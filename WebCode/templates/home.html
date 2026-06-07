@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-card">
+  <div class="hero-copy">
+    <p class="hero-kicker">LaTeX Native Publishing</p>
+    <h1>{{ site.title }}</h1>
+    <p class="hero-summary">{{ site.description }}</p>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-box">
+      <span>文章数</span>
+      <strong>{{ post_count }}</strong>
+    </div>
+    <div class="stat-box">
+      <span>独立页面</span>
+      <strong>{{ page_count }}</strong>
+    </div>
+    <div class="stat-box">
+      <span>内容源</span>
+      <strong>LaTeX</strong>
+    </div>
+  </div>
+</section>
+
+<section class="paper-card">
+  <header class="article-header">
+    <div>
+      <p class="article-type">首页说明</p>
+      <h2>{{ document.title }}</h2>
+    </div>
+    <div class="article-meta">
+      <span>{{ document.author }}</span>
+      {% if document.date_display %}
+      <span>{{ document.date_display }}</span>
+      {% endif %}
+    </div>
+  </header>
+  <div class="article-body">
+    {{ document.html | safe }}
+  </div>
+</section>
+
+<section class="library-grid">
+  <div class="paper-card">
+    <header class="section-header">
+      <p class="article-type">Recent</p>
+      <h2>最近文章</h2>
+    </header>
+    <div class="post-card-grid">
+      {% for post in recent_posts %}
+      <a class="post-card" href="{{ post.url }}">
+        <p class="post-card__meta">{{ post.date_display }}</p>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.summary }}</p>
+      </a>
+      {% endfor %}
+      {% if not recent_posts %}
+      <p class="empty-state">现在还没有文章，先去 `PostCode/posts` 放一篇 `.tex` 试试。</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <header class="section-header">
+      <p class="article-type">Archive</p>
+      <h2>分组目录</h2>
+    </header>
+    <div class="group-stack">
+      {% for group in post_groups %}
+      <section class="group-block">
+        <h3>{{ group.title }}</h3>
+        <ul class="archive-list">
+          {% for post in group.posts %}
+          <li>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+            <span>{{ post.date_display }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endfor %}
+      {% if not post_groups %}
+      <p class="empty-state">目录生成器已经准备好了，只差你的 LaTeX 内容。</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

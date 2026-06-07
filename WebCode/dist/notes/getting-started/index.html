@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>从 LaTeX 源文件到可浏览页面 | 数学博客实验站</title>
+  <meta name="description" content="用一篇示例文章演示这个新网站骨架支持的写法，包括章节、列表、公式、定理块和插图。" />
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+        packages: {'[+]': ['ams']}
+      },
+      chtml: {
+        scale: 1.02
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script defer src="/assets/js/site.js"></script>
+</head>
+<body class="is-article">
+  <div class="page-backdrop"></div>
+  <div class="progress-bar" data-progress-bar></div>
+
+  <header class="site-header">
+    <div class="header-left">
+      <button class="nav-toggle" type="button" aria-label="打开导航" data-nav-toggle>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a class="site-brand" href="/">
+        <span class="brand-kicker">MathBlog</span>
+        <span class="brand-title">数学博客实验站</span>
+      </a>
+    </div>
+    <div class="header-meta">
+      <span>用 LaTeX 写内容，用 Python 生成静态站点</span>
+      <span>最近更新：2026-06-07</span>
+    </div>
+  </header>
+
+  <div class="layout-scrim" data-close-nav></div>
+
+  <div class="layout-shell">
+    <aside class="side-panel side-panel--nav" data-nav-panel>
+      <div class="panel-card">
+        <div class="panel-eyebrow">内容导航</div>
+        <a class="home-link" href="/">
+          首页
+        </a>
+
+
+        <section class="nav-group">
+          <h2>文章树</h2>
+          <ul class="tree-list">
+  <li class="tree-item is-active has-children">
+    <span class="tree-label">Notes</span>
+    <ul class="tree-list">
+  <li class="tree-item is-active">
+    <a class="tree-link" href="/notes/getting-started/">从 LaTeX 源文件到可浏览页面</a>
+  </li>
+</ul>
+  </li>
+</ul>
+        </section>
+      </div>
+    </aside>
+
+    <main class="content-column">
+<article class="paper-card article-page">
+  <header class="article-header">
+    <div>
+      <p class="article-type">文章</p>
+      <h1>从 LaTeX 源文件到可浏览页面</h1>
+      <p class="article-lead">用一篇示例文章演示这个新网站骨架支持的写法，包括章节、列表、公式、定理块和插图。</p>
+    </div>
+
+    <div class="article-meta">
+      <span>MathBlog</span>
+      <span>2026-06-07</span>
+      <span>LaTeX · 静态站点 · 数学博客</span>
+    </div>
+  </header>
+
+  <div class="article-body">
+    <h3 id="写作方式的变化">写作方式的变化</h3>
+<p>这个站点最关键的改造，是把旧站的“Markdown 为主，数学显示为辅”，切换成“<strong>LaTeX 为主，HTML 为输出</strong>”。</p>
+<p>于是你在内容层面可以继续按照熟悉的方式写：</p>
+<ol class="article-list article-list--ol">
+<li><p>小节结构用 <code>\section</code>、<code>\subsection</code>。</p></li>
+<li><p>行内公式直接写成 <span class="math-inline">\(a_n = \frac{1}{n^2}\)</span>。</p></li>
+<li><p>推导过程可以用 <code>align</code> 环境整理。</p></li>
+<li><p>想强调结论时，可以用 <code>definition</code>、<code>theorem</code>、<code>proof</code> 这一类块。</p></li>
+</ol>
+<h4 id="一个短的数学示例">一个短的数学示例</h4>
+<p>下面这个例子展示了块级公式环境在页面里的呈现效果：</p>
+<div class="math-block">\begin{align}
+\sum_{n=1}^{\infty}\frac{1}{n^2}
+&amp;=
+\frac{\pi^2}{6}, \\
+\sum_{n=1}^{\infty}\frac{1}{n^4}
+&amp;=
+\frac{\pi^4}{90}.
+\end{align}</div>
+<section class="latex-block latex-block--theorem"><div class="block-label">定理 1 · 一个非常基础的结论</div><div class="block-body"><p>若数列 <span class="math-inline">\((a_n)\)</span> 单调递增且有上界，则 <span class="math-inline">\((a_n)\)</span> 收敛。</p></div></section>
+<section class="latex-block latex-block--proof"><div class="block-label">证明</div><div class="block-body"><p>这是实分析中的单调有界定理。证明思路是：取集合 <span class="math-inline">\(\{a_n : n \in \mathbb{N}\}\)</span> 的上确界，记作 <span class="math-inline">\(L\)</span>，再利用上确界定义验证 <span class="math-inline">\(a_n \to L\)</span>。</p></div></section>
+<h4 id="图像与版式">图像与版式</h4>
+<p>这一版也支持把内容资源放在 <code>PostCode</code> 下，然后通过 LaTeX 引入：</p>
+<figure class="article-figure"><img src="/content-assets/assets/sample-geometry.svg" alt="一个简单的几何示意图，说明图片资源可以和 LaTeX 正文一起组织。" loading="lazy" style="width: min(100%, 72%);" /><figcaption>一个简单的几何示意图，说明图片资源可以和 LaTeX 正文一起组织。</figcaption></figure>
+<h4 id="你后面怎么继续写">你后面怎么继续写</h4>
+<section class="latex-block latex-block--example"><div class="block-label">例 1</div><div class="block-body"><p>如果你准备写“高等代数笔记”，可以建立 <code>PostCode/posts/algebra/</code>；如果你准备写“实分析习题解析”，可以建立 <code>PostCode/posts/analysis/</code>。目录结构本身就会自动反映到左侧文章树里。</p></div></section>
+<p>如果你想把一篇长文拆成多个文件，也可以把章节拆开后再在主文稿中统一合并，这样大体量文章会更容易维护。</p>
+  </div>
+
+</article>
+      <footer class="site-footer">
+        <span>静态构建时间：2026-06-07 20:18</span>
+        <span>内容目录：`PostCode`</span>
+        <span>站点框架：`WebCode`</span>
+      </footer>
+    </main>
+
+    <aside class="side-panel side-panel--toc">
+      <div class="panel-card toc-card">
+        <div class="panel-eyebrow">文内提纲</div>
+        <ul class="toc-list">
+          <li class="toc-item toc-level-2">
+            <a href="#写作方式的变化">写作方式的变化</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#一个短的数学示例">一个短的数学示例</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#图像与版式">图像与版式</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#你后面怎么继续写">你后面怎么继续写</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>

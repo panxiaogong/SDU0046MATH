@@ -1,0 +1,108 @@
+{% import "macros.html" as macros %}
+<!DOCTYPE html>
+<html lang="{{ site.language }}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% if document.is_home %}{{ site.title }}{% else %}{{ document.title }} | {{ site.title }}{% endif %}</title>
+  <meta name="description" content="{{ document.summary or site.description }}" />
+  <link rel="stylesheet" href="{{ site.base_url if site.base_url != '/' else '' }}/assets/css/site.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+        packages: {'[+]': ['ams']}
+      },
+      chtml: {
+        scale: 1.02
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script defer src="{{ site.base_url if site.base_url != '/' else '' }}/assets/js/site.js"></script>
+</head>
+<body class="{% if document.is_home %}is-home{% else %}is-article{% endif %}">
+  <div class="page-backdrop"></div>
+  <div class="progress-bar" data-progress-bar></div>
+
+  <header class="site-header">
+    <div class="header-left">
+      <button class="nav-toggle" type="button" aria-label="打开导航" data-nav-toggle>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a class="site-brand" href="{{ site.base_url if site.base_url != '/' else '/' }}">
+        <span class="brand-kicker">MathBlog</span>
+        <span class="brand-title">{{ site.title }}</span>
+      </a>
+    </div>
+    <div class="header-meta">
+      <span>{{ site.subtitle }}</span>
+      <span>最近更新：{{ last_updated }}</span>
+    </div>
+  </header>
+
+  <div class="layout-scrim" data-close-nav></div>
+
+  <div class="layout-shell">
+    <aside class="side-panel side-panel--nav" data-nav-panel>
+      <div class="panel-card">
+        <div class="panel-eyebrow">内容导航</div>
+        <a class="home-link{% if document.is_home %} is-active{% endif %}" href="{{ site.base_url if site.base_url != '/' else '/' }}">
+          首页
+        </a>
+
+        {% if page_links %}
+        <section class="nav-group">
+          <h2>独立页面</h2>
+          <ul class="simple-links">
+            {% for page in page_links %}
+            <li>
+              <a class="{% if page.active %}is-active{% endif %}" href="{{ page.url }}">{{ page.title }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        <section class="nav-group">
+          <h2>文章树</h2>
+          {% if post_tree %}
+          {{ macros.render_tree(post_tree) }}
+          {% else %}
+          <p class="empty-state">`PostCode/posts` 里还没有文章。</p>
+          {% endif %}
+        </section>
+      </div>
+    </aside>
+
+    <main class="content-column">
+      {% block content %}{% endblock %}
+      <footer class="site-footer">
+        <span>静态构建时间：{{ generated_at }}</span>
+        <span>内容目录：`PostCode`</span>
+        <span>站点框架：`WebCode`</span>
+      </footer>
+    </main>
+
+    <aside class="side-panel side-panel--toc">
+      <div class="panel-card toc-card">
+        <div class="panel-eyebrow">文内提纲</div>
+        {% if toc %}
+        <ul class="toc-list">
+          {% for heading in toc %}
+          <li class="toc-item toc-level-{{ heading.level }}">
+            <a href="#{{ heading.anchor }}">{{ heading.text }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty-state">这一页还没有可索引的小节。</p>
+        {% endif %}
+      </div>
+    </aside>
+  </div>
+</body>
+</html>

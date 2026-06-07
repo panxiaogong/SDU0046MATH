@@ -1,0 +1,12 @@
+site:
+  title: 数学博客实验站
+  subtitle: 用 LaTeX 写内容，用 Python 生成静态站点
+  description: 一个将 LaTeX 内容直接编译为 HTML 页面、适合数学与学术写作的静态网站骨架。
+  author: MathBlog
+  language: zh-CN
+  base_url: /
+
+content:
+  posts_dir: ../PostCode/posts
+  pages_dir: ../PostCode/pages
+  output_dir: ./dist

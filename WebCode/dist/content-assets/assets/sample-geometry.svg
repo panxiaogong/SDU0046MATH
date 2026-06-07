@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" fill="none">
+  <rect width="720" height="460" rx="28" fill="#F8F4EC"/>
+  <rect x="18" y="18" width="684" height="424" rx="22" stroke="#CBBDA7" stroke-width="2"/>
+  <circle cx="182" cy="330" r="9" fill="#2A5D7C"/>
+  <circle cx="356" cy="116" r="9" fill="#2A5D7C"/>
+  <circle cx="564" cy="330" r="9" fill="#2A5D7C"/>
+  <path d="M182 330L356 116L564 330H182Z" stroke="#284256" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M356 116V330" stroke="#7B8D98" stroke-width="3" stroke-dasharray="10 10"/>
+  <path d="M330 330H382" stroke="#7B8D98" stroke-width="3"/>
+  <path d="M330 330V304" stroke="#7B8D98" stroke-width="3"/>
+  <path d="M382 330V304" stroke="#7B8D98" stroke-width="3"/>
+  <circle cx="356" cy="330" r="6" fill="#D98A44"/>
+  <path d="M208 330C208 310 224 294 244 294" stroke="#D98A44" stroke-width="3"/>
+  <path d="M538 330C538 310 522 294 502 294" stroke="#D98A44" stroke-width="3"/>
+  <text x="170" y="364" fill="#1F2937" font-family="STIX Two Text, Georgia, serif" font-size="26">A</text>
+  <text x="350" y="98" fill="#1F2937" font-family="STIX Two Text, Georgia, serif" font-size="26">B</text>
+  <text x="560" y="364" fill="#1F2937" font-family="STIX Two Text, Georgia, serif" font-size="26">C</text>
+  <text x="368" y="324" fill="#D98A44" font-family="STIX Two Text, Georgia, serif" font-size="24">H</text>
+  <text x="228" y="288" fill="#D98A44" font-family="STIX Two Text, Georgia, serif" font-size="26">α</text>
+  <text x="486" y="288" fill="#D98A44" font-family="STIX Two Text, Georgia, serif" font-size="26">β</text>
+</svg>

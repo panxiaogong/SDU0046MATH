@@ -1,0 +1,16 @@
+{% macro render_tree(nodes) -%}
+<ul class="tree-list">
+  {% for node in nodes %}
+  <li class="tree-item{% if node.active %} is-active{% endif %}{% if node.children %} has-children{% endif %}">
+    {% if node.url %}
+    <a class="tree-link" href="{{ node.url }}">{{ node.title }}</a>
+    {% else %}
+    <span class="tree-label">{{ node.title }}</span>
+    {% endif %}
+    {% if node.children %}
+    {{ render_tree(node.children) }}
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{%- endmacro %}

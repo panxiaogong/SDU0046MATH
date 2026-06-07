@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>数学博客实验站</title>
+  <meta name="description" content="一个把 LaTeX 内容直接编译成 HTML 的数学博客骨架，适合课程笔记、研究随笔和学术长文发布。" />
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+        packages: {'[+]': ['ams']}
+      },
+      chtml: {
+        scale: 1.02
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script defer src="/assets/js/site.js"></script>
+</head>
+<body class="is-home">
+  <div class="page-backdrop"></div>
+  <div class="progress-bar" data-progress-bar></div>
+
+  <header class="site-header">
+    <div class="header-left">
+      <button class="nav-toggle" type="button" aria-label="打开导航" data-nav-toggle>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a class="site-brand" href="/">
+        <span class="brand-kicker">MathBlog</span>
+        <span class="brand-title">数学博客实验站</span>
+      </a>
+    </div>
+    <div class="header-meta">
+      <span>用 LaTeX 写内容，用 Python 生成静态站点</span>
+      <span>最近更新：2026-06-07</span>
+    </div>
+  </header>
+
+  <div class="layout-scrim" data-close-nav></div>
+
+  <div class="layout-shell">
+    <aside class="side-panel side-panel--nav" data-nav-panel>
+      <div class="panel-card">
+        <div class="panel-eyebrow">内容导航</div>
+        <a class="home-link is-active" href="/">
+          首页
+        </a>
+
+
+        <section class="nav-group">
+          <h2>文章树</h2>
+          <ul class="tree-list">
+  <li class="tree-item has-children">
+    <span class="tree-label">Notes</span>
+    <ul class="tree-list">
+  <li class="tree-item">
+    <a class="tree-link" href="/notes/getting-started/">从 LaTeX 源文件到可浏览页面</a>
+  </li>
+</ul>
+  </li>
+</ul>
+        </section>
+      </div>
+    </aside>
+
+    <main class="content-column">
+<section class="hero-card">
+  <div class="hero-copy">
+    <p class="hero-kicker">LaTeX Native Publishing</p>
+    <h1>数学博客实验站</h1>
+    <p class="hero-summary">一个将 LaTeX 内容直接编译为 HTML 页面、适合数学与学术写作的静态网站骨架。</p>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-box">
+      <span>文章数</span>
+      <strong>1</strong>
+    </div>
+    <div class="stat-box">
+      <span>独立页面</span>
+      <strong>0</strong>
+    </div>
+    <div class="stat-box">
+      <span>内容源</span>
+      <strong>LaTeX</strong>
+    </div>
+  </div>
+</section>
+
+<section class="paper-card">
+  <header class="article-header">
+    <div>
+      <p class="article-type">首页说明</p>
+      <h2>站点首页</h2>
+    </div>
+    <div class="article-meta">
+      <span>MathBlog</span>
+      <span>2026-06-07</span>
+    </div>
+  </header>
+  <div class="article-body">
+    <h3 id="这个站点现在能做什么">这个站点现在能做什么</h3>
+<p>这个版本不再沿用旧站的 Markdown 渲染流程，而是把内容源统一切换为 <strong>LaTeX</strong>。也就是说，后续你只需要在 <code>PostCode</code> 目录下维护 <code>.tex</code> 文件，<code>WebCode/build.py</code> 就会把它们编译成结构化的 HTML 页面。</p>
+<nav class="inline-toc"><div class="inline-toc__label">本文提纲</div><ul><li><a href="#这个站点现在能做什么">这个站点现在能做什么</a></li><li><a href="#目录分工">目录分工</a></li><li><a href="#这条新链路为什么更适合你">这条新链路为什么更适合你</a></li><li><a href="#建议你的下一步">建议你的下一步</a></li></ul></nav>
+<h4 id="目录分工">目录分工</h4>
+<ol class="article-list article-list--ol">
+<li><p><code>WebCode</code> 保存站点框架、模板、样式、脚本，以及 LaTeX 到 HTML 的 Python 构建程序。</p></li>
+<li><p><code>PostCode</code> 保存内容本身，包括首页、独立页面、文章以及图片等资源。</p></li>
+<li><p>构建输出会进入 <code>WebCode/dist</code>，方便你后续直接部署到 GitHub Pages 或其他静态托管平台。</p></li>
+</ol>
+<h4 id="这条新链路为什么更适合你">这条新链路为什么更适合你</h4>
+<section class="latex-block latex-block--definition"><div class="block-label">定义 1</div><div class="block-body"><p>这里的“更适合”是指：内容创作习惯、数学公式表达、长文结构控制三件事，都尽量围绕 LaTeX 本身展开，而不是先写 Markdown 再做兼容修补。</p></div></section>
+<p>对于数学站点而言，行内公式 <span class="math-inline">\(f(x)=x^2+\sin x\)</span>、块级公式</p>
+<div class="math-block">\[
+\int_0^1 x^2\,dx = \frac{1}{3}
+\]</div>
+<p>以及像 <code>align</code> 这样的环境，本来就是 LaTeX 最自然的表达方式。把内容层直接建立在 LaTeX 上，后续维护会轻松很多。</p>
+<h4 id="建议你的下一步">建议你的下一步</h4>
+<ul class="article-list article-list--ul">
+<li><p>把你原来准备发布的内容逐步迁移到 <code>PostCode/posts/</code> 里。</p></li>
+<li><p>如果文章较长，可以按专题建立子目录，例如 <code>PostCode/posts/analysis/</code>、<code>PostCode/posts/algebra/</code>。</p></li>
+<li><p>如果需要插图，统一放到 <code>PostCode/assets/</code> 中，再用 <code>\includegraphics</code> 调用。</p></li>
+</ul>
+<section class="latex-block latex-block--remark"><div class="block-label">注记</div><div class="block-body"><p>这一版已经足够支撑“课程笔记型”和“研究笔记型”网站。如果你接下来想加自动引用、文献系统、搜索页、标签页，我们可以继续往上接。</p></div></section>
+  </div>
+</section>
+
+<section class="library-grid">
+  <div class="paper-card">
+    <header class="section-header">
+      <p class="article-type">Recent</p>
+      <h2>最近文章</h2>
+    </header>
+    <div class="post-card-grid">
+      <a class="post-card" href="/notes/getting-started/">
+        <p class="post-card__meta">2026-06-07</p>
+        <h3>从 LaTeX 源文件到可浏览页面</h3>
+        <p>用一篇示例文章演示这个新网站骨架支持的写法，包括章节、列表、公式、定理块和插图。</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="paper-card">
+    <header class="section-header">
+      <p class="article-type">Archive</p>
+      <h2>分组目录</h2>
+    </header>
+    <div class="group-stack">
+      <section class="group-block">
+        <h3>Notes</h3>
+        <ul class="archive-list">
+          <li>
+            <a href="/notes/getting-started/">从 LaTeX 源文件到可浏览页面</a>
+            <span>2026-06-07</span>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</section>
+      <footer class="site-footer">
+        <span>静态构建时间：2026-06-07 20:18</span>
+        <span>内容目录：`PostCode`</span>
+        <span>站点框架：`WebCode`</span>
+      </footer>
+    </main>
+
+    <aside class="side-panel side-panel--toc">
+      <div class="panel-card toc-card">
+        <div class="panel-eyebrow">文内提纲</div>
+        <ul class="toc-list">
+          <li class="toc-item toc-level-2">
+            <a href="#这个站点现在能做什么">这个站点现在能做什么</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#目录分工">目录分工</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#这条新链路为什么更适合你">这条新链路为什么更适合你</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#建议你的下一步">建议你的下一步</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>
