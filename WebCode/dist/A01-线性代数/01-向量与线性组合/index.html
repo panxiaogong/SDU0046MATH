@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>向量与线性组合 | 数学博客实验站</title>
+  <meta name="description" content="一个示例性的线性代数内容页，用来展示根目录内容文件夹的新组织方式，以及 LaTeX 到 HTML 的渲染效果。" />
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+        packages: {'[+]': ['ams']}
+      },
+      chtml: {
+        scale: 1.02
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script defer src="/assets/js/site.js"></script>
+</head>
+<body class="is-article">
+  <div class="page-backdrop"></div>
+  <div class="progress-bar" data-progress-bar></div>
+
+  <header class="site-header">
+    <div class="header-left">
+      <button class="nav-toggle" type="button" aria-label="打开导航" data-nav-toggle>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a class="site-brand" href="/">
+        <span class="brand-kicker">MathBlog</span>
+        <span class="brand-title">数学博客实验站</span>
+      </a>
+    </div>
+    <div class="header-meta">
+      <span>用 LaTeX 写内容，用 Python 生成静态站点</span>
+      <span>最近更新：2026-06-07</span>
+    </div>
+  </header>
+
+  <div class="layout-scrim" data-close-nav></div>
+
+  <div class="layout-shell">
+    <aside class="side-panel side-panel--nav" data-nav-panel>
+      <div class="panel-card">
+        <div class="panel-eyebrow">内容导航</div>
+        <a class="home-link" href="/">
+          首页
+        </a>
+
+
+        <section class="nav-group">
+          <h2>文章树</h2>
+          <ul class="tree-list">
+  <li class="tree-item is-active has-children">
+    <span class="tree-label">A01-线性代数</span>
+    <ul class="tree-list">
+  <li class="tree-item is-active">
+    <a class="tree-link" href="/A01-线性代数/01-向量与线性组合/">向量与线性组合</a>
+  </li>
+</ul>
+  </li>
+</ul>
+        </section>
+      </div>
+    </aside>
+
+    <main class="content-column">
+<article class="paper-card article-page">
+  <header class="article-header">
+    <div>
+      <p class="article-type">文章</p>
+      <h1>向量与线性组合</h1>
+      <p class="article-lead">一个示例性的线性代数内容页，用来展示根目录内容文件夹的新组织方式，以及 LaTeX 到 HTML 的渲染效果。</p>
+    </div>
+
+    <div class="article-meta">
+      <span>MathBlog</span>
+      <span>2026-06-07</span>
+      <span>线性代数 · 向量空间 · LaTeX</span>
+    </div>
+  </header>
+
+  <div class="article-body">
+    <h3 id="线性组合的基本想法">线性组合的基本想法</h3>
+<p>在线性代数里，我们经常希望用少量基础向量去描述更多的向量。最基本的形式就是线性组合：</p>
+<div class="math-block">\[
+\mathbf{v} = a_1\mathbf{u}_1 + a_2\mathbf{u}_2 + \cdots + a_n\mathbf{u}_n.
+\]</div>
+<p>这意味着，只要给定若干向量 <span class="math-inline">\(\mathbf{u}_1,\dots,\mathbf{u}_n\)</span>，以及一组标量 <span class="math-inline">\(a_1,\dots,a_n\)</span>，就可以得到新的向量 <span class="math-inline">\(\mathbf{v}\)</span>。</p>
+<h4 id="二维情形的直观理解">二维情形的直观理解</h4>
+<p>在二维平面里，若</p>
+<div class="math-block">\[
+\mathbf{u}_1 =
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix},
+\qquad
+\mathbf{u}_2 =
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix},
+\]</div>
+<p>那么任意向量</p>
+<div class="math-block">\[
+\mathbf{v} =
+\begin{pmatrix}
+x\\
+y
+\end{pmatrix}
+\]</div>
+<p>都可以写成</p>
+<div class="math-block">\[
+\mathbf{v} = x\mathbf{u}_1 + y\mathbf{u}_2.
+\]</div>
+<figure class="article-figure"><img src="/content-assets/A01-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/assets/linear-combination.svg" alt="二维平面中，向量 \(\mathbf{v}\) 可以看成基向量线性组合的结果。" loading="lazy" style="width: min(100%, 74%);" /><figcaption>二维平面中，向量 <span class="math-inline">\(\mathbf{v}\)</span> 可以看成基向量线性组合的结果。</figcaption></figure>
+<h4 id="张成与向量空间">张成与向量空间</h4>
+<section class="latex-block latex-block--definition"><div class="block-label">定义 1</div><div class="block-body"><p>给定向量组 <span class="math-inline">\(\mathbf{u}_1,\dots,\mathbf{u}_n\)</span>，所有形如</p>
+<div class="math-block">\[
+a_1\mathbf{u}_1 + \cdots + a_n\mathbf{u}_n
+\]</div>
+<p>的向量所构成的集合，称为这组向量的<strong>张成集</strong>。</p></div></section>
+<p>如果一组向量能够张成整个空间，我们就说它们足以描述这个空间中的所有向量。在线性代数课程里，这会进一步引出“基”“维数”“线性无关”等核心概念。</p>
+<h4 id="一个常见结论">一个常见结论</h4>
+<section class="latex-block latex-block--theorem"><div class="block-label">定理 1</div><div class="block-body"><p>在 <span class="math-inline">\(\mathbb{R}^2\)</span> 中，只要两个向量线性无关，它们就能够张成整个 <span class="math-inline">\(\mathbb{R}^2\)</span>。</p></div></section>
+<section class="latex-block latex-block--proof"><div class="block-label">证明</div><div class="block-body"><p>若两个向量线性无关，则它们不共线，因此它们确定了平面中的两个独立方向。任意平面向量都可以唯一地沿这两个方向分解，所以整个 <span class="math-inline">\(\mathbb{R}^2\)</span> 都能写成这两个向量的线性组合。</p></div></section>
+<h4 id="为什么这个示例有意义">为什么这个示例有意义</h4>
+<section class="latex-block latex-block--example"><div class="block-label">例 1</div><div class="block-body"><p>这个文件被直接放在仓库根目录下的 <code>A01-线性代数</code> 文件夹中，因此别人打开 GitHub 仓库首页后，能够立刻定位到“线性代数”这一专题，而不用先进入统一的内容总目录。</p></div></section>
+<p>这正是这次结构调整的主要目标：让内容文件夹本身就成为仓库首页最直观的导航入口。</p>
+  </div>
+
+</article>
+      <footer class="site-footer">
+        <span>静态构建时间：2026-06-07 20:45</span>
+        <span>内容目录：仓库根目录下与 WebCode 同级的内容文件夹</span>
+        <span>站点框架：`WebCode`</span>
+      </footer>
+    </main>
+
+    <aside class="side-panel side-panel--toc">
+      <div class="panel-card toc-card">
+        <div class="panel-eyebrow">文内提纲</div>
+        <ul class="toc-list">
+          <li class="toc-item toc-level-2">
+            <a href="#线性组合的基本想法">线性组合的基本想法</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#二维情形的直观理解">二维情形的直观理解</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#张成与向量空间">张成与向量空间</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#一个常见结论">一个常见结论</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#为什么这个示例有意义">为什么这个示例有意义</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>

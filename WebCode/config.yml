@@ -7,6 +7,13 @@ site:
   base_url: /
 
 content:
-  posts_dir: ../PostCode/posts
-  pages_dir: ../PostCode/pages
+  source_root: ..
+  reserved_dirs:
+    - WebCode
+    - .git
+    - .github
+    - .agents
+    - .codex
+    - __pycache__
+    - node_modules
   output_dir: ./dist

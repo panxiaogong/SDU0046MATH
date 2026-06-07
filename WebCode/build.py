@@ -346,8 +346,8 @@ def summarize_html(html_value: str, limit: int = 150) -> str:
 
 
 class LatexHtmlConverter:
-    def __init__(self, post_root: Path, base_url: str) -> None:
-        self.post_root = post_root.resolve()
+    def __init__(self, content_root: Path, base_url: str) -> None:
+        self.content_root = content_root.resolve()
         self.base_url = base_url
         self.content_asset_prefix = "content-assets"
         self.headings: list[Heading] = []
@@ -676,12 +676,12 @@ class LatexHtmlConverter:
 
         candidates = [
             (source_path.parent / raw_path).resolve(),
-            (self.post_root / raw_path).resolve(),
+            (self.content_root / raw_path).resolve(),
         ]
         for candidate in candidates:
             if candidate.exists() and candidate.is_file():
                 try:
-                    relative = candidate.relative_to(self.post_root).as_posix()
+                    relative = candidate.relative_to(self.content_root).as_posix()
                 except ValueError:
                     continue
                 quoted = quote(relative, safe="/-_.~")
@@ -920,8 +920,19 @@ def load_config(config_path: Path) -> dict[str, Any]:
     site.setdefault("language", "zh-CN")
     site.setdefault("base_url", "/")
 
-    content.setdefault("posts_dir", "../PostCode/posts")
-    content.setdefault("pages_dir", "../PostCode/pages")
+    content.setdefault("source_root", "..")
+    content.setdefault(
+        "reserved_dirs",
+        [
+            "WebCode",
+            ".git",
+            ".github",
+            ".agents",
+            ".codex",
+            "__pycache__",
+            "node_modules",
+        ],
+    )
     content.setdefault("output_dir", "./dist")
     return raw
 
@@ -930,16 +941,45 @@ def resolve_local_path(base_path: Path, raw_path: str) -> Path:
     return (base_path / raw_path).resolve()
 
 
-def discover_tex_files(root: Path) -> list[Path]:
-    if not root.exists():
-        return []
-    return sorted(path for path in root.rglob("*.tex") if path.is_file())
+def discover_content_roots(project_root: Path, reserved_dirs: list[str]) -> list[Path]:
+    reserved = {name.casefold() for name in reserved_dirs}
+    roots: list[Path] = []
+
+    for entry in project_root.iterdir():
+        if not entry.is_dir():
+            continue
+        if entry.name.startswith("."):
+            continue
+        if entry.name.casefold() in reserved:
+            continue
+        roots.append(entry)
+
+    return sorted(roots)
+
+
+def discover_tex_files(roots: list[Path]) -> list[Path]:
+    files: list[Path] = []
+    for root in roots:
+        files.extend(path for path in root.rglob("*.tex") if path.is_file())
+    return sorted(files)
+
+
+def infer_document_kind(source_path: Path) -> str:
+    raw_text = source_path.read_text(encoding="utf-8")
+    metadata, _ = split_leading_comment_metadata(raw_text)
+    explicit = metadata.get("kind", "").strip().lower()
+
+    if explicit in {"home", "page", "post"}:
+        return explicit
+    if source_path.stem.lower() == "home":
+        return "home"
+    return "post"
 
 
 def build_document(
     source_path: Path,
     kind: str,
-    posts_root: Path,
+    source_root: Path,
     converter: LatexHtmlConverter,
     site_config: dict[str, Any],
     base_url: str,
@@ -957,18 +997,18 @@ def build_document(
     title = metadata.get("title") or (toc[0].text if toc else prettify_slug_piece(source_path.stem))
     nav_title = metadata.get("nav_title") or title
 
-    relative = source_path.relative_to(posts_root)
-    if kind == "page":
+    relative = source_path.relative_to(source_root)
+    if kind == "home":
+        slug = ""
+    elif kind == "page":
         if metadata.get("slug"):
             slug = normalize_slug(metadata["slug"])
-        elif source_path.stem.lower() in {"home", "index"}:
-            slug = ""
         else:
             slug = normalize_slug(relative.with_suffix("").as_posix())
     else:
         slug = normalize_slug(metadata.get("slug") or relative.with_suffix("").as_posix())
 
-    is_home = kind == "page" and not slug
+    is_home = kind == "home"
     output_path = (
         resolve_local_path(WEB_ROOT, site_config["content"]["output_dir"]) / "index.html"
         if is_home
@@ -1081,10 +1121,12 @@ def copy_directory(source: Path, target: Path) -> None:
     shutil.copytree(source, target, dirs_exist_ok=True)
 
 
-def copy_post_assets(post_root: Path, output_root: Path) -> None:
-    for item in post_root.rglob("*"):
-        if item.is_file() and item.suffix.lower() != ".tex":
-            destination = output_root / "content-assets" / item.relative_to(post_root)
+def copy_content_assets(content_root: Path, content_roots: list[Path], output_root: Path) -> None:
+    for root in content_roots:
+        for item in root.rglob("*"):
+            if not item.is_file() or item.suffix.lower() == ".tex":
+                continue
+            destination = output_root / "content-assets" / item.relative_to(content_root)
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(item, destination)
 
@@ -1094,42 +1136,48 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
     site = config["site"]
     content = config["content"]
 
-    posts_dir = resolve_local_path(WEB_ROOT, content["posts_dir"])
-    pages_dir = resolve_local_path(WEB_ROOT, content["pages_dir"])
+    content_root = resolve_local_path(WEB_ROOT, content["source_root"])
+    content_roots = discover_content_roots(content_root, content["reserved_dirs"])
     output_dir = resolve_local_path(WEB_ROOT, content["output_dir"])
     templates_dir = WEB_ROOT / "templates"
     assets_dir = WEB_ROOT / "assets"
-    post_root = PROJECT_ROOT / "PostCode"
 
     if should_clean and output_dir.exists():
         shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     copy_directory(assets_dir, output_dir / "assets")
-    copy_post_assets(post_root, output_dir)
+    copy_content_assets(content_root, content_roots, output_dir)
 
-    converter = LatexHtmlConverter(post_root=post_root, base_url=site["base_url"])
+    converter = LatexHtmlConverter(content_root=content_root, base_url=site["base_url"])
 
-    pages = [
-        build_document(path, "page", pages_dir, converter, config, site["base_url"])
-        for path in discover_tex_files(pages_dir)
-    ]
-    posts = [
-        build_document(path, "post", posts_dir, converter, config, site["base_url"])
-        for path in discover_tex_files(posts_dir)
-    ]
+    pages: list[Document] = []
+    posts: list[Document] = []
 
-    if not any(page.is_home for page in pages):
+    for path in discover_tex_files(content_roots):
+        kind = infer_document_kind(path)
+        document = build_document(path, kind, content_root, converter, config, site["base_url"])
+        if document.is_home or document.kind == "page":
+            pages.append(document)
+        else:
+            posts.append(document)
+
+    home_pages = [page for page in pages if page.is_home]
+    if len(home_pages) > 1:
+        locations = ", ".join(str(page.source_path.relative_to(content_root)) for page in home_pages)
+        raise ValueError(f"Multiple home documents found: {locations}")
+
+    if not home_pages:
         pages.insert(
             0,
             Document(
-                source_path=pages_dir / "home.tex",
-                kind="page",
+                source_path=content_root / "home.tex",
+                kind="home",
                 title=site["title"],
                 slug="",
                 url=build_page_url(site["base_url"], ""),
                 output_path=output_dir / "index.html",
-                html="<p>欢迎来到新的 LaTeX 数学站点。你可以在 PostCode/pages/home.tex 中自定义首页内容。</p>",
+                html="<p>欢迎来到新的 LaTeX 数学站点。你可以在仓库根目录下任意内容文件夹里的 <code>home.tex</code> 中自定义首页内容。</p>",
                 summary=site["description"],
                 author=site["author"],
                 date_raw="",
@@ -1170,6 +1218,7 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
         "page_count": len(other_pages),
         "recent_posts": posts[:6],
         "post_groups": build_post_groups(posts),
+        "content_root_label": "仓库根目录下与 WebCode 同级的内容文件夹",
     }
 
     def render_document(document: Document) -> None:

@@ -1,0 +1,50 @@
+% kind: home
+% title: 站点首页
+% summary: 这个数学站点现在采用“WebCode + 根目录内容文件夹”的结构，方便在 GitHub 仓库首页直接查找专题内容。
+
+\section{新的目录组织方式}
+
+这个仓库现在不再把所有内容集中塞进一个 `PostCode` 文件夹里，而是把 \textbf{每个专题内容目录直接放在仓库根目录}，并与 `WebCode` 保持同级。
+
+\tableofcontents
+
+\subsection{这样调整的原因}
+
+\begin{enumerate}
+\item 进入 GitHub 仓库首页后，读者可以第一时间看到内容专题，而不是先钻进统一的内容总目录。
+\item 如果后续由多位同学共同维护，不同专题可以天然按文件夹拆开，查找和协作都更直接。
+\item 网站构建层和内容层分离得更清楚：`WebCode` 只负责框架，其他内容文件夹只负责 LaTeX 文稿和资源。
+\end{enumerate}
+
+\subsection{你现在可以怎样组织内容}
+
+例如你完全可以在仓库根目录下建立这些同级文件夹：
+
+\begin{itemize}
+\item `A01-线性代数`
+\item `A02-数学分析`
+\item `B01-课程论文`
+\item `C01-项目报告`
+\end{itemize}
+
+这些目录中的 `.tex` 文件会被 `WebCode/build.py` 自动扫描并生成站点页面。
+
+\subsection{首页与文章的规则}
+
+\begin{definition}
+如果某个内容文件夹里有一个名为 `home.tex` 的文件，那么它会被识别为网站首页；其他 `.tex` 文件默认会被识别为普通文章。
+\end{definition}
+
+如果你以后还想额外增加“关于本站”“友情链接”“课程说明”这类独立页面，也可以在对应的 LaTeX 文件开头写上：
+
+\begin{verbatim}
+% kind: page
+\end{verbatim}
+
+\subsection{后续建议}
+
+\begin{remark}
+从仓库可读性的角度看，按 `A01-...`、`A02-...` 这样的前缀组织内容是很好的做法，因为它既保留排序，又能让人一眼看出专题边界。
+\end{remark}
+
+你现在已经可以直接在根目录新增专题文件夹，然后往里面继续写 LaTeX 内容了。

@@ -1,11 +1,13 @@
 # MathBlog 站点骨架
 
-这个项目现在分成两部分：
+这个版本的目录结构已经改成了你想要的形式：
 
 - `D:\MATHBLOG\WebCode`
-  站点框架、模板、样式、前端脚本、Python 构建脚本都放在这里。
-- `D:\MATHBLOG\PostCode`
-  站点内容放在这里，文章和页面统一用 LaTeX 编写。
+  只放网站框架、模板、样式、脚本和 Python 构建程序。
+- `D:\MATHBLOG` 根目录下的其他同级文件夹
+  直接作为内容文件夹使用，例如 `A01-线性代数`、`A02-实分析`、`B01-课程作业`。
+
+这样其他人在进入 GitHub 仓库时，可以直接从仓库根目录找到他们需要的内容专题。
 
 ## 目录约定
 
@@ -16,9 +18,10 @@ MATHBLOG/
 │  ├─ templates/
 │  ├─ build.py
 │  └─ config.yml
-└─ PostCode/
-   ├─ pages/
-   ├─ posts/
+├─ A00-站点说明/
+│  └─ home.tex
+└─ A01-线性代数/
+   ├─ 01-向量与线性组合.tex
    └─ assets/
 ```
 
@@ -44,27 +47,90 @@ python .\WebCode\build.py --serve --port 8000
 
 然后访问 `http://127.0.0.1:8000`。
 
-## 内容写法
+## 内容放置规则
 
-### 1. 页面与文章来源
+### 1. 内容文件夹
 
-- 首页：`PostCode/pages/home.tex`
-- 普通页面：`PostCode/pages/*.tex`
-- 文章：`PostCode/posts/**/*.tex`
+`WebCode` 之外的顶层文件夹，默认都会被视为内容来源。
 
-### 2. 推荐元数据写法
+例如下面这些名字都可以：
+
+- `A01-线性代数`
+- `A02-数学分析`
+- `B01-课程论文`
+
+### 2. 首页
+
+如果某个内容文件夹里有一个 `home.tex`，它会被当作网站首页。
+
+当前示例是：
+
+```text
+A00-站点说明/home.tex
+```
+
+### 3. 普通文章
+
+其他 `.tex` 文件默认都会被当作文章处理，例如：
+
+```text
+A01-线性代数/01-向量与线性组合.tex
+A01-线性代数/第二章/02-线性映射.tex
+```
+
+左侧文章树会自动按真实文件夹层级组织。
+
+### 4. 独立页面
+
+如果你想让某个 `.tex` 文件变成“独立页面”而不是普通文章，可以在文件最前面写：
+
+```tex
+% kind: page
+```
+
+如果你想显式指定首页，也可以写：
+
+```tex
+% kind: home
+```
+
+## 推荐元数据写法
 
 在 `.tex` 文件最前面使用注释元数据：
 
 ```tex
 % title: 文章标题
-% slug: notes/my-first-post
+% slug: linear-algebra/vector-spaces
 % date: 2026-06-07
 % summary: 一段简短摘要
-% tags: LaTeX, 数学, 网站
+% tags: LaTeX, 线性代数
 ```
 
-### 3. 当前支持的 LaTeX 结构
+## 图片资源
+
+推荐把图片放在对应内容文件夹自己的 `assets/` 子目录里。
+
+例如：
+
+```text
+A01-线性代数/
+├─ 01-向量与线性组合.tex
+└─ assets/
+   └─ linear-combination.svg
+```
+
+然后在 LaTeX 中这样引用：
+
+```tex
+\begin{figure}
+\includegraphics[width=0.72\textwidth]{assets/linear-combination.svg}
+\caption{向量线性组合示意图}
+\end{figure}
+```
+
+构建时这些资源会自动复制到站点输出目录。
+
+## 当前支持的 LaTeX 结构
 
 - 标题：`\section`、`\subsection`、`\subsubsection`、`\paragraph`
 - 列表：`itemize`、`enumerate`
@@ -79,41 +145,15 @@ python .\WebCode\build.py --serve --port 8000
 - 代码块：`verbatim`
 - 正文内目录：`\tableofcontents`
 
-## 关于公式渲染
-
-这个版本的链路是：
-
-1. Python 脚本把 LaTeX 的文档结构转换成 HTML。
-2. 页面里的数学公式由 MathJax 在浏览器端排版。
-
-这样做的好处是：
-
-- 你可以继续直接写 LaTeX。
-- 数学公式显示效果稳定。
-- 不再依赖旧站那套 Markdown 渲染流程。
-
-## 图片资源
-
-推荐把图片放在 `PostCode/assets/` 下，然后在 LaTeX 中这样引用：
-
-```tex
-\begin{figure}
-\includegraphics[width=0.72\textwidth]{assets/sample-geometry.svg}
-\caption{示意图}
-\end{figure}
-```
-
-构建时会自动复制到站点输出目录。
-
 ## 注意
 
 这不是完整 TeX 引擎级别的“全量 LaTeX 转 HTML”，而是一个面向数学博客/学术长文场景的、可维护的静态站点生成器。
 
-如果你后面要支持更复杂的内容，比如：
+如果你后面要继续扩展，比如：
 
 - 自动编号引用 `\ref`
 - 表格 `tabular`
 - 定理统一编号体系
 - BibTeX 参考文献
 
-我们可以在这个骨架上继续扩展。
+我们可以继续在这个骨架上往上接。

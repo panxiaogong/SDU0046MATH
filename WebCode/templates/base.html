@@ -72,7 +72,7 @@
           {% if post_tree %}
           {{ macros.render_tree(post_tree) }}
           {% else %}
-          <p class="empty-state">`PostCode/posts` 里还没有文章。</p>
+          <p class="empty-state">根目录内容文件夹里还没有文章。</p>
           {% endif %}
         </section>
       </div>
@@ -82,7 +82,7 @@
       {% block content %}{% endblock %}
       <footer class="site-footer">
         <span>静态构建时间：{{ generated_at }}</span>
-        <span>内容目录：`PostCode`</span>
+        <span>内容目录：{{ content_root_label }}</span>
         <span>站点框架：`WebCode`</span>
       </footer>
     </main>

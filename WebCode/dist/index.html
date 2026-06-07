@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>数学博客实验站</title>
-  <meta name="description" content="一个把 LaTeX 内容直接编译成 HTML 的数学博客骨架，适合课程笔记、研究随笔和学术长文发布。" />
+  <meta name="description" content="这个数学站点现在采用“WebCode + 根目录内容文件夹”的结构，方便在 GitHub 仓库首页直接查找专题内容。" />
   <link rel="stylesheet" href="/assets/css/site.css" />
   <script>
     window.MathJax = {
@@ -58,10 +58,10 @@
           <h2>文章树</h2>
           <ul class="tree-list">
   <li class="tree-item has-children">
-    <span class="tree-label">Notes</span>
+    <span class="tree-label">A01-线性代数</span>
     <ul class="tree-list">
   <li class="tree-item">
-    <a class="tree-link" href="/notes/getting-started/">从 LaTeX 源文件到可浏览页面</a>
+    <a class="tree-link" href="/A01-线性代数/01-向量与线性组合/">向量与线性组合</a>
   </li>
 </ul>
   </li>
@@ -105,29 +105,31 @@
     </div>
   </header>
   <div class="article-body">
-    <h3 id="这个站点现在能做什么">这个站点现在能做什么</h3>
-<p>这个版本不再沿用旧站的 Markdown 渲染流程，而是把内容源统一切换为 <strong>LaTeX</strong>。也就是说，后续你只需要在 <code>PostCode</code> 目录下维护 <code>.tex</code> 文件，<code>WebCode/build.py</code> 就会把它们编译成结构化的 HTML 页面。</p>
-<nav class="inline-toc"><div class="inline-toc__label">本文提纲</div><ul><li><a href="#这个站点现在能做什么">这个站点现在能做什么</a></li><li><a href="#目录分工">目录分工</a></li><li><a href="#这条新链路为什么更适合你">这条新链路为什么更适合你</a></li><li><a href="#建议你的下一步">建议你的下一步</a></li></ul></nav>
-<h4 id="目录分工">目录分工</h4>
+    <h3 id="新的目录组织方式">新的目录组织方式</h3>
+<p>这个仓库现在不再把所有内容集中塞进一个 <code>PostCode</code> 文件夹里，而是把 <strong>每个专题内容目录直接放在仓库根目录</strong>，并与 <code>WebCode</code> 保持同级。</p>
+<nav class="inline-toc"><div class="inline-toc__label">本文提纲</div><ul><li><a href="#新的目录组织方式">新的目录组织方式</a></li><li><a href="#这样调整的原因">这样调整的原因</a></li><li><a href="#你现在可以怎样组织内容">你现在可以怎样组织内容</a></li><li><a href="#首页与文章的规则">首页与文章的规则</a></li><li><a href="#后续建议">后续建议</a></li></ul></nav>
+<h4 id="这样调整的原因">这样调整的原因</h4>
 <ol class="article-list article-list--ol">
-<li><p><code>WebCode</code> 保存站点框架、模板、样式、脚本，以及 LaTeX 到 HTML 的 Python 构建程序。</p></li>
-<li><p><code>PostCode</code> 保存内容本身，包括首页、独立页面、文章以及图片等资源。</p></li>
-<li><p>构建输出会进入 <code>WebCode/dist</code>，方便你后续直接部署到 GitHub Pages 或其他静态托管平台。</p></li>
+<li><p>进入 GitHub 仓库首页后，读者可以第一时间看到内容专题，而不是先钻进统一的内容总目录。</p></li>
+<li><p>如果后续由多位同学共同维护，不同专题可以天然按文件夹拆开，查找和协作都更直接。</p></li>
+<li><p>网站构建层和内容层分离得更清楚：<code>WebCode</code> 只负责框架，其他内容文件夹只负责 LaTeX 文稿和资源。</p></li>
 </ol>
-<h4 id="这条新链路为什么更适合你">这条新链路为什么更适合你</h4>
-<section class="latex-block latex-block--definition"><div class="block-label">定义 1</div><div class="block-body"><p>这里的“更适合”是指：内容创作习惯、数学公式表达、长文结构控制三件事，都尽量围绕 LaTeX 本身展开，而不是先写 Markdown 再做兼容修补。</p></div></section>
-<p>对于数学站点而言，行内公式 <span class="math-inline">\(f(x)=x^2+\sin x\)</span>、块级公式</p>
-<div class="math-block">\[
-\int_0^1 x^2\,dx = \frac{1}{3}
-\]</div>
-<p>以及像 <code>align</code> 这样的环境，本来就是 LaTeX 最自然的表达方式。把内容层直接建立在 LaTeX 上，后续维护会轻松很多。</p>
-<h4 id="建议你的下一步">建议你的下一步</h4>
+<h4 id="你现在可以怎样组织内容">你现在可以怎样组织内容</h4>
+<p>例如你完全可以在仓库根目录下建立这些同级文件夹：</p>
 <ul class="article-list article-list--ul">
-<li><p>把你原来准备发布的内容逐步迁移到 <code>PostCode/posts/</code> 里。</p></li>
-<li><p>如果文章较长，可以按专题建立子目录，例如 <code>PostCode/posts/analysis/</code>、<code>PostCode/posts/algebra/</code>。</p></li>
-<li><p>如果需要插图，统一放到 <code>PostCode/assets/</code> 中，再用 <code>\includegraphics</code> 调用。</p></li>
+<li><p><code>A01-线性代数</code></p></li>
+<li><p><code>A02-数学分析</code></p></li>
+<li><p><code>B01-课程论文</code></p></li>
+<li><p><code>C01-项目报告</code></p></li>
 </ul>
-<section class="latex-block latex-block--remark"><div class="block-label">注记</div><div class="block-body"><p>这一版已经足够支撑“课程笔记型”和“研究笔记型”网站。如果你接下来想加自动引用、文献系统、搜索页、标签页，我们可以继续往上接。</p></div></section>
+<p>这些目录中的 <code>.tex</code> 文件会被 <code>WebCode/build.py</code> 自动扫描并生成站点页面。</p>
+<h4 id="首页与文章的规则">首页与文章的规则</h4>
+<section class="latex-block latex-block--definition"><div class="block-label">定义 1</div><div class="block-body"><p>如果某个内容文件夹里有一个名为 <code>home.tex</code> 的文件，那么它会被识别为网站首页；其他 <code>.tex</code> 文件默认会被识别为普通文章。</p></div></section>
+<p>如果你以后还想额外增加“关于本站”“友情链接”“课程说明”这类独立页面，也可以在对应的 LaTeX 文件开头写上：</p>
+<pre class="latex-code"><code>% kind: page</code></pre>
+<h4 id="后续建议">后续建议</h4>
+<section class="latex-block latex-block--remark"><div class="block-label">注记</div><div class="block-body"><p>从仓库可读性的角度看，按 <code>A01-...</code>、<code>A02-...</code> 这样的前缀组织内容是很好的做法，因为它既保留排序，又能让人一眼看出专题边界。</p></div></section>
+<p>你现在已经可以直接在根目录新增专题文件夹，然后往里面继续写 LaTeX 内容了。</p>
   </div>
 </section>
 
@@ -138,10 +140,10 @@
       <h2>最近文章</h2>
     </header>
     <div class="post-card-grid">
-      <a class="post-card" href="/notes/getting-started/">
+      <a class="post-card" href="/A01-线性代数/01-向量与线性组合/">
         <p class="post-card__meta">2026-06-07</p>
-        <h3>从 LaTeX 源文件到可浏览页面</h3>
-        <p>用一篇示例文章演示这个新网站骨架支持的写法，包括章节、列表、公式、定理块和插图。</p>
+        <h3>向量与线性组合</h3>
+        <p>一个示例性的线性代数内容页，用来展示根目录内容文件夹的新组织方式，以及 LaTeX 到 HTML 的渲染效果。</p>
       </a>
     </div>
   </div>
@@ -153,10 +155,10 @@
     </header>
     <div class="group-stack">
       <section class="group-block">
-        <h3>Notes</h3>
+        <h3>A01-线性代数</h3>
         <ul class="archive-list">
           <li>
-            <a href="/notes/getting-started/">从 LaTeX 源文件到可浏览页面</a>
+            <a href="/A01-线性代数/01-向量与线性组合/">向量与线性组合</a>
             <span>2026-06-07</span>
           </li>
         </ul>
@@ -165,8 +167,8 @@
   </div>
 </section>
       <footer class="site-footer">
-        <span>静态构建时间：2026-06-07 20:18</span>
-        <span>内容目录：`PostCode`</span>
+        <span>静态构建时间：2026-06-07 20:45</span>
+        <span>内容目录：仓库根目录下与 WebCode 同级的内容文件夹</span>
         <span>站点框架：`WebCode`</span>
       </footer>
     </main>
@@ -176,16 +178,19 @@
         <div class="panel-eyebrow">文内提纲</div>
         <ul class="toc-list">
           <li class="toc-item toc-level-2">
-            <a href="#这个站点现在能做什么">这个站点现在能做什么</a>
+            <a href="#新的目录组织方式">新的目录组织方式</a>
           </li>
           <li class="toc-item toc-level-3">
-            <a href="#目录分工">目录分工</a>
+            <a href="#这样调整的原因">这样调整的原因</a>
           </li>
           <li class="toc-item toc-level-3">
-            <a href="#这条新链路为什么更适合你">这条新链路为什么更适合你</a>
+            <a href="#你现在可以怎样组织内容">你现在可以怎样组织内容</a>
           </li>
           <li class="toc-item toc-level-3">
-            <a href="#建议你的下一步">建议你的下一步</a>
+            <a href="#首页与文章的规则">首页与文章的规则</a>
+          </li>
+          <li class="toc-item toc-level-3">
+            <a href="#后续建议">后续建议</a>
           </li>
         </ul>
       </div>
