@@ -13,13 +13,12 @@
 
 ```text
 MATHBLOG/
+├─ 00-关于本站.tex
 ├─ WebCode/
 │  ├─ assets/
 │  ├─ templates/
 │  ├─ build.py
 │  └─ config.yml
-├─ A00-站点说明/
-│  └─ home.tex
 └─ A01-线性代数/
    ├─ 01-向量与线性组合.tex
    └─ assets/
@@ -61,12 +60,16 @@ python .\WebCode\build.py --serve --port 8000
 
 ### 2. 首页
 
-如果某个内容文件夹里有一个 `home.tex`，它会被当作网站首页。
+如果你希望某个文稿作为网站首页，可以在文件最前面写：
+
+```tex
+% kind: home
+```
 
 当前示例是：
 
 ```text
-A00-站点说明/home.tex
+00-关于本站.tex
 ```
 
 ### 3. 普通文章
@@ -88,11 +91,7 @@ A01-线性代数/第二章/02-线性映射.tex
 % kind: page
 ```
 
-如果你想显式指定首页，也可以写：
-
-```tex
-% kind: home
-```
+如果你想把首页直接放在仓库根目录，这也是支持的。
 
 ## 推荐元数据写法
 

@@ -211,10 +211,16 @@ def parse_date_value(raw: str | None, fallback: datetime) -> tuple[str, str, dat
         return fallback.strftime("%Y-%m-%d"), fallback.strftime("%Y-%m-%d"), fallback
 
     candidate = raw.strip()
-    for fmt in ("%Y-%m-%d", "%Y/%m/%d", "%Y-%m-%d %H:%M", "%Y-%m-%d %H:%M:%S"):
+    format_map = {
+        "%Y-%m-%d": "%Y-%m-%d",
+        "%Y/%m/%d": "%Y-%m-%d",
+        "%Y-%m-%d %H:%M": "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d %H:%M:%S": "%Y-%m-%d %H:%M:%S",
+    }
+    for fmt, display_fmt in format_map.items():
         try:
             parsed = datetime.strptime(candidate, fmt)
-            return candidate, parsed.strftime("%Y-%m-%d"), parsed
+            return candidate, parsed.strftime(display_fmt), parsed
         except ValueError:
             continue
     return candidate, candidate, fallback
@@ -460,7 +466,7 @@ class LatexHtmlConverter:
         text = strip_html(self._render_inline(title, source_path))
         anchor = self._unique_anchor(text or title)
         self.headings.append(Heading(level=level, text=text or title, anchor=anchor))
-        tag = f"h{min(level + 1, 6)}"
+        tag = f"h{min(level, 6)}"
         return f"<{tag} id=\"{anchor}\">{self._render_inline(title, source_path)}</{tag}>"
 
     def _unique_anchor(self, value: str) -> str:
@@ -957,6 +963,10 @@ def discover_content_roots(project_root: Path, reserved_dirs: list[str]) -> list
     return sorted(roots)
 
 
+def discover_root_tex_files(project_root: Path) -> list[Path]:
+    return sorted(path for path in project_root.glob("*.tex") if path.is_file())
+
+
 def discover_tex_files(roots: list[Path]) -> list[Path]:
     files: list[Path] = []
     for root in roots:
@@ -1020,10 +1030,7 @@ def build_document(
     author = metadata.get("author") or site_config["site"]["author"]
     tags = parse_tag_list(metadata.get("tags"))
 
-    if kind == "post":
-        collection_path = relative.parent.parts
-    else:
-        collection_path = ()
+    collection_path = () if is_home else relative.parent.parts
 
     return Document(
         source_path=source_path,
@@ -1061,6 +1068,8 @@ def build_post_tree(posts: list[Document], active_slug: str) -> list[dict[str, A
                     "children": [],
                 }
                 cursor.append(existing)
+            if existing["url"] is None:
+                existing["url"] = post.url
             cursor = existing["children"]
 
         cursor.append(
@@ -1081,6 +1090,57 @@ def build_post_tree(posts: list[Document], active_slug: str) -> list[dict[str, A
             branch["children"] = sort_nodes(branch["children"])
             branch["active"] = branch["active"] or any(child["active"] for child in branch["children"])
         return branches + leaves
+
+    return sort_nodes(root)
+
+
+def build_navigation_tree(documents: list[Document], active_slug: str) -> list[dict[str, Any]]:
+    root: list[dict[str, Any]] = []
+
+    ordered_documents = sorted(
+        documents,
+        key=lambda item: (item.collection_path, item.nav_title.lower(), item.slug),
+    )
+
+    for document in ordered_documents:
+        cursor = root
+        for segment in document.collection_path:
+            existing = next(
+                (
+                    node
+                    for node in cursor
+                    if node["title"] == prettify_slug_piece(segment) and node["children"]
+                ),
+                None,
+            )
+            if not existing:
+                existing = {
+                    "title": prettify_slug_piece(segment),
+                    "url": None,
+                    "active": False,
+                    "children": [],
+                }
+                cursor.append(existing)
+            if existing["url"] is None:
+                existing["url"] = document.url
+            cursor = existing["children"]
+
+        cursor.append(
+            {
+                "title": document.nav_title,
+                "url": document.url,
+                "active": document.slug == active_slug,
+                "children": [],
+            }
+        )
+
+    def sort_nodes(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        nodes.sort(key=lambda node: node["title"].lower())
+        for node in nodes:
+            if node["children"]:
+                node["children"] = sort_nodes(node["children"])
+                node["active"] = node["active"] or any(child["active"] for child in node["children"])
+        return nodes
 
     return sort_nodes(root)
 
@@ -1151,10 +1211,11 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
 
     converter = LatexHtmlConverter(content_root=content_root, base_url=site["base_url"])
 
+    source_paths = [*discover_root_tex_files(content_root), *discover_tex_files(content_roots)]
     pages: list[Document] = []
     posts: list[Document] = []
 
-    for path in discover_tex_files(content_roots):
+    for path in sorted(source_paths):
         kind = infer_document_kind(path)
         document = build_document(path, kind, content_root, converter, config, site["base_url"])
         if document.is_home or document.kind == "page":
@@ -1222,9 +1283,9 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
     }
 
     def render_document(document: Document) -> None:
+        all_navigation_docs = [home_page, *other_pages, *posts]
         nav_context = {
-            "page_links": build_page_links(pages, document.slug),
-            "post_tree": build_post_tree(posts, document.slug),
+            "navigation_tree": build_navigation_tree(all_navigation_docs, document.slug),
         }
         template_name = "home.html" if document.is_home else "page.html"
         template = jinja.get_template(template_name)

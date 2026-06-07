@@ -1,46 +1,34 @@
 {% extends "base.html" %}
 
 {% block content %}
-<article class="paper-card article-page">
-  <header class="article-header">
-    <div>
-      <p class="article-type">{% if document.kind == 'post' %}文章{% else %}页面{% endif %}</p>
-      <h1>{{ document.title }}</h1>
-      {% if document.summary %}
-      <p class="article-lead">{{ document.summary }}</p>
-      {% endif %}
-    </div>
+<h1 id="article-title">{{ document.title }}</h1>
 
-    <div class="article-meta">
-      <span>{{ document.author }}</span>
-      {% if document.date_display %}
-      <span>{{ document.date_display }}</span>
-      {% endif %}
-      {% if document.tags %}
-      <span>{{ document.tags | join(' · ') }}</span>
-      {% endif %}
-    </div>
-  </header>
-
-  <div class="article-body">
-    {{ document.html | safe }}
-  </div>
-
-  {% if document.kind == 'post' and (document.previous_post or document.next_post) %}
-  <nav class="article-pager">
-    {% if document.previous_post %}
-    <a class="pager-link" href="{{ document.previous_post.url }}">
-      <span>上一篇</span>
-      <strong>{{ document.previous_post.title }}</strong>
-    </a>
-    {% endif %}
-    {% if document.next_post %}
-    <a class="pager-link" href="{{ document.next_post.url }}">
-      <span>下一篇</span>
-      <strong>{{ document.next_post.title }}</strong>
-    </a>
-    {% endif %}
-  </nav>
+<div class="article-meta">
+  <span>{{ document.author }}</span>
+  {% if document.date_display %}
+  <span>{{ document.date_display }}</span>
   {% endif %}
-</article>
+  {% if document.tags %}
+  <span>{{ document.tags | join(' · ') }}</span>
+  {% endif %}
+</div>
+
+<div id="article-content">
+  {{ document.html | safe }}
+</div>
+
+{% if document.kind == 'post' and (document.previous_post or document.next_post) %}
+<div class="post-guide">
+  <div class="item">
+    {% if document.previous_post %}
+    <a href="{{ document.previous_post.url }}"><i class="fa fa-angle-left" aria-hidden="true"></i>{{ document.previous_post.title }}</a>
+    {% endif %}
+  </div>
+  <div class="item right">
+    {% if document.next_post %}
+    <a href="{{ document.next_post.url }}">{{ document.next_post.title }}<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
 {% endblock %}

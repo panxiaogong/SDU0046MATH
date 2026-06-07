@@ -3,8 +3,8 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-  <title>向量与线性组合 | 网安数学站</title>
-  <meta name="description" content="一个示例性的线性代数内容页，用来展示根目录内容文件夹的新组织方式，以及 LaTeX 到 HTML 的渲染效果。" />
+  <title>离散数学课程说明 | 网安数学站</title>
+  <meta name="description" content="这里将逐步整理离散数学的课程笔记、习题讨论与专题总结。" />
   <link rel="stylesheet" href="/assets/css/site.css" />
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css" />
   <script>
@@ -76,15 +76,15 @@
   <li class="file">
     <a href="/">00-关于本站</a>
   </li>
-  <li class="directory is-open">
+  <li class="directory">
     <a href="/A01-线性代数/01-向量与线性组合/" class="directory">
       <span class="tree-label">A01-线性代数</span>
-      <span class="tree-expander" role="button" tabindex="0" aria-label="切换 A01-线性代数" aria-expanded="true">
+      <span class="tree-expander" role="button" tabindex="0" aria-label="切换 A01-线性代数" aria-expanded="false">
         <i class="fa fa-angle-right tree-arrow" aria-hidden="true"></i>
       </span>
     </a>
     <ul>
-  <li class="file active">
+  <li class="file">
     <a href="/A01-线性代数/01-向量与线性组合/">01-向量与线性组合</a>
   </li>
 </ul>
@@ -115,15 +115,15 @@
   </li>
 </ul>
   </li>
-  <li class="directory">
+  <li class="directory is-open">
     <a href="/A04-离散数学/00-课程说明/" class="directory">
       <span class="tree-label">A04-离散数学</span>
-      <span class="tree-expander" role="button" tabindex="0" aria-label="切换 A04-离散数学" aria-expanded="false">
+      <span class="tree-expander" role="button" tabindex="0" aria-label="切换 A04-离散数学" aria-expanded="true">
         <i class="fa fa-angle-right tree-arrow" aria-hidden="true"></i>
       </span>
     </a>
     <ul>
-  <li class="file">
+  <li class="file active">
     <a href="/A04-离散数学/00-课程说明/">00-课程说明</a>
   </li>
 </ul>
@@ -179,69 +179,24 @@
     <div id="sidebar-overlay"></div>
 
     <main id="content" class="content">
-<h1 id="article-title">向量与线性组合</h1>
+<h1 id="article-title">离散数学课程说明</h1>
 
 <div class="article-meta">
   <span>山东大学网络空间安全学院</span>
   <span>2026-06-07</span>
-  <span>线性代数 · 向量空间 · LaTeX</span>
 </div>
 
 <div id="article-content">
-  <h2 id="线性组合的基本想法">线性组合的基本想法</h2>
-<p>在线性代数里，我们经常希望用少量基础向量去描述更多的向量。最基本的形式就是线性组合：</p>
-<div class="math-block">\[
-\mathbf{v} = a_1\mathbf{u}_1 + a_2\mathbf{u}_2 + \cdots + a_n\mathbf{u}_n.
-\]</div>
-<p>这意味着，只要给定若干向量 <span class="math-inline">\(\mathbf{u}_1,\dots,\mathbf{u}_n\)</span>，以及一组标量 <span class="math-inline">\(a_1,\dots,a_n\)</span>，就可以得到新的向量 <span class="math-inline">\(\mathbf{v}\)</span>。</p>
-<h3 id="二维情形的直观理解">二维情形的直观理解</h3>
-<p>在二维平面里，若</p>
-<div class="math-block">\[
-\mathbf{u}_1 =
-\begin{pmatrix}
-1\\
-0
-\end{pmatrix},
-\qquad
-\mathbf{u}_2 =
-\begin{pmatrix}
-0\\
-1
-\end{pmatrix},
-\]</div>
-<p>那么任意向量</p>
-<div class="math-block">\[
-\mathbf{v} =
-\begin{pmatrix}
-x\\
-y
-\end{pmatrix}
-\]</div>
-<p>都可以写成</p>
-<div class="math-block">\[
-\mathbf{v} = x\mathbf{u}_1 + y\mathbf{u}_2.
-\]</div>
-<figure class="article-figure"><img src="/content-assets/A01-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/assets/linear-combination.svg" alt="二维平面中，向量 \(\mathbf{v}\) 可以看成基向量线性组合的结果。" loading="lazy" style="width: min(100%, 74%);" /><figcaption>二维平面中，向量 <span class="math-inline">\(\mathbf{v}\)</span> 可以看成基向量线性组合的结果。</figcaption></figure>
-<h3 id="张成与向量空间">张成与向量空间</h3>
-<section class="latex-block latex-block--definition"><div class="block-label">定义 1</div><div class="block-body"><p>给定向量组 <span class="math-inline">\(\mathbf{u}_1,\dots,\mathbf{u}_n\)</span>，所有形如</p>
-<div class="math-block">\[
-a_1\mathbf{u}_1 + \cdots + a_n\mathbf{u}_n
-\]</div>
-<p>的向量所构成的集合，称为这组向量的<strong>张成集</strong>。</p></div></section>
-<p>如果一组向量能够张成整个空间，我们就说它们足以描述这个空间中的所有向量。在线性代数课程里，这会进一步引出“基”“维数”“线性无关”等核心概念。</p>
-<h3 id="一个常见结论">一个常见结论</h3>
-<section class="latex-block latex-block--theorem"><div class="block-label">定理 1</div><div class="block-body"><p>在 <span class="math-inline">\(\mathbb{R}^2\)</span> 中，只要两个向量线性无关，它们就能够张成整个 <span class="math-inline">\(\mathbb{R}^2\)</span>。</p></div></section>
-<section class="latex-block latex-block--proof"><div class="block-label">证明</div><div class="block-body"><p>若两个向量线性无关，则它们不共线，因此它们确定了平面中的两个独立方向。任意平面向量都可以唯一地沿这两个方向分解，所以整个 <span class="math-inline">\(\mathbb{R}^2\)</span> 都能写成这两个向量的线性组合。</p></div></section>
-<h3 id="为什么这个示例有意义">为什么这个示例有意义</h3>
-<section class="latex-block latex-block--example"><div class="block-label">例 1</div><div class="block-body"><p>这个文件被直接放在仓库根目录下的 <code>A01-线性代数</code> 文件夹中，因此别人打开 GitHub 仓库首页后，能够立刻定位到“线性代数”这一专题，而不用先进入统一的内容总目录。</p></div></section>
-<p>这正是这次结构调整的主要目标：让内容文件夹本身就成为仓库首页最直观的导航入口。</p>
+  <h2 id="课程说明">课程说明</h2>
+<p>这里将逐步整理离散数学的课程笔记、习题讨论、命题证明与专题总结。后续你可以继续在这个文件夹下按章节新增 LaTeX 文稿。</p>
 </div>
 
 <div class="post-guide">
   <div class="item">
+    <a href="/A03-数学分析-下/00-课程说明/"><i class="fa fa-angle-left" aria-hidden="true"></i>数学分析(下)课程说明</a>
   </div>
   <div class="item right">
-    <a href="/A02-数学分析-上/00-课程说明/">数学分析(上)课程说明<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    <a href="/A05-组合学与图论/00-课程说明/">组合学与图论课程说明<i class="fa fa-angle-right" aria-hidden="true"></i></a>
   </div>
 </div>
     </main>
@@ -252,19 +207,7 @@ a_1\mathbf{u}_1 + \cdots + a_n\mathbf{u}_n
         <nav id="right-toc-content">
           <ul>
             <li class="toc-level-1">
-              <a href="#线性组合的基本想法">线性组合的基本想法</a>
-            </li>
-            <li class="toc-level-2">
-              <a href="#二维情形的直观理解">二维情形的直观理解</a>
-            </li>
-            <li class="toc-level-2">
-              <a href="#张成与向量空间">张成与向量空间</a>
-            </li>
-            <li class="toc-level-2">
-              <a href="#一个常见结论">一个常见结论</a>
-            </li>
-            <li class="toc-level-2">
-              <a href="#为什么这个示例有意义">为什么这个示例有意义</a>
+              <a href="#课程说明">课程说明</a>
             </li>
           </ul>
         </nav>

@@ -1,8 +1,8 @@
 site:
-  title: 数学博客实验站
-  subtitle: 用 LaTeX 写内容，用 Python 生成静态站点
-  description: 一个将 LaTeX 内容直接编译为 HTML 页面、适合数学与学术写作的静态网站骨架。
-  author: MathBlog
+  title: 网安数学站
+  subtitle: ""
+  description: 一个面向学院数学课程笔记整理与分享的静态站点。
+  author: 山东大学网络空间安全学院
   language: zh-CN
   base_url: /
 
