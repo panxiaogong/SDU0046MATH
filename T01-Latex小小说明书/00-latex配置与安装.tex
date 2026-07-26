@@ -24,11 +24,79 @@ OK，那我们应该如何使用latex呢？
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.35]{figure/00/1.png}
-	\caption{Ubuntu20.04安装成功}
+	\includegraphics[width=0.6\textwidth]{figure/00/1.png}
+	\caption{下载镜像文件}
 \end{figure}
 
+找到下载好的文件，双击它，可能会出现下面的弹窗，无需理会，点击打开
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.3\textwidth]{figure/00/2.png}
+	\caption{系统安全警告}
+\end{figure}
 
+会得到下面的界面：
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figure/00/3.png}
+	\caption{镜像文件内}
+\end{figure}
+
+点击install-tl-windows.bat，开始安装texlive，可能会出现下面的弹窗，无需理会，点击运行
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.3\textwidth]{figure/00/4.png}
+	\caption{开始安装}
+\end{figure}
+
+然后你能看到安装程序，先不要点击安装，如下图所示：
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.3\textwidth]{figure/00/5.png}
+	\caption{安装程序}
+\end{figure}
+
+点击高级，如下图所示：
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figure/00/6.png}
+	\caption{高级}
+\end{figure}
+
+你可以在这里修改安装位置，我把它修改成了下面的样子(因为我实在是不想把它装在C盘，仅供参考)，注意安装路径不能含有中文，否则安装到一半会失败，然后点击安装。
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figure/00/7.png}
+	\caption{个人修改}
+\end{figure}
+
+安装的界面如下图：
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figure/00/8.png}
+	\caption{等待安装完成}
+\end{figure}
+
+安装所需要的时间因电脑而异，请耐心等待，你会等到这样的界面，这时候不要点击终止，要继续耐心等待。
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figure/00/9.png}
+	\caption{等待安装完成}
+\end{figure}
+
+等出现下面的界面时，就意味着安装完成了
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figure/00/10.png}
+	\caption{安装完成}
+\end{figure}
+
+可以摁住win键+R，输入cmd，打开命令行窗口，输入latex -v，如果出现了版本号，就说明安装成功了。
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figure/00/11.png}
+	\caption{检验安装是否成功}
+\end{figure}
 \end{document}
 
 
