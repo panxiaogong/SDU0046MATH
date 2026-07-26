@@ -1296,7 +1296,6 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
         "recent_posts": posts[:6],
         "post_groups": build_post_groups(posts),
         "content_root_label": "仓库根目录下与 WebCode 同级的内容文件夹",
-        "navigation_tree": shared_navigation_tree,
     }
 
     def render_document(document: Document) -> None:

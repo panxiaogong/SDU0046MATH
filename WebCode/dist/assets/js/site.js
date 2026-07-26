@@ -1,14 +1,31 @@
 $(document).ready(function () {
   initHighlight();
   initSidebar();
-  initDirectoryTree();
-  initTreeSearch();
   initHeaderSearch();
   initBackToTop();
   buildRightToc();
   wrapImageWithFancyBox();
-  setActiveSidebarItem();
+  loadSidebar();
 });
+
+function loadSidebar() {
+  var url = window.__sidebarUrl || '/sidebar.html';
+  fetch(url)
+    .then(function (resp) {
+      if (!resp.ok) throw new Error('Sidebar load failed: ' + resp.status);
+      return resp.text();
+    })
+    .then(function (html) {
+      $('#tree').html(html);
+      setActiveSidebarItem();
+      initDirectoryTree();
+      initTreeSearch();
+    })
+    .catch(function (err) {
+      console.error(err);
+      $('#tree').html('<ul><li class="file active"><a href="/">导航加载失败</a></li></ul>');
+    });
+}
 
 function normalizePath(path) {
   var decoded;
