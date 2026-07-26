@@ -1175,6 +1175,13 @@ def build_post_groups(posts: list[Document]) -> list[dict[str, Any]]:
     return grouped
 
 
+def write_text_if_changed(path: Path, content: str) -> None:
+    encoded = content.encode('utf-8')
+    if path.exists() and path.read_bytes() == encoded:
+        return
+    path.write_bytes(encoded)
+
+
 def copy_directory(source: Path, target: Path) -> None:
     if not source.exists():
         return
@@ -1266,6 +1273,14 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
         lstrip_blocks=True,
     )
 
+    sidebar_template = jinja.get_template("sidebar.html")
+    all_navigation_docs = [home_page, *other_pages, *posts]
+    sidebar_html = sidebar_template.render(
+        site=site,
+        navigation_tree=build_navigation_tree(all_navigation_docs, ""),
+    )
+    write_text_if_changed(output_dir / "sidebar.html", sidebar_html)
+
     last_updated = max(
         [home_page.date_sort, *(page.date_sort for page in other_pages), *(post.date_sort for post in posts)],
         default=datetime.now(),
@@ -1283,21 +1298,16 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
     }
 
     def render_document(document: Document) -> None:
-        all_navigation_docs = [home_page, *other_pages, *posts]
-        nav_context = {
-            "navigation_tree": build_navigation_tree(all_navigation_docs, document.slug),
-        }
         template_name = "home.html" if document.is_home else "page.html"
         template = jinja.get_template(template_name)
         rendered = template.render(
             **base_context,
-            **nav_context,
             document=document,
             other_pages=other_pages,
             toc=[heading for heading in document.toc if heading.level >= 2],
         )
         document.output_path.parent.mkdir(parents=True, exist_ok=True)
-        document.output_path.write_text(rendered, encoding="utf-8")
+        write_text_if_changed(document.output_path, rendered)
 
     render_document(home_page)
     for page in other_pages:

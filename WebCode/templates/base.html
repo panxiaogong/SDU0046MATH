@@ -38,6 +38,9 @@
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" onload="window.__typesetMath()"></script>
+  <script>
+    window.sidebarUrl = "{{ site.base_url.rstrip('/') if site.base_url != '/' else '' }}/sidebar.html";
+  </script>
   <script defer src="{{ site.base_url if site.base_url != '/' else '' }}/assets/js/site.js"></script>
 </head>
 <body class="sidebar-open">
@@ -73,13 +76,7 @@
 
       <div class="sidebar-tree-wrap">
         <nav id="tree">
-          {% if navigation_tree %}
-          {{ macros.render_tree(navigation_tree) }}
-          {% else %}
-          <ul>
-            <li class="file active"><a href="{{ site.base_url if site.base_url != '/' else '/' }}">暂无内容</a></li>
-          </ul>
-          {% endif %}
+          <div id="sidebar-content"></div>
         </nav>
       </div>
     </aside>

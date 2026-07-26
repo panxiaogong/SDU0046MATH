@@ -1,13 +1,66 @@
 $(document).ready(function () {
   initHighlight();
   initSidebar();
-  initDirectoryTree();
-  initTreeSearch();
+  loadSidebar().finally(function () {
+    initDirectoryTree();
+    initTreeSearch();
+  });
   initHeaderSearch();
   initBackToTop();
   buildRightToc();
   wrapImageWithFancyBox();
 });
+
+function loadSidebar() {
+  var sidebarUrl = window.sidebarUrl || '/sidebar.html';
+  return fetch(sidebarUrl, { cache: 'no-cache' })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error('Failed to load sidebar: ' + response.status);
+      }
+      return response.text();
+    })
+    .then(function (html) {
+      $('#tree').html(html);
+      setActiveSidebarItem();
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+
+function normalizePath(path) {
+  var normalized = path.replace(/\/index\.html$/i, '/');
+  if (!normalized.endsWith('/')) {
+    normalized += '/';
+  }
+  return normalized;
+}
+
+function setActiveSidebarItem() {
+  var currentPath = normalizePath(window.location.pathname);
+  $('#tree li.file').removeClass('active');
+
+  $('#tree a').each(function () {
+    var href = $(this).attr('href');
+    if (!href) {
+      return;
+    }
+
+    try {
+      var resolved = new URL(href, window.location.origin).pathname;
+      resolved = normalizePath(resolved);
+      if (resolved === currentPath) {
+        var $fileItem = $(this).closest('li.file');
+        $fileItem.addClass('active');
+        revealTreePath($fileItem, true);
+        return false;
+      }
+    } catch (error) {
+      // Ignore invalid URLs
+    }
+  });
+}
 
 function initHighlight() {
   if (!window.hljs) return;
