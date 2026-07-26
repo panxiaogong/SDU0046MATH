@@ -1275,9 +1275,10 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
 
     sidebar_template = jinja.get_template("sidebar.html")
     all_navigation_docs = [home_page, *other_pages, *posts]
+    shared_navigation_tree = build_navigation_tree(all_navigation_docs, "")
     sidebar_html = sidebar_template.render(
         site=site,
-        navigation_tree=build_navigation_tree(all_navigation_docs, ""),
+        navigation_tree=shared_navigation_tree,
     )
     write_text_if_changed(output_dir / "sidebar.html", sidebar_html)
 
@@ -1295,6 +1296,7 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
         "recent_posts": posts[:6],
         "post_groups": build_post_groups(posts),
         "content_root_label": "仓库根目录下与 WebCode 同级的内容文件夹",
+        "navigation_tree": shared_navigation_tree,
     }
 
     def render_document(document: Document) -> None:

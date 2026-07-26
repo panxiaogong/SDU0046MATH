@@ -1,36 +1,23 @@
 $(document).ready(function () {
   initHighlight();
   initSidebar();
-  loadSidebar().finally(function () {
-    initDirectoryTree();
-    initTreeSearch();
-  });
+  initDirectoryTree();
+  initTreeSearch();
   initHeaderSearch();
   initBackToTop();
   buildRightToc();
   wrapImageWithFancyBox();
+  setActiveSidebarItem();
 });
 
-function loadSidebar() {
-  var sidebarUrl = window.sidebarUrl || '/sidebar.html';
-  return fetch(sidebarUrl, { cache: 'no-cache' })
-    .then(function (response) {
-      if (!response.ok) {
-        throw new Error('Failed to load sidebar: ' + response.status);
-      }
-      return response.text();
-    })
-    .then(function (html) {
-      $('#tree').html(html);
-      setActiveSidebarItem();
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
-}
-
 function normalizePath(path) {
-  var normalized = path.replace(/\/index\.html$/i, '/');
+  var decoded;
+  try {
+    decoded = decodeURIComponent(path);
+  } catch (e) {
+    decoded = path;
+  }
+  var normalized = decoded.replace(/\/index\.html$/i, '/');
   if (!normalized.endsWith('/')) {
     normalized += '/';
   }
@@ -40,8 +27,9 @@ function normalizePath(path) {
 function setActiveSidebarItem() {
   var currentPath = normalizePath(window.location.pathname);
   $('#tree li.file').removeClass('active');
+  $('#tree li.directory').removeClass('is-open');
 
-  $('#tree a').each(function () {
+  $('#tree li.file a').each(function () {
     var href = $(this).attr('href');
     if (!href) {
       return;
