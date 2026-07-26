@@ -578,10 +578,15 @@ body:not(.sidebar-open) #content > * {
 }
 
 #article-content h2 {
+  --line-length: 1em;
   font-size: 29px;
-  margin: 24px 0 12px;
+  margin: 0px 0  -12px;
   padding-left: 12px;
-  border-left: 3px solid var(--accent);
+  line-height: 2.4;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 3px var(--line-length);
+  background-position: left calc(((100% - var(--line-length)) / 2) + 3px);
+  background-repeat: no-repeat;
 }
 
 #article-content h3 {
