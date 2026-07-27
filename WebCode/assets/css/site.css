@@ -7,7 +7,7 @@
   --bg-surface-end: #e3dfd6;
   --bg-header: #1f2126;
   --bg-header-deep: #23252b;
-  --text-main: #1f2a37;
+  --text-main: #111;
   --text-soft: #4f5b69;
   --text-weak: #7b8490;
   --accent: #2f4f75;
@@ -20,7 +20,7 @@
   --shadow-soft: 0 8px 18px rgba(32, 36, 43, 0.09);
   --font-latin-math: "MJXTEX", "Latin Modern Roman", "STIX Two Text", "Times New Roman", serif;
   --font-latin-math-italic: "MJXTEX-I-Scaled", "MJXTEX-I", "MJXTEX", "Latin Modern Roman", "STIX Two Text", "Times New Roman", serif;
-  --font-cn: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --font-cn: "Source Han Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "SimHei", sans-serif;
 }
 
 @font-face {
@@ -65,8 +65,8 @@ body {
       linear-gradient(180deg, var(--bg-main) 0%, #edeae5 100%);
   color: var(--text-main);
   font-family: var(--font-cn);
-  line-height: 1.78;
-  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+  -webkit-font-smoothing: auto;
   text-rendering: optimizeLegibility;
 }
 
@@ -545,9 +545,9 @@ body:not(.sidebar-open) #content > * {
   background: linear-gradient(180deg, var(--bg-surface-start) 0%, var(--bg-surface-end) 100%);
   box-shadow: var(--shadow-soft);
   font-family: var(--font-latin-math-italic), var(--font-cn);
-  font-size: 17px;
-  font-weight: 500;
-  font-synthesis: none;
+  font-size: 19px;
+  font-weight: 550;
+  font-synthesis: style weight;
 }
 
 #article-content p,
