@@ -7,7 +7,7 @@
   --bg-surface-end: #e3dfd6;
   --bg-header: #1f2126;
   --bg-header-deep: #23252b;
-  --text-main: #111;
+  --text-main: #1f2a37;
   --text-soft: #4f5b69;
   --text-weak: #7b8490;
   --accent: #2f4f75;
@@ -161,6 +161,7 @@ a:hover {
   font-weight: 700;
   letter-spacing: 0.01em;
   font-size: 30px;
+  font-family: var(--font-cn);
 }
 
 #title i {
@@ -366,6 +367,7 @@ body:not(.sidebar-open) .sidebar-float-toggle i {
   font-size: 15px;
   line-height: 1.35;
   word-break: break-word;
+  font-family: var(--font-cn);
 }
 
 #tree li a:hover {
@@ -384,6 +386,7 @@ body:not(.sidebar-open) .sidebar-float-toggle i {
   gap: 12px;
   color: #2f3948;
   font-weight: 600;
+  font-family: var(--font-cn);
 }
 
 #tree li.file > a {
@@ -535,6 +538,7 @@ body:not(.sidebar-open) #content > * {
   font-size: 48px;
   line-height: 1.22;
   letter-spacing: 0.01em;
+  font-family: var(--font-cn);
 }
 
 #article-content {
@@ -742,6 +746,7 @@ table th {
   color: var(--text-main);
   font-size: 19px;
   font-weight: 700;
+  font-family: var(--font-cn);
 }
 
 #right-toc-content ul {
@@ -762,6 +767,7 @@ table th {
   color: var(--text-soft);
   font-size: 14px;
   line-height: 1.4;
+  font-family: var(--font-cn);
 }
 
 #right-toc-content a:hover {
