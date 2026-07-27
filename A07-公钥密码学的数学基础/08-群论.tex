@@ -1,0 +1,704 @@
+% title: 群论
+% nav_title: 08-群论
+% summary: 公钥密码学的数学基础——群论个人详解
+\documentclass[12pt, a4paper, oneside]{ctexart}
+\usepackage{amsmath,amsthm,amssymb,graphicx}
+\usepackage{float}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+}
+\newtheorem{definition}{定义}[section]
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}{引理}[section]
+\newtheorem{corollary}{推论}[section]
+\newtheorem{proposition}{命题}[section]
+\newtheorem{example}{例}[section]
+\newtheorem*{remark}{注记}
+\renewenvironment{proof}{\noindent\textbf{证明：}}{\hfill$\square$\par}
+\newenvironment{myquote}{\begin{quote}\small\color{gray}}{\end{quote}}
+
+\setlength{\parskip}{4pt plus 2pt minus 1pt}
+
+\begin{document}
+
+\section{群论}
+
+
+其实最开始是没有抽象代数之类的东西的，最开始我们研究的都是普通的数字及其上面的运算，但是随着数学的发展，数学家们发现一些抽象的对象也有和数类似的特征，于是就对这些抽象的东西展开了研究，就有了抽象代数(也叫近世代数)，研究的对象也不再仅仅是数，而是各种各样的“结构”，这其中最基本的就是群、环、域。
+
+群是含有一种代数运算的代数系统(这一句话看不懂不要紧，学完群就懂了)。
+
+\section{群的定义}
+
+为了方便理解群的定义，我们先给出\textbf{二元运算}的定义：
+\textbf{定义}：设$A$是一个非空集合，若对于A中的任意两个元素$a,b$，通过某个法则“$\circ$”，能得到$A$中唯一确定的一个元素$c$，我们就称法则“$\circ$”为集合$A$上的一个代数运算，元素$c$是$a,b$通过运算$\circ$得到的结果，将此结果记为$a\circ b=c$。
+
+这应该不难理解，有理数的加法、减法、乘法都是有理数集$Q$上的代数运算，但除法不是，因为0不能作为除数，但是如果我们考虑非零有理数的集合$Q^*$，那么除法就是$Q^*$上的代数运算，因为此时集合中不再含有0，任意从集合中取出两个数都能运算，并且得到的结果都是非零的有理数。
+
+在知晓了二元运算的定义之后，我们就能看群的定义了。
+
+\begin{myquote}
+为什么我们要先看二元运算呢？群作为一个可被研究的结构，肯定不能只是一个集合那么简单，我们前面写过抽象代数的意义之一在于研究抽象与具体之间的关系，那具体的加减乘除都是运算，所以在研究抽象的东西时也不能忽略“运算”所对应的抽象，这就是为什么要先明白运算的定义。
+\end{myquote}
+
+\textbf{定义}：设$G$是一个非空集合，在$G$上定义了一个二元运算$\circ$，若该运算满足下面的条件，我们就称$G$为一个群：
+(1)对于任意的$a,b,c\in G$，有$(a\circ b)\circ c=a\circ (b\circ c)$(结合律)
+(2)$\exist e\in G,\forall g\in G,\mbox{有}e\circ g=g\circ e=g$(有单位元素)
+(3)$\forall g\in G,\exist g'\in G,\mbox{使得}g\circ g'=g'\circ g=e$(有逆元，并记为$g^{-1}$)
+
+对于群的定义，我们需要额外声明以下几点：
+
+\begin{itemize}[leftmargin=*]
+\item “在$G$上定义了一个二元运算$\circ$”其实就说明了该二元运算在$G$上是\textbf{封闭}的(就是指运算的结果一定是集合内的某个元素，而不是集合外的元素)，这也是判断某个非空集合是否为群的首要条件。
+\item 群中的单位元素必然是存在且唯一的($e_2=e_2\circ e_1=e_1$)
+\item 群中每个元素的逆元素必然是存在且唯一的
+\end{itemize}
+
+($g_2=e\circ g_2=(g_1\circ g)\circ g_2=g_1\circ(g\circ g_2)=g_1\circ e=g_1$)
+
+\begin{myquote}
+若看不懂此声明请反复阅读定义的(1)(2)(3)，实在是看不懂也没关系，我会在后文中放更加详细的证明。
+\end{myquote}
+
+群中只含有一种代数运算，这个代数运算一般用$\circ$或者$\cdot$来表示(当然也可以使用别的符号，比如用加法符号或者乘法符号，皆可)，或者直接省略运算符号，干脆记为$ab$(所以有时把这种代数运算叫做“乘法”，但不绝对，我们在后面会遇到将其称为加法的情况，截止到这里，叫什么名字并不重要)。
+
+\begin{myquote}
+为了避免混淆，后面关于群中的二元运算皆使用符号$\circ$来表示，意在提醒这只是一种抽象的运算，而不是日常里常见的普通乘法，这一点尤其要注意，不要学着学着就混淆了抽象与具体。在使用符号$\circ$的基础上，我们一般把群记为$(G,\circ)$，当然在不引起歧义的前提下可以记为$G$。
+另外，为了避免混淆，后文中所提到的“普通加法”“普通乘法”皆是日常生活中我们常用的加减乘除中的“加”与“乘”，但是后文中提到的“加法”“乘法”两个词是指的抽象的二元运算(毕竟抽象也得有个名字对吧)，请注意区分。
+\end{myquote}
+
+群是一个非常抽象的概念，但是我们可以找到很多群的具体例子，比如全体不等于零的有理数对于普通乘法来说作成一个群，单位元为1，$a$的逆元为$\frac{1}{a}$。
+这是不难理解的，全体不等于0的有理数上的普通乘法肯定是封闭的，有理数同有理数相乘必然仍是有理数；普通乘法必然满足结合律；单位元只有1个，那就是1；元素的逆元就是该元素的倒数(注意，这个集合里是不含0的)。它显然完全满足群的定义，所以这是一个群。
+需要注意的是，这个例子中的非空集合是“全体不等于0的有理数”，而不是“全体有理数”，因为0在普通乘法上是找不到逆元的，这是显然的，因为0乘任何数都等于0，而不等于单位元1。
+
+我们当然还可以举出其他的很多例子，设$n\in Z$，模$n$的完全剩余类$Z_n$对于模$n$的加法(普通加法而已)构成了一个群。它封闭，满足结合律，有单位元$\overline{0}$，$\overline{a}$有逆元$\overline{n-a}$(这里的减号就是普通的减法)；模$n$的简化剩余系对于模$n$的乘法运算(普通乘法而已)也构成了一个群，它封闭，满足结合律，有单位元$\overline{1}$，并且每个元素都有逆元。
+这么说似乎还是有些空洞，不如我们直接举个例子，取$n=8$，那么其完全剩余系就是$\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5},\overline{6},\overline{7}\}$，它是满足结合律的，比如说(因为已经说明是普通加法了，所以直接用了“+”，而没有用“$\circ$”)：
+\[
+(\overline{1}+\overline{2})+\overline{3}=\overline{1}+(\overline{2}+\overline{3})=\overline{6}
+\]
+它还有单位元素$\overline{0}$，比如说：
+\[
+\overline{0}+\overline{2}=\overline{2}+\overline{0}=\overline{2}
+\]
+每个元素都有逆元，比如说：
+\[
+\overline{2}+\overline{6}=\overline{6}+\overline{2}=\overline{0}
+\]
+取$n=8$，那么其简化剩余系就是$\{\overline{1},\overline{3},\overline{5},\overline{7}\}$，也不难验证，首先这是满足结合律的：
+\[
+(\overline{3}\times\overline{5})\times\overline{7}=\overline{3}\times(\overline{5}\times\overline{7})=\overline{105}=\overline{1}
+\]
+它还有单位元素$\overline{1}$，比如说：
+\[
+\overline{1}\times\overline{5}=\overline{5}\times\overline{1}=\overline{5}
+\]
+每个元素都有逆元，比如说：
+\[
+\overline{3}\times\overline{3}=\overline{9}=\overline{1}
+\]
+
+\begin{myquote}
+这里比较特殊一些，$\overline{3}$的逆元恰好是它本身，这当然是符合定义的，但不是所有的群都这样。另外，群的定义中使用的是“任意的”，这里只是为了方便才只写部分元素，实际上对于任意元素都有三条定义成立。
+\end{myquote}
+
+我们现在已经有了群的定义，其实就是一个非空集合加上一个代数运算而已，那么首先就不得不考虑一件事情：这个集合里的元素是有限的还是无限的？根据我们前面的例子，不难发现，有限的也可以，无限的也可以，所以我们给出下面的定义：
+
+\textbf{定义}：假如一个群的元素个数是一个有限的整数，那么称这个群为有限群，否则就称这个群为无限群，一个有限群的元素个数叫做这个群的\textbf{阶}，记作$|G|$。
+
+这并不是一个难懂的概念，接下来我们暂停对群的集合部分的讨论，转而去看看群的运算部分：前面我们的例子中写过$\overline{a}\circ\overline{b}$，那么请问下面这个式子成立吗？
+\[
+\overline{a}\circ\overline{b}=\overline{b}\circ\overline{a}
+\]
+看不出来不要紧，我们想想我们前面提到过的几个例子：对于群$(Z_n,+)$(忘记了的回去重新看例子哦)，不难发现这个例子是成立的，比如说取$n=8$，那么显然有$\overline{3}+\overline{4}=\overline{4}+\overline{3}$，但是对于全体$n$阶可逆矩阵关于矩阵乘法所做成的群，这个式子又不成立了，因为对于任意的两个可逆矩阵$A,B$，不一定有$AB=BA$。
+
+\begin{myquote}
+至于为什么对于全体$n$阶可逆矩阵关于矩阵乘法所做成的结构是群，由于涉及到线性代数，这里不做要求，只需要知道这确实是一个群即可，不过证明也不难。
+\end{myquote}
+
+所以这个式子$\overline{a}\circ\overline{b}=\overline{b}\circ\overline{a}$只对有些群成立，对于有些群反而不成立，为了将这两种群区分开，所以有下面的定义：
+
+\textbf{定义}：对于一个群$(G,\circ)$，如果任意的$a,b\in G$，有$a\circ b=b\circ a$，则称这个群为\textbf{交换群}，也叫做$Abel$群。
+
+\begin{myquote}
+选择性阅读：当一个群是交换群的时候，我们往往将该群的单位元记为0，并称单位元为“零元”，将元素的逆元称为“负元”，并且用“+”来表示群上的运算，并称这个运算为“加法”，把运算的结果叫做“和”，并把这个群称为“加群”；当一个群不是交换群的时候，我们往往将该群称为“乘群”，并把乘群上的运算叫做“乘法”，并且乘群上的运算符号通常会省略不写(当然在这个文档里我还是会写成$\circ$的，为了防止大家在学习过程中混淆这个抽象的乘法与普通乘法。)，接下来这一节中提到的群，若无特殊说明或者特别明显，皆是非交换群。
+\end{myquote}
+
+在对群有了初步的认识之后，我们接下来看一下群的一些简单性质：
+
+\begin{itemize}[leftmargin=*]
+\item 群$G$的单位元是唯一的：
+\[
+\begin{aligned}
+&\mbox{如果}e_1,e_2\mbox{皆是该群的单位元,那么}\\
+&e_1\circ e_2=e_1(\mbox{因为}e_1\mbox{是该群的单位元})\\
+&e_1\circ e_2=e_2(\mbox{因为}e_2\mbox{是该群的单位元})\\
+&\therefore e_2=e_2\circ e_1=e_1
+\end{aligned}
+\]
+\item 群$G$中每一个元素的逆元是唯一的：
+\[
+\begin{aligned}
+&\mbox{如果}g_1,g_2\mbox{皆是元素}g\mbox{的逆元,那么}\\
+&g_2=e\circ g_2=(g_1\circ g)\circ g_2=g_1\circ(g\circ g_2)=g_1\circ e=g_1
+\end{aligned}
+\]
+\item 对于任意的$a\in G$，有$(a^{-1})^{-1}=a$(不证明了，自己体会，体会不出来也没关系，价值不高)
+\item 对于任意的$a,b\in G$，都有$(a\circ b)^{-1}=b^{-1}\circ a^{-1}$(这不难证明，直接计算即可)
+\[
+(a\circ b)\circ(b^{-1}\circ a^{-1})=a\circ (b\circ b^{-1})\circ a^{-1}=a\circ e\circ a^{-1}=a\circ a^{-1}=e
+\]
+\end{itemize}
+
+群的定义中的结合律表明，群中三个元素$a,b,c$做运算的结果与运算的顺序无关，你可以先计算$a\circ b$，再计算$(a\circ b)\circ c$，也可以先计算$b\circ c$，再计算$a\circ(b\circ c)$，但是要注意，不能先计算$a\circ c$，再计算$(a\circ c)\circ b$，因为我们这是在一般的群上进行的讨论，而不是交换群。
+对于三个元素做运算的结果与运算的顺序无关，因此可以直接写成$a\circ b\circ c$，那么对于任意的$k$个元素，其运算结果与运算顺序也是无关的，可以直接写成$a_1\circ a_2\circ \cdots\circ a_k$。据此，我们可以定义出群的元素的方幂：
+
+对于任意的正整数$n$，定义：
+\[
+a^n=a\circ a\circ \cdots \circ a(n\mbox{个}a\mbox{做二元运算})
+\]
+并且约定：
+\[
+a^0=e\\
+a^{-n}=(a^{-1})^n=a^{-1}\circ a^{-1}\circ \cdots\circ a^{-1}
+\]
+
+\begin{myquote}
+实际上公钥课本第八章第一节并未给出群的元素的方幂的定义，这里给出是因为理解这个方幂确实是十分的重要，课本上直接写作$g^m$是省略了运算符号，而不是意味着运算就是普通乘法运算。
+\end{myquote}
+
+不难注意到(实在是注意不到请反复阅读定义)：
+\[
+a^n\circ a^m=a^{n+m}\\
+(a^n)^m=a^{mn}
+\]
+另外，如果群$G$是一个交换群的话，还可以有$(ab)^n=a^nb^n$，但是若不是交换群，那么这个式子一般不会成立。
+
+（接下来这一段选择性阅读）当群$G$是加群(也就是交换群)的时候，元素的方幂应该改写为倍数的形式：也就是$a^n$写作$na$，也就是：
+\[
+na=a+a+\cdots+a\\
+0a=0(0其实是交换群的单位元，前面的选择性阅读中提到过)\\
+(-n)a=n(-a)=(-a)+(-a)+\cdots+(-a)
+\]
+指数法则也会对应的变成倍数法则：
+\[
+na+ma=(n+m)a\\
+m(na)=(mn)a
+\]
+(选择性阅读到此结束)
+
+有了方幂的概念，我们就可以定义元素的阶了(之前我们定义的是群的阶，与元素的阶完全是两个概念，注意不要混淆)：
+
+定义：给定群$G$的一个元素$g$，满足$g^m=e$的最小正整数$m$叫做$g$的阶(或者叫周期)，若这样的$m$不存在，则称$g$的阶为无限。
+
+这是一个相当抽象的概念，必须得通过举例来说明，尽管课本上使用初等数论中的指数来举例，但是这个例子也不够简单，下面我们以群$(Z_n,+)$为例(取$n=8$)，这个群的单位元为$\overline{0}$，我们接下来就需要计算了：
+\[
+\overline{1}^8=\overline{1}+\overline{1}+\overline{1}+\overline{1}+\overline{1}+\overline{1}+\overline{1}+\overline{1}+=\overline{8}=\overline{0}
+\]
+所以该群中元素$\overline{1}$的阶就是8，对于其他的元素也是如此。不过我个人觉得对于单位元来讨论元素的阶就没啥意义了，满足$\overline{0}^m=\overline{0}$的最小正整数$m$，这实在是没什么意思。
+
+课本上有一个定理(尽管我个人觉得这不是很重要)，如下：
+设$a$的阶为$m$，则$a^n=e$当且仅当$m|n$。
+证明：若$m|n$，那么存在整数$k$，使得$n=mk$，于是$a^n=a^{mk}=(a^m)^k=e^k=e$，反之，若$a^n=e$，但是$m$不能整除$n$，设$n=mk+r(1\leqslant r<m)$，那么就有$e=a^n=a^{mk+r}=a^{mk}\circ a^r=(a^m)^k\circ a^r=e\circ a^r=a^r$，这样$a$的阶就是更小的$r$，矛盾。
+
+\begin{myquote}
+课本上有这样一句话，“模$m$的既约剩余系关于剩余系的乘法运算构成了一个有限群，元素的指数即为元素的阶”，感兴趣的同学可以自行体会。
+\end{myquote}
+
+课本上有这样一道例题：设$a,b$是交换群$G$中的元素，$a$的阶为$p$，$b$的阶为$q$，且$p,q$为不同的素数，则$a\circ b$的阶为$pq$(这里的$pq$采用的运算就是普通乘法哈)。
+证明：不妨设$a\circ b$的阶为$d$，那么:
+\[
+(a\circ b)^{pq}=a^{pq}\circ b^{pq}=(a^p)^q\circ (b^q)^p=e\circ e=e\Rightarrow d|pq\\
+e=(a\circ b)^d=(a\circ b)^{dq}(这一步是因为d|dq)\\
+\therefore e=a^{dq}\circ b^{dq}=a^{dq}\circ (b^q)^d=a^{dq}\circ e=a^{dq}\\
+\therefore p|dq\Rightarrow p|d\\
+同理 q|d,所以pq|d\Rightarrow d=pq
+\]
+群的定义这一章就到此结束(现在是凌晨两点二十，我还清醒着)
+
+\section{循环群}
+
+循环群是一种极其特殊的群，尽管这一节放在这里有点前不着村后不着店，但是这一节的内容还是十分重要的。
+
+定义：若一个群$G$中的每一个元素都是某一个固定元素的方幂(在上一节我们已经定义过方幂了)，即$G=\{a^n|n\in Z\}$，则称$G$为循环群，我们也称$G$是由元素$a$生成的，记为$G=(a)$，$a$称为$G$的一个生成元素。
+
+\begin{myquote}
+如果你还能记得初等数论的内容的话，你应该还能记得既约剩余系可以由原根来生成，这就是这个定义的最佳例子。当然记不住也没关系，我们还有别的例子。
+\end{myquote}
+
+最简单的例子，莫过于整数集合上对于普通加法作成的群，也就是$(Z,+)$，该群的单位元是$0=1^0$，$-1=1^{-1}$，不过要注意，这两个式子成立完全是由于方幂的定义，而不是普通乘法！！！任意的整数都可以由有限个1相加或者有限个-1相加，所以$G$中的任意一个元素都可以表示为1的方幂，所以可以说该群是由元素1生成的，写为$(Z,+)=(1)$。
+
+\begin{myquote}
+其实通过计算不难发现，当一个群可由元素$a$生成的时候，这个群其实也可以由元素$a$的逆元来生成。反映到上面的例子中，任意的整数其实也可以表示为-1的方幂，所以-1也是群$(Z,+)$的一个生成元素，也可以写$(Z,+)=(-1)$
+\end{myquote}
+
+这样我们就大概了解了什么是循环群。在具体讨论其结构之前，我们首先要给出群同构的概念，这是一件威力巨大的工具，其意义甚至超过了这一节的循环群(至少我是这么觉得的)
+
+\textbf{定义}：设$(G,\circ),(G',\oplus)$是两个群，如果存在$G$到$G'$的一个映射$f:G\rightarrow G'$，使得
+\[
+f(a\circ b)=f(a)\oplus f(b)
+\]
+对于一切的$a,b\in G$皆成立，那么就说$f$是$G$到$G'$上的一个同态映射。
+
+\begin{myquote}
+需要注意的是，上文中的$\circ,\oplus$皆是二元运算的运算符，只是一个符号表示，并无具体含义，另外，由于$a,b$皆是$G$中的元素，所以$a,b$之间的运算使用$a\circ b$，而$f(a),f(b)$作为$G'$上的元素，之间的运算就应该是$f(a)\oplus f(b)$
+\end{myquote}
+
+\begin{itemize}[leftmargin=*]
+\item 如果$f$是一个满射，那么就说$f$是满同态，用$G\sim G'$来表示
+\item 如果$f$是一个单射，那么就说$f$是单一同态
+\item 如果$f$是一个双射，那么就说$f$是同构映射，此时称这两个群同构，记为$G\cong G'$。
+\end{itemize}
+
+有了这样的定义之后，我们就可以讨论循环群的结构了，是下面的定理：
+
+\textbf{定理}：假定$G$是一个由元$a$所生成的循环群，若$a$的阶无限，那么$G$同整数加群$(Z,+)$同构；若$a$的阶是一个有限整数$n$，那么$G$与模$n$的剩余类加群是同构的。
+
+\begin{myquote}
+这里有一点前面其实没有提到，群$(Z,+)$的名字就是整数加群，当我们提到整数加群的时候也是特指该群，“加”表示该群是一个交换群，群$(Z_n,+)$的名字就是模$n$的剩余类加群，“加”也表示该群是一个交换群。
+\end{myquote}
+
+这里就不再写定理的证明了，这是为数不多的课本上写得异常清楚的证明过程。
+
+(现在是凌晨三点，有点不太清醒了)
+
+\section{子群、子群的陪集}
+
+在讨论集合时，我们引入了子集的概念；在讨论线性空间时，我们引入子空间的概念，所以在研究群的时候，也要考虑群的某些子集的性质，但真正使我们感兴趣的是那些本身按原来群上的运算也是个群的子集，感觉上就是在一个大群里面寻找更小的群，这就有了群的子群的概念。
+
+\textbf{定义}：群$(G,\circ)$的非空子集$H$，若对于$G$的运算作成群，则说$H$是$G$的一个子群，我们用符号$H\leqslant G$来表示。
+
+给定一个任意的群$G$，$G$至少有两个子群，分别是$G$和$\{e\}$，称这两个子群为平凡子群；其他的子群，称为$G$的非平凡子群。
+
+\begin{myquote}
+$G$是自身的一个子群是很好理解的，但是为什么$\{e\}$也是一个子群呢？严格按照定义即可，结合律显然是满足的，任意三个元素只能都取$e$，而$e$作为单位元，其逆元就是它自己，所以这个$\{e\}$其实完全符合一个群的定义，它便就是一个子群。
+\end{myquote}
+
+这么讲还是有一些抽象，我们来举个例子看看。
+设$m$是一个整数，令$H=\{mz|z\in Z\}$，则$H$就是整数加群的一个子群(这里的mz用的就是普通乘法哈)。
+证明：首先，$0=m\times 0$，所以$H$是一个非空集合。
+其次，对于任意的$mx,my\in H$，有$mx+my=m(x+y)\in H$，所以$H$关于$Z$的运算是封闭的。
+由于结合律对$Z$成立，所以对$H$也成立。
+因为$0\in H$，所以对于任意的$mx\in H$，有$0+mx=mx+0=mx$，所以0为$H$的单位元。
+对于$mx\in H$，有$-mx=m(-x)\in H$，且$(-mx)+mx=mx+(-mx)=0$，所以$-mx$就是$mx$的逆元。
+所以$H$就是一个群，所以就是$G$的一个子群。
+
+\begin{myquote}
+这样其实不难看出证明一个结构是群与证明一个非空子集是子群其实是不一样的。当我们需要证明一个结构是群时，往往已经给出了上面封闭的二元运算，我们只需要严格按照群的三条定义即可。但是如果我们想证明某一个非空子集是某一个群的子群，我们就必须先说明它是非空的，其次说明对于群上的运算是封闭的，最后再严格按照群的三条定义去说明，其实，结合律是没必要证明的，因为结合律其实是属于群的运算部分的性质，而不是群的集合部分的性质，从群到运算封闭的非空子集，其运算其实是没有变的，所以满足运算封闭的非空子集一定也是满足结合律的。
+\end{myquote}
+
+其实判断某个非空子集是否是子群，我们有更简单的定理：
+
+\textbf{定理}：设$H$为群$(G,\circ)$的非空子集，$H$作成$G$的一个子群的充分必要条件是：若$a,b\in H\Rightarrow a\circ b^{-1}\in H$。
+
+\textbf{证明：}若$H$是$G$的一个子群，若$a,b\in H$，那么就有$b^{-1}\in H$，由于运算封闭，就有$a\circ b^{-1}\in H$。这就证明了必要性。
+如果想证明充分性：由于$H$是非空的，那么$H$中至少含有一个元素$a$，所以取条件中$b=a$，就有$a\circ a^{-1}=e\in H$，这就说明了其含有单位元，由$e,a\in H$可得$e\circ a^{-1}=a^{-1}\in H$，这就说明了其含有逆元，但是我们还没有说明一件事：该非空子集对于群的运算是封闭的，也就是说，必须要说明$\forall a,b\in H,ab\in H$，这也不难说明：$\forall a,b\in H$，一定会有$a^{-1},b^{-1}\in H$，从而$a\circ b=a\circ (b^{-1})^{-1}\in H$，这就说明了运算的封闭性，一旦有了运算的封闭性，结合律也就自然而然地成立了，所以$H$就是$G$的一个子群。
+
+(现在是凌晨四点，手腕已经有点过载了)
+
+有了子群的概念之后，再结合上一节的循环群，我们就能得到一些奇怪的定理与性质(实际上是我在写到这里时，依然无法判断这些定理到底有用没用)
+
+\textbf{定理}：循环群的子群仍然为循环群。
+
+\textbf{证明：}设循环群的一个生成元素是$a$，若子群$H$只含有一个元素，那它必然是循环群(其实此时$H$就是$\{e\}$)。若$H\neq\{e\}$，由于$H$非空，故所以一定存在$a^k\in H,k>0$，之所以会这样是因为$H$已经是子群了，如果$H$中所有除单位元之外的元素都可以写成生成元素$a$的负数次方幂的话，可以通过取其逆元来获得生成元素$a$的正数次方幂，也就是$H$中会含有$a$的某些幂。令$A=\{k|k\geqslant1,k\in Z,a^k\in H\}$，那么$A$必然不是空集，所以里面必然有最小的元素$r$，任取$a^l\in H$，则当然可以使用带余除法，有$l=qr+s,0\leqslant s<r$，所以有$a^l=a^{qr}\circ a^s$，既然有$a^r$属于子群$H$，那么我们不断地令它与自身做二元运算，就有$(a^r)^q\in H$，所以其逆元$(a^{qr})^{-1}\in H$，又因为$a^l\in H$，所以$(a^{qr})^{-1}\circ a^l=(a^{qr})^{-1}\circ a^{qr}\circ a^s=a^s\in H$，但是$r$已经是最小的正整数了，所以$s=0$，从而对于任意的$a^l\in H$，皆有$l=qr$，所以$H=(a^r)$。
+
+你还记得前面的例子吗？设$m$是一个整数，令$H=\{mz|z\in Z\}$，则$H$就是整数加群的一个子群，不妨我们取$m=5$，那子群$H$中的元素其实全部都是5的倍数，那么就可以写成$H=(5)=(1^5)$。
+
+\textbf{定理}：若$G$为$n$阶循环群，任给$a^i\in G,0\leqslant i\leqslant n-1$，循环子群$H=(a^i)$的阶为$\frac{n}{(n,i)}$。
+
+\textbf{证明：}由题，因为$G$为$n$阶循环群(也就是总共有$n$个元素，每个元素皆可表示为$a$的方幂)
+\[
+G=\{e,a,a^2,...,a^{n-1}\}
+\]
+但是我们要考虑一件事：$a^n$等于$e,a,a^2,...,a^{n-1}$中的哪一个呢？？因为群上的运算是封闭的，所以必然有$a^n=a\circ a^{n-1}\in G$，可是$a^n$等于$e,a,a^2,...,a^{n-1}$中的哪一个呢？？
+
+如果$a^n=a^i(1\leqslant i\leqslant n-1)$，那么就有$a^{n-i}=e$；等等，可是我们规定的是$a^0=e$，所以说对于任意的$1\leqslant i\leqslant n-1$，$a^n=a^i$都不可能成立，所以唯一必须成立的只有$a^n=a^0=e$。
+
+你有没有发现，我们误打误撞中发现了一个事实，循环群$G$的阶为$n$，$a^n=e$说明$a$的阶也是$n$，那么就有：\textbf{有限循环群的阶其实就等于其生成元的阶}。这实在是意外的收获。
+
+那么循环子群$H=(a^i)$的阶其实就是$a^i$的阶，也就是满足$(a^i)^k=e$的最小正整数$k$，也就是$a^{ik}=e$，那么就有$n|ik$，于是：
+\[
+\frac{n}{(n,i)}|\frac{i}{(n,i)}k\\
+\therefore \frac{n}{(n,i)}|k
+\]
+由于我们求的是最小正整数$k$，那么根据上式，最小的正整数$k$就是$\frac{n}{(n,i)}$，故$a^i$的阶就是$\frac{n}{(n,i)}$，所以循环子群$H=(a^i)$的阶就是$\frac{n}{(n,i)}$。
+
+\textbf{例：}若$G=(a)$为$n$阶循环群，那么生成元个数为$\phi(n)$。
+
+\textbf{证明：}我们看上一个定理：$H=(a^i)$的阶就是$\frac{n}{(n,i)}$，等等，如果$(n,i)=1$的话，那么循环子群的阶不就是$n$了嘛！但是它毕竟是子群啊，如果它含有$n$个元素，那必然就是群$G$中的$n$个元素啊，那$a^i$就是群$G$的一个生成元。所以群$G$的生成元的个数就是满足$(n,i)=1$的$i$的个数，那么就是$\phi(n)$。
+
+\begin{myquote}
+已经体会到写到这里突然明白这个例子的喜悦了。
+\end{myquote}
+
+(关于循环群的知识到此结束)
+
+关于子群，还有两点要提及：
+
+\begin{itemize}[leftmargin=*]
+\item 群$G$的任意多个子群的交集仍然也是子群。(若想看证明可以翻课本，不是很困难)
+\item 任取群$G$的一个子集合$M$，设$H_i,i\in I$是群$G$中所有含有$M$的子群，则$H=\cap_{i\in I}H_i$是含$M$的最小子群，我们把这样的$H$叫做$M$生成的子群，用符号$(M)$来表示。(但是我个人没有看到这个定理的价值，尽管在环中好像也有类似的定理？)
+\end{itemize}
+
+下面我们来看陪集的概念：
+
+\textbf{定义}：设$H$是$(G,\circ)$的子群，对于任意的$a\in G$，称$aH=\{a\circ h|h\in H\}$为子群$H$的一个左陪集，同理，称$Ha=\{h\circ a|h\in H\}$为子群$H$的一个右陪集。
+
+\begin{myquote}
+注意，课本上写的是$aH=\{ah|h\in H\}$，是因为课本第八章中会省略二元运算的运算符号(如果你在前面阅读过选择性阅读，知道什么是乘群的话这里就更容易理解了)，但是为了避免学习过程中将抽象的二元运算与普通乘法所混淆，所以这里写$aH=\{a\circ h|h\in H\}$而不是$aH=\{ah|h\in H\}$。
+\end{myquote}
+
+我们仍然举前面的例子：设$m$是一个整数，令$H=\{mz|z\in Z\}$，则$H$就是整数加群的一个子群，不妨我们取$m=5$，那么$H=\{5z|z\in Z\}$。所以我们可以随便写出几个陪集：
+\[
+2H=\{2+5z|z\in Z\}\\
+3H=\{3+5z|z\in Z\}
+\]
+这两个陪集就是模5的两个剩余类。
+
+我们其实能发现，这两个陪集其实压根没有公共元素，那是不是对于任意群的陪集都有这样的性质呢？
+
+\textbf{定理}：设$H$为$G$的子群，任给$H$的左陪集$aH,bH$，则要么$aH=bH$，要么$aH\cap bH=\varnothing$。
+
+\textbf{证明}：若存在$x\in G使得x\in aH\cap bH$，那么
+\[
+x\in aH\Rightarrow \exist h_1\in H,x=a\circ h_1\\
+x\in bH\Rightarrow \exist h_2\in H,x=b\circ h_2\\
+\therefore x=a\circ h_1=b\circ h_2\\
+\therefore \forall a\circ h\in aH,a\circ h=a\circ e\circ h=a\circ h_1\circ h_1^{-1}\circ h\\=
+(a\circ h_1)\circ h_1^{-1}\circ h=(b\circ h_2)\circ h_1^{-1}\circ h=b\circ(h_2\circ h_1^{-1}\circ h)\\
+由于h_2,h_1^{-1},h\in H,另外还有运算的封闭性\\
+\therefore h_2\circ h_1^{-1}\circ h\in H,不妨记为h'\\
+\therefore \forall a\circ h\in aH,a\circ h=b\circ h'\in bH\\
+\therefore aH\subseteq bH
+\]
+同理可得$bH\subseteq aH$，也就是说，但凡$aH,bH$有一个公共元素，就会导致$aH=bH$，所以定理得证。
+
+根据这个定理，我们可以知道群$G$可以借助子群$H$的左陪集(或者右陪集)来实现一个划分(因为不同的陪集之间压根没有公共元素)。
+
+课本这里有一道非常好的例题，也放在下面了：
+\textbf{例}：模6的剩余类加群$(Z_6,+)=\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5}\}$，它有两个子群:
+\[
+H_2=\{\overline{0},\overline{2},\overline{4}\}\;\; H_3=\{\overline{0},\overline{3}\}
+\]
+
+\begin{myquote}
+$H_2,H_3$很容易验证是子群，另外，由于剩余类加群是循环群，所以下面的这两个子群也是循环群，并且分别是由$\overline{2},\overline{3}$生成的。
+\end{myquote}
+
+有子群便能写陪集：
+\[
+\overline{0}H_2=\{\overline{0}+\overline{0},\overline{0}+\overline{2},\overline{0}+\overline{4}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{1}H_2=\{\overline{1}+\overline{0},\overline{1}+\overline{2},\overline{1}+\overline{4}\}=\{\overline{1},\overline{3},\overline{5}\}\\
+\overline{2}H_2=\{\overline{2}+\overline{0},\overline{2}+\overline{2},\overline{2}+\overline{4}\}=\{\overline{2},\overline{4},\overline{6}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{3}H_2=\{\overline{3}+\overline{0},\overline{3}+\overline{2},\overline{3}+\overline{4}\}=\{\overline{3},\overline{5},\overline{1}\}\\
+\overline{4}H_2=\{\overline{4}+\overline{0},\overline{4}+\overline{2},\overline{4}+\overline{4}\}=\{\overline{4},\overline{0},\overline{2}\}\\
+\overline{5}H_2=\{\overline{5}+\overline{0},\overline{5}+\overline{2},\overline{5}+\overline{4}\}=\{\overline{5},\overline{1},\overline{3}\}\\
+\]
+同理可写$H_3$的陪集。
+
+通过这个例子，我们能发现以下几点：
+
+\begin{itemize}[leftmargin=*]
+\item $H$的一个陪集有可能是一个子群，也有可能不是
+\item $H$的各个陪集的元素个数都是相同的。
+\item $G$的两个不同元素可能可能生成同一个左陪集
+\end{itemize}
+
+那一个子群的左陪集与右陪集之间有什么数量关系呢？我们有下面的定理：
+
+\textbf{定理}：若$H$是$G$的子群，则$G$关于子群$H$的左陪集与右陪集的个数是一定相等的。
+
+\textbf{证明}：设左陪集作成的集合为$S_L$，右陪集作成的集合为$S_R$，作$S_R$到$S_L$的映射：
+\[
+\phi:Ha\rightarrow a^{-1}H
+\]
+下面证明$\phi$是一个从$S_R$到$S_L$的一个一一映射。
+
+首先证明这是一个映射，也就是说明相同的原象对应相同的象，若$Ha=Hb$，那么：
+\[
+不妨令H={h_1,h_2,...,h_k},由Ha=Hb\\
+\{h_1\circ a,h_2\circ a,...,h_k\circ a\}=\{h_1\circ b,h_2\circ b,...,h_k\circ b\}\\
+不妨设h_i\circ a=h_j\circ b\\
+h_i^{-1}\circ h_i\circ a\circ b^{-1}=h_i^{-1}\circ h_j\circ b\circ b^{-1}\\
+\therefore a\circ b^{-1}=h_i^{-1}\circ h_j\\
+\because h_i,h_j\in H\Rightarrow h_i^{-1}\in H\Rightarrow h_i^{-1}\circ h_j\in H\\
+\therefore a\circ b^{-1}\in H\\
+\therefore (a\circ b^{-1})^{-1}\in H也就是b\circ a^{-1}\in H\\
+不妨设b\circ a^{-1}=h_1,那么a^{-1}=b^{-1}\circ h_1\\
+\therefore a^{-1}H=(b^{-1}\circ h_1)H=\\
+\{b^{-1}\circ h_1\circ h_1,b^{-1}\circ h_1\circ h_2,...,b^{-1}\circ h_1\circ h_k\}\\
+由于H作为一个子群,其上面的运算是封闭的，所以:\\
+\{ h_1\circ h_1, h_1\circ h_2,..., h_1\circ h_k\}=\{h_1,h_2,...,h_k\}\\
+\therefore \{b^{-1}\circ h_1\circ h_1,b^{-1}\circ h_1\circ h_2,...,b^{-1}\circ h_1\circ h_k\}\\=\{ b^{-1}\circ h_1, b^{-1}\circ h_2,..., b^{-1}\circ h_k\}=b^{-1}H\\
+\therefore a^{-1}H=b^{-1}H
+\]
+这就说明了任意两个原象对应相同的象，所以这是一个映射。
+
+接下来证明这是一个满射：$S_L$中的任意元素$aH$都是$S_R$中元素$Ha^{-1}$的象，所以这是一个满射。最后证明这是一个单射：若$Ha\neq Hb$，由前面的定理，我们知道，$Ha,Hb$要么相等，要么交集为空，所以如果$Ha\neq Hb$，那只能是交集为空，即两个右陪集之间一个相同的元素都没有，回忆刚才证明其是映射的过程($Ha=Hb\Rightarrow ab^{-1}\in H$)，现在$Ha\neq Hb$，就会有$ab^{-1}\notin H$，所以$(ab^{-1})^{-1}=ba^{-1}\notin H$，所以$a^{-1}H\neq b^{-1}H$，也就是任意不同的原象对应着不同的象，所以这是一个单射。
+
+综上，这是一个一一映射，所以群$G$关于子群$H$的左陪集与右陪集个数是相等的。
+
+接下来我们给出一个定义：
+
+\textbf{定义}：一个群$G$的一个子群$H$的右陪集(或左陪集)的个数叫做$H$在$G$里的指数，记为$[G:H]$，特别的，$[G:1]$表示群$G$的阶，也就是群中的元素数目。
+
+但愿大家还能记得刚才举过的例子：
+\textbf{例}：模6的剩余类加群$(Z_6,+)=\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5}\}$，它有两个子群:
+\[
+H_2=\{\overline{0},\overline{2},\overline{4}\}\;\; H_3=\{\overline{0},\overline{3}\}
+\]
+有子群便能写陪集：
+\[
+\overline{0}H_2=\{\overline{0}+\overline{0},\overline{0}+\overline{2},\overline{0}+\overline{4}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{1}H_2=\{\overline{1}+\overline{0},\overline{1}+\overline{2},\overline{1}+\overline{4}\}=\{\overline{1},\overline{3},\overline{5}\}\\
+\overline{2}H_2=\{\overline{2}+\overline{0},\overline{2}+\overline{2},\overline{2}+\overline{4}\}=\{\overline{2},\overline{4},\overline{6}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{3}H_2=\{\overline{3}+\overline{0},\overline{3}+\overline{2},\overline{3}+\overline{4}\}=\{\overline{3},\overline{5},\overline{1}\}\\
+\overline{4}H_2=\{\overline{4}+\overline{0},\overline{4}+\overline{2},\overline{4}+\overline{4}\}=\{\overline{4},\overline{0},\overline{2}\}\\
+\overline{5}H_2=\{\overline{5}+\overline{0},\overline{5}+\overline{2},\overline{5}+\overline{4}\}=\{\overline{5},\overline{1},\overline{3}\}\\
+\]
+同理可写$H_3$的陪集。
+
+结合上面的定义，就有$[G:H_2]=2$，(注意定义中的指数计算的是不同的左陪集的个数，所以这里是2而不是6)，我们不难发现，例子中的剩余类加群阶为6，陪集中的元素个数皆为3，恰好有$6=2\times 3$。这并不是什么巧合，这就是群论中一个非常重要的定理，\textbf{拉格朗日定理}。
+
+\textbf{Lagrange定理}：若$H$是一个有限群$G$的子群，那么：
+\[
+[G:1]=[G:H][H:1]
+\]
+证明：前面提到过，群$G$可以借助其子群的左陪集或者右陪集来确定一个划分，总共有$n$个元素，被划分为了$[G:H]$个部分，每个部分皆含有$[H:1]$个元素(前面提到过，同一个子群确定的各个陪集元素个数是相等的)，所以就有这个结论成立。
+
+\begin{myquote}
+为什么这个定理这样写出来这么简单，但是当时讲的时候怎么就是理解不了呢？？？
+\end{myquote}
+
+该定理之所以重要，是因为其具有巨大的实用价值，比如：
+
+\textbf{定理}：一个有限群$G$的任意一个元$a$的阶$n$都能整除$G$的阶。
+\textbf{证明}：该元$a$的阶是$n$，也就是有$a^n=e$，那么$a$生成的子群$H$就是$\{e,a,a^2,...,a^{n-1}\}$，也就是说$[H:1]=n$，直接带入拉格朗日定理，就有：
+\[
+群G的阶=[G:1]=[G:H][H:1]=[G:H]\cdot n
+\]
+所以$n$能够整除群$G$的阶。
+
+\textbf{定理(Euler定理)}：设$a,m$是两个正整数并且$(a,m)=1$，那么：
+\[
+a^{\varphi(m)}\equiv 1(mod \;\; m)
+\]
+\textbf{证明}：考虑模$m$的既约剩余类乘群，用$a$作为生成元生成该群的一个子群，记该子群的阶为$\delta$，前面提到过\textbf{有限循环群的阶其实就等于其生成元的阶}，该子群其实就是一个有限循环群，该子群的阶就是生成元的阶，所以就有：
+\[
+a^\delta \equiv \overline{1}
+\]
+由拉格朗日定理：
+\[
+\varphi(m)=[G:1]=[G:H][H:1]=[G:H]\cdot \delta\\
+\therefore \delta |\varphi(m)\Rightarrow \varphi(m)=k\delta\\
+\therefore a^{\varphi(m)}=a^{k\delta}=(a^\delta)^k\equiv 1(mod \;\;m)
+\]
+定理得证。
+
+\begin{myquote}
+其实这里就足够能感受到抽象代数的强大了，拉格朗日定理的推导等等并没有太用到初等数论相关的内容，但是却可以通过合适的群的选取来证明初等数论中的欧拉定理。
+\end{myquote}
+
+课本上还有一道例8.31，但是那道例题的证明过程竟然写的反常的详细，所以这里就不做补充了。
+
+\section{同态基本定理}
+
+在我们介绍了左右陪集之后，我们知道对于群$G$的任意子群$H$，其左陪集未必等于右陪集，但是有一类$G$的特殊子群，其左陪集等于右陪集，我们称这种子群为\textbf{不变子群}。
+
+\textbf{定义}：设$H$是群$G$的一个子群，如果对任意的$a\in G$都有$aH=Ha$，那么就说$H$是$G$的一个不变子群(或正规子群)，记为$H\vartriangleleft G$
+
+首先，对于群$G$的两个平凡子群$G,\{e\}$，这两个子群其实都是不变子群，这是比较显然的，子群$G$的任意一个左陪集或者右陪集其实都是$G$(考虑群上二元运算的封闭性)，而子群$\{e\}$的同相同元素$a$产生的左陪集与右陪集当然也都是$\{a\}$，所以这两个都是不变子群。
+
+判断一个群是不是不变子群，可以直接使用定义，也可以用下面的充要条件：
+
+\textbf{定理}：设$H$是群$G$的子群，那么下面四个条件等价：
+(1)$H$是$G$的不变子群
+(2)对于任意的$a\in G$，都有$aHa^{-1}=H$
+(3)对于任意的$a\in G$，都有$aHa^{-1}\subseteq H$
+(4)对于任意的$a\in G$和任意的$h\in H$，都有$aha^{-1}\in H$
+
+关于这里的证明，课本上已经写的十分的详细了，没有什么好补充的，这里不再搬运了。
+
+(接下来的几段话可能有点玄乎，深呼吸)
+
+若$H$是$(G,\circ)$的不变子群，$G/H=\{aH|a\in G\}$表示$G$关于$H$的所有陪集的集合，我们定义$G/H$上的一种运算$\oplus$:
+\[
+aH\oplus bH=(a\circ b)H
+\]
+
+\begin{myquote}
+这里的新运算之所以不用课本上用的“$\circ$”符号是因为这个符号已经被我用作表示群上的运算，所以这里使用符合$\oplus$来加以区分，意在说明这两个运算并不是同一种运算。至于课本上直接写$ab$，那是因为省略了中间的符号而已。
+\end{myquote}
+
+下面证明，这种运算是一种二元运算：
+
+\begin{myquote}
+我需要说明的是，我个人认为课本上此处的证明是错误的，至于为什么错误，看完下面我个人认为正确的证明过程，应该能够明白。(下面的这个证明过程来自于第二版近世代数)
+\end{myquote}
+
+要想证明这是二元运算，只需要说明对于两组相同的操作数，运算得到的结果相同，也就是如果$aH=a'H,bH=b'H,那么就有aH\oplus bH=a'H\oplus b'H$，证明过程如下：
+\[
+a'H\oplus b'H=(a'b')H=a'(b'H)=a'(bH)=a'(Hb)\\
+=(a'H)b=(aH)b=a(Hb)=a(bH)=(ab)H\\
+=aH\oplus bH
+\]
+这样就证明了该二元运算其实是$G/H$的一个二元运算。
+
+课本上有一个例8.36，我觉得比较有助于理解这种二元运算，做了部分补充放在了下面：
+
+\textbf{例}：设$H$是$G$的一个子群，则$H$的任意两个左陪集的乘积仍是一个左陪集当且仅当$H$是$G$的一个不变子群。(注意，此处的“乘积”二字指的就是刚才定义过的二元运算)
+
+\textbf{证明}：如果$H$是$G$的一个不变子群，那么根据我们刚才定义的运算：
+\[
+aH\oplus bH=(a\circ b)H
+\]
+这显然就是两个左陪集的乘积仍然是一个左陪集，这是没有什么异议的。如果$H$的任意两个左陪集的乘积仍是一个左陪集，那我们该如何证明子群$H$是一个不变子群呢？首先，我们需要证明$aH\oplus bH=(a\circ b)H$，等等，这个不是已经成立了吗？？当然不是，在已知$H$是$G$的一个不变子群的情况下，这个式子是成立的，但是我们现在不知道$H$到底是不是一个不变子群，所以就要先证明这个式子成立：
+既然我们已知$H$的任意两个左陪集的乘积仍是一个左陪集，我们不妨设$aH\oplus bH=cH$，由于：
+\[
+a\circ b=(a\circ e)\circ (b\circ e)\in aH\oplus bH=cH\\
+\therefore a\circ b\in cH
+\]
+由前面的定理我们可以知道，两个陪集要么没有公共元素，要么完全相等，因为$a\circ b\in (a\circ b)H$是显然有的，所以$(a\circ b)H=cH$，那么就有：
+\[
+aH\oplus bH=cH=(a\circ b)H
+\]
+如果取$b=a^{-1}$，那么就有：
+\[
+aH\oplus a^{-1}H=(a\circ a^{-1})H=eH=H
+\]
+所以说，对于任意的$h\in H$，则：
+\[
+aha^{-1}=(ah)(a^{-1}e)\in aH\oplus a^{-1}H=H
+\]
+这样其实就满足了定理中的条件(4)，可以得出$H$是$G$的不变子群。
+
+现在既然我们已经有了一个崭新的运算$\oplus$，那能不能有一个崭新的群呢？
+
+\textbf{定理}：设$H$是群$G$的不变子群，那么$(G/H,\oplus)$作成一个群。(其中，$G/H=\{aH|a\in G\}$表示$G$关于$H$的所有陪集的集合，二元运算$\oplus$为我们刚刚定义出的那个运算)
+
+\textbf{证明}：该运算是一个二元运算以及运算的封闭性我们刚才已经证明过了(就在刚开始提出这种运算的地方)。
+接下来我们证明其满足结合律：对于任意的$a,b,c\in G$，有：
+\[
+(aH\oplus bH)\oplus cH=(a\circ b)H\oplus cH=((a\circ b)\circ c)H\\
+=(a\circ(b\circ c))H=aH\oplus (b\circ c)H=aH\oplus (bH\oplus cH)
+\]
+所以说结合律是成立的。对于任意的$a\in G$，有：
+\[
+eH\oplus aH=(e\circ a)H=aH=(a\circ e)H=aH\oplus eH
+\]
+所以说$eH(其实就是H)$就是该群的单位元。对于任意的$aH\in G/H$，有$a^{-1}H\in G/H$，且：
+\[
+a^{-1}H\oplus  aH=(a^{-1}\circ a)H=eH=(a\circ a^{-1})H=aH\oplus a^{-1}H
+\]
+这样就说明了该群中的任意元素都有逆元。这就证明了$G/H$是一个群。
+
+对于$G/H$这个群，我们特意给它取了名字，看下面的定义：
+
+\textbf{定义}：群$G$的不变子群$H$的陪集所作成的群叫做一个商群，记作$G/H$(其实就是前面已经提到过的$G/H$，只是这里非常认真地给个定义而已)。
+
+\textbf{定理}：一个群$G$同它的每一个商群$G/H$同态(注意是每一个，因为当群$G$有不止一个不变子群的时候，肯定也会有不止一个商群)。
+\textbf{证明}：作一个映射：$\phi:a\rightarrow aH(a\in G)$，我们前面提到过，$G$的两个不同元素可能可能生成同一个左陪集，所以这一定是一个从$G$到$G/H$的满射，如果实在是明白不了也没关系，可以看下面的这个例子：
+\textbf{例}：模6的剩余类加群$(Z_6,+)=\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5}\}$，它有一个不变子群为$H_2$(因为剩余类加群是交换群，所以它的子群一定是不变子群，不明白也没关系，知道这就是个不变子群继续往下看即可):
+\[
+H_2=\{\overline{0},\overline{2},\overline{4}\}
+\]
+有子群便能写陪集：
+\[
+\overline{0}H_2=\{\overline{0}+\overline{0},\overline{0}+\overline{2},\overline{0}+\overline{4}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{1}H_2=\{\overline{1}+\overline{0},\overline{1}+\overline{2},\overline{1}+\overline{4}\}=\{\overline{1},\overline{3},\overline{5}\}\\
+\overline{2}H_2=\{\overline{2}+\overline{0},\overline{2}+\overline{2},\overline{2}+\overline{4}\}=\{\overline{2},\overline{4},\overline{6}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{3}H_2=\{\overline{3}+\overline{0},\overline{3}+\overline{2},\overline{3}+\overline{4}\}=\{\overline{3},\overline{5},\overline{1}\}\\
+\overline{4}H_2=\{\overline{4}+\overline{0},\overline{4}+\overline{2},\overline{4}+\overline{4}\}=\{\overline{4},\overline{0},\overline{2}\}\\
+\overline{5}H_2=\{\overline{5}+\overline{0},\overline{5}+\overline{2},\overline{5}+\overline{4}\}=\{\overline{5},\overline{1},\overline{3}\}\\
+\]
+不难发现，元素$\overline{0},\overline{2},\overline{4}$对应的都是同一个陪集。
+
+在说明完这是一个满射之后，我们必须说明它是一个同态映射：对于任意的$a,b\in G$，有：
+\[
+\phi(a\circ b)=(a\circ b)H=aH\oplus bH=\phi(a)\oplus\phi(b)
+\]
+所以这就是一个同态满射，定理得证。
+
+接下来的定义也好，定理也好，都是围绕着不变子群，商群与同态映射来展开的。
+
+\textbf{定义}：设$\phi$是群$G$到群$G'$的同态满射，$G'$的单位元$e'$在$\phi$作用下的逆象为$G$的子集，该子集称为同态满射$\phi$的核，记作$ker \phi$，那么有$ker \phi=\phi^{-1}(e')$
+
+我还是拿已经出现过三次的这个例子来举例：
+\textbf{例}：模6的剩余类加群$(Z_6,+)=\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5}\}$，它有一个不变子群为$H_2$
+\[
+H_2=\{\overline{0},\overline{2},\overline{4}\}
+\]
+有子群便能写陪集：
+\[
+\overline{0}H_2=\{\overline{0}+\overline{0},\overline{0}+\overline{2},\overline{0}+\overline{4}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{1}H_2=\{\overline{1}+\overline{0},\overline{1}+\overline{2},\overline{1}+\overline{4}\}=\{\overline{1},\overline{3},\overline{5}\}\\
+\overline{2}H_2=\{\overline{2}+\overline{0},\overline{2}+\overline{2},\overline{2}+\overline{4}\}=\{\overline{2},\overline{4},\overline{6}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{3}H_2=\{\overline{3}+\overline{0},\overline{3}+\overline{2},\overline{3}+\overline{4}\}=\{\overline{3},\overline{5},\overline{1}\}\\
+\overline{4}H_2=\{\overline{4}+\overline{0},\overline{4}+\overline{2},\overline{4}+\overline{4}\}=\{\overline{4},\overline{0},\overline{2}\}\\
+\overline{5}H_2=\{\overline{5}+\overline{0},\overline{5}+\overline{2},\overline{5}+\overline{4}\}=\{\overline{5},\overline{1},\overline{3}\}\\
+\]
+我们只需要取$G'=G/H$即可，这样$G'$的单位元其实就是$\overline{0}H_2=H_2$，我们发现：
+\[
+\phi(\overline{0})=\overline{0}H_2=\{\overline{0},\overline{2},\overline{4}\}=H_2=e'\\
+\phi(\overline{2})=\overline{2}H_2=\{\overline{0},\overline{2},\overline{4}\}=H_2=e'\\
+\phi(\overline{4})=\overline{4}H_2=\{\overline{0},\overline{2},\overline{4}\}=H_2=e'\\
+\]
+那么$ker \phi=\{\overline{0},\overline{2},\overline{4}\}$。
+
+\textbf{定理}：若$\phi$是群$G$到群$G'$的同态满射，那么$ker \phi$是G的不变子群。
+
+在上面的例子中，$ker \phi=\{\overline{0},\overline{2},\overline{4}\}$，这其实就是$H_2$，就是群$G$的一个不变子群。那如何证明呢？
+\textbf{证明}：令$ker \phi=K$，对于任意$a,b\in K$，由于$\phi$是同态映射，那么就有：
+\[
+\phi(a\circ b^{-1})=\phi(a)\cdot\phi(b^{-1})
+\]
+接下来我们看下面几个过程：
+\[
+\phi(e)=\phi(e\circ e)=\phi(e)\cdot\phi(e)\Rightarrow \phi(e)=e'\\
+e'=\phi(e)=\phi(b\circ b^{-1})=\phi(b)\cdot\phi(b^{-1})\Rightarrow \phi(b)^{-1}=\phi(b^{-1})
+\]
+所以：
+\[
+\phi(a\circ b^{-1})=\phi(a)\cdot\phi(b^{-1})=\phi(a)\cdot\phi(b)^{-1}=e'\cdot e'^{-1}=e'\\
+\therefore a\circ b^{-1}\in K
+\]
+所以$K$是一个子群。同理，对于任意的$a\in G,k\in K$：
+\[
+\phi(aka^{-1})=\phi(a)\cdot\phi(k)\cdot\phi(a^{-1})=\phi(a)\cdot\phi(k)\cdot\phi(a)^{-1}\\
+=\phi(a)\cdot e'\cdot\phi(a)^{-1}=(\phi(a)\cdot e')\cdot\phi(a)^{-1}=(e'\cdot\phi(a))\cdot\phi(a)^{-1}\\
+=e'\cdot\phi(a)\cdot\phi(a)^{-1}=e'
+\]
+所以$aka^{-1}\in K$，所以$K$是一个不变子群。
+
+\textbf{定理}：若$\phi$是群$G$到群$G'$的同态满射，那么$G/ker\phi\cong G'$。
+
+\begin{myquote}
+在证明它之前，我觉得有必要解释一下它，因为$ker \phi$是不变子群，所以$G/ker\phi$其实就是一个商群，一个由$ker \phi$的所有陪集所构成的集合所作成的群，符号$\cong$的意思是同构，就是说商群同$G'$之间存在一个同构映射。
+\end{myquote}
+
+有关该定理的证明，课本写的十分清楚，而且那些可能会有疑问的地方皆在前面被解释过好几次了，这里不再搬运，大家开动脑筋。
+
+要不我先介绍一下同态象的意思吧：比如说群$G$到群$G'$之间存在一个同态映射$f$，那么$G'$就是$G$的一个同态象，可以记为$f(G)=G'$。
+
+\textbf{同态基本定理}：设$G$是一个群，则$G$的任意商群都是$G$的同态象(这里运用了定理：一个群$G$同它的每一个商群$G/H$同态)，反之，如果说$f(G)=G'$，那么$G/ker\phi\cong G'$(这其实就是上一个定理)
+
+课本上有一个定理8.44，但是我个人觉得这个定理放在这里有些无厘头，直接扑哧扑哧放了四条性质在这里，实在是摸不着头脑(我也确实没力气证了)，至于后面的例8.45，我个人觉得证明过程还是很详细的，并且不需要定理8.44，只需要同态基本定理就能做，各位开动脑筋，检验一下自己的学习成果。
+
+\section{有限群的实例}
+
+OK我终于熬到这里了。
+
+关于第五节的内容，我个人觉得唯一有用处的就是定义8.49那几个公式，若再感兴趣一点可以看看课件上的图解，这已经超出我能力范围了，我原先没有使用过数学软件绘制函数图像，而且绘制出来的也不一定多好看，而且课件上那几张曲线的图片确实已经十分的明显了，更何况，这一节椭圆曲线这里，不会群也没关系，当成高中解析几何去学感觉也差不多，个人暴论，个人暴论。
+
+\section{最后}
+
+我知道群的理解难度远远比不上环，但是一路写下来，我发现了很多相似的地方，怎么说呢，我个人觉得，如果群学得相对熟练一些，应该对学习环也有很大的帮助吧。帮到这里了，大家自求多福。
+
+
+\end{document}

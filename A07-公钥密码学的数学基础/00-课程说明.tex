@@ -1,7 +1,47 @@
-% title: 公钥密码学的数学基础课程说明
+% title: 课程说明
 % nav_title: 00-课程说明
 % summary: 这里将逐步整理公钥密码学相关数学基础内容，包括数论、代数结构与算法背景。
+\documentclass[12pt, a4paper, oneside]{ctexart}
+\usepackage{amsmath,amsthm,amssymb,graphicx}
+\usepackage{float}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+}
 
-\section{课程说明}
 
-这里将逐步整理公钥密码学相关的数学基础内容，包括数论、代数结构、算法背景与课程例题。后续你可以继续在这个文件夹下按章节新增 LaTeX 文稿。
+
+\begin{document}
+
+\section*{个人看法}
+
+毫不夸张地讲，公钥密码学的数学基础在24级是相当困难的一门课，一是绝大多数同学之前可能没有接触过数论，可能会对这种很新奇的思考问题的方式感到陌生，二是数论本身理解起来难度就比较大，对几乎绝大多数人都不友好，所以当时在随着课程推进时，我就写了群论(课本第八章)和环与域的文档并且发了出去，很侥幸地收获了一些好评，其他章节的难度要小于这两章，内容也是后来补充的。
+
+另外需要提出的是，文档中的例题有很多并不来源于我们的课本，而是其他的参考资料，是一些我个人觉得比较有价值的题目。
+\section*{关于文档的参考}
+
+\textbf{本文档的所有知识点几乎全部来自于《公钥密码学的数学基础(第二版)》，有部分习题也来自于这本书}，这也是24级这门课程的课本。
+
+除了这本课本之外，我们还参考了下面几本教材：
+\begin{itemize}
+    \item 北京大学出版社《初等数论(第三版)》
+    \item 科学出版社《近世代数(第二版)》
+\end{itemize}
+
+\section*{关于文档所涉及的章节}
+
+对于几个课上迅速带过的章节，它们并不会是考试的重点，文档目前也不会详细解释(可能未来会调整更新)，对于那些非常困难的并且授课时间较长的章节，文档会重点详细解释，尤其是第二章同余，第三章同余方程，第四章指数与原根，第七章近世代数基本概念，第八章群论以及第九章环与域。
+
+\section*{其他}
+
+文档的PDF版以及其他电子资料可以前往仓库下载。
+
+
+
+\end{document}

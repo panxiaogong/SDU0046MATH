@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+  <title>群论 | 网安数学站</title>
+  <meta name="description" content="公钥密码学的数学基础——群论个人详解" />
+  <link rel="stylesheet" href="/assets/css/site.css?v=2" />
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <script>
+    var searchEngine = "https://www.google.com/search?q=";
+    var homeHost = window.location.host;
+    window.MathJax = {
+      tex: {
+        packages: {'[+]': ['ams']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      startup: {
+        typeset: false
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+    window.__typesetMath = function () {
+      if (!window.MathJax || typeof window.MathJax.typesetPromise !== 'function') return;
+      var container = document.getElementById('content') || document.body;
+      window.MathJax.typesetPromise([container]).catch(function (err) {
+        console.error('MathJax typeset failed:', err);
+      });
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+      window.__typesetMath();
+    });
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" onload="window.__typesetMath()"></script>
+  <script>
+    window.__sidebarUrl = "/sidebar.html";
+  </script>
+  <script defer src="/assets/js/site.js?v=2"></script>
+</head>
+<body class="sidebar-open">
+  <header id="header">
+    <div class="header-left">
+      <a id="title" href="/" class="logo">
+        <i class="fa fa-book" aria-hidden="true"></i>
+        <span>网安数学站</span>
+      </a>
+    </div>
+
+    <ul id="menu">
+      <li class="menu-item sidebar-mobile-toggle">
+        <button id="sidebar-toggle-mobile" class="icon-btn" aria-label="Toggle Sidebar">
+          <i class="fa fa-bars" aria-hidden="true"></i>
+        </button>
+      </li>
+    </ul>
+  </header>
+
+  <div id="app-shell">
+    <aside id="sidebar">
+      <div class="sidebar-head">
+        <button id="sidebar-close" class="icon-btn" aria-label="Close Sidebar">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="sidebar-search-wrap">
+        <i class="fa fa-search" aria-hidden="true"></i>
+        <input id="search-input" class="search-input" type="search" placeholder="Press Enter to search">
+      </div>
+
+      <div class="sidebar-tree-wrap">
+        <nav id="tree"></nav>
+      </div>
+    </aside>
+
+    <button id="sidebar-toggle" class="sidebar-float-toggle" aria-label="Toggle Sidebar">
+      <i class="fa fa-angle-left" aria-hidden="true"></i>
+    </button>
+
+    <div id="sidebar-overlay"></div>
+
+    <main id="content" class="content">
+<h1 id="article-title">群论</h1>
+
+<div class="article-meta">
+  <span>山东大学网络空间安全学院</span>
+  <span>2026-07-27</span>
+</div>
+
+<div id="article-content">
+  <h2 id="群论">群论</h2>
+<p>其实最开始是没有抽象代数之类的东西的，最开始我们研究的都是普通的数字及其上面的运算，但是随着数学的发展，数学家们发现一些抽象的对象也有和数类似的特征，于是就对这些抽象的东西展开了研究，就有了抽象代数(也叫近世代数)，研究的对象也不再仅仅是数，而是各种各样的“结构”，这其中最基本的就是群、环、域。</p>
+<p>群是含有一种代数运算的代数系统(这一句话看不懂不要紧，学完群就懂了)。</p>
+<h2 id="群的定义">群的定义</h2>
+<p>为了方便理解群的定义，我们先给出<strong>二元运算</strong>的定义： <strong>定义</strong>：设<span class="math-inline">\(A\)</span>是一个非空集合，若对于A中的任意两个元素<span class="math-inline">\(a,b\)</span>，通过某个法则“<span class="math-inline">\(\circ\)</span>”，能得到<span class="math-inline">\(A\)</span>中唯一确定的一个元素<span class="math-inline">\(c\)</span>，我们就称法则“<span class="math-inline">\(\circ\)</span>”为集合<span class="math-inline">\(A\)</span>上的一个代数运算，元素<span class="math-inline">\(c\)</span>是<span class="math-inline">\(a,b\)</span>通过运算<span class="math-inline">\(\circ\)</span>得到的结果，将此结果记为<span class="math-inline">\(a\circ b=c\)</span>。</p>
+<p>这应该不难理解，有理数的加法、减法、乘法都是有理数集<span class="math-inline">\(Q\)</span>上的代数运算，但除法不是，因为0不能作为除数，但是如果我们考虑非零有理数的集合<span class="math-inline">\(Q^*\)</span>，那么除法就是<span class="math-inline">\(Q^*\)</span>上的代数运算，因为此时集合中不再含有0，任意从集合中取出两个数都能运算，并且得到的结果都是非零的有理数。</p>
+<p>在知晓了二元运算的定义之后，我们就能看群的定义了。</p>
+<section class="latex-block latex-block--generic"><p>为什么我们要先看二元运算呢？群作为一个可被研究的结构，肯定不能只是一个集合那么简单，我们前面写过抽象代数的意义之一在于研究抽象与具体之间的关系，那具体的加减乘除都是运算，所以在研究抽象的东西时也不能忽略“运算”所对应的抽象，这就是为什么要先明白运算的定义。</p></section>
+<p><strong>定义</strong>：设<span class="math-inline">\(G\)</span>是一个非空集合，在<span class="math-inline">\(G\)</span>上定义了一个二元运算<span class="math-inline">\(\circ\)</span>，若该运算满足下面的条件，我们就称<span class="math-inline">\(G\)</span>为一个群： (1)对于任意的<span class="math-inline">\(a,b,c\in G\)</span>，有<span class="math-inline">\((a\circ b)\circ c=a\circ (b\circ c)\)</span>(结合律) (2)<span class="math-inline">\(\exist e\in G,\forall g\in G,\mbox{有}e\circ g=g\circ e=g\)</span>(有单位元素) (3)<span class="math-inline">\(\forall g\in G,\exist g'\in G,\mbox{使得}g\circ g'=g'\circ g=e\)</span>(有逆元，并记为<span class="math-inline">\(g^{-1}\)</span>)</p>
+<p>对于群的定义，我们需要额外声明以下几点：</p>
+<ul class="article-list article-list--ul">
+<li><p>“在<span class="math-inline">\(G\)</span>上定义了一个二元运算<span class="math-inline">\(\circ\)</span>”其实就说明了该二元运算在<span class="math-inline">\(G\)</span>上是<strong>封闭</strong>的(就是指运算的结果一定是集合内的某个元素，而不是集合外的元素)，这也是判断某个非空集合是否为群的首要条件。</p></li>
+<li><p>群中的单位元素必然是存在且唯一的(<span class="math-inline">\(e_2=e_2\circ e_1=e_1\)</span>)</p></li>
+<li><p>群中每个元素的逆元素必然是存在且唯一的</p></li>
+</ul>
+<p>(<span class="math-inline">\(g_2=e\circ g_2=(g_1\circ g)\circ g_2=g_1\circ(g\circ g_2)=g_1\circ e=g_1\)</span>)</p>
+<section class="latex-block latex-block--generic"><p>若看不懂此声明请反复阅读定义的(1)(2)(3)，实在是看不懂也没关系，我会在后文中放更加详细的证明。</p></section>
+<p>群中只含有一种代数运算，这个代数运算一般用<span class="math-inline">\(\circ\)</span>或者<span class="math-inline">\(\cdot\)</span>来表示(当然也可以使用别的符号，比如用加法符号或者乘法符号，皆可)，或者直接省略运算符号，干脆记为<span class="math-inline">\(ab\)</span>(所以有时把这种代数运算叫做“乘法”，但不绝对，我们在后面会遇到将其称为加法的情况，截止到这里，叫什么名字并不重要)。</p>
+<section class="latex-block latex-block--generic"><p>为了避免混淆，后面关于群中的二元运算皆使用符号<span class="math-inline">\(\circ\)</span>来表示，意在提醒这只是一种抽象的运算，而不是日常里常见的普通乘法，这一点尤其要注意，不要学着学着就混淆了抽象与具体。在使用符号<span class="math-inline">\(\circ\)</span>的基础上，我们一般把群记为<span class="math-inline">\((G,\circ)\)</span>，当然在不引起歧义的前提下可以记为<span class="math-inline">\(G\)</span>。 另外，为了避免混淆，后文中所提到的“普通加法”“普通乘法”皆是日常生活中我们常用的加减乘除中的“加”与“乘”，但是后文中提到的“加法”“乘法”两个词是指的抽象的二元运算(毕竟抽象也得有个名字对吧)，请注意区分。</p></section>
+<p>群是一个非常抽象的概念，但是我们可以找到很多群的具体例子，比如全体不等于零的有理数对于普通乘法来说作成一个群，单位元为1，<span class="math-inline">\(a\)</span>的逆元为<span class="math-inline">\(\frac{1}{a}\)</span>。 这是不难理解的，全体不等于0的有理数上的普通乘法肯定是封闭的，有理数同有理数相乘必然仍是有理数；普通乘法必然满足结合律；单位元只有1个，那就是1；元素的逆元就是该元素的倒数(注意，这个集合里是不含0的)。它显然完全满足群的定义，所以这是一个群。 需要注意的是，这个例子中的非空集合是“全体不等于0的有理数”，而不是“全体有理数”，因为0在普通乘法上是找不到逆元的，这是显然的，因为0乘任何数都等于0，而不等于单位元1。</p>
+<p>我们当然还可以举出其他的很多例子，设<span class="math-inline">\(n\in Z\)</span>，模<span class="math-inline">\(n\)</span>的完全剩余类<span class="math-inline">\(Z_n\)</span>对于模<span class="math-inline">\(n\)</span>的加法(普通加法而已)构成了一个群。它封闭，满足结合律，有单位元<span class="math-inline">\(\overline{0}\)</span>，<span class="math-inline">\(\overline{a}\)</span>有逆元<span class="math-inline">\(\overline{n-a}\)</span>(这里的减号就是普通的减法)；模<span class="math-inline">\(n\)</span>的简化剩余系对于模<span class="math-inline">\(n\)</span>的乘法运算(普通乘法而已)也构成了一个群，它封闭，满足结合律，有单位元<span class="math-inline">\(\overline{1}\)</span>，并且每个元素都有逆元。 这么说似乎还是有些空洞，不如我们直接举个例子，取<span class="math-inline">\(n=8\)</span>，那么其完全剩余系就是<span class="math-inline">\(\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5},\overline{6},\overline{7}\}\)</span>，它是满足结合律的，比如说(因为已经说明是普通加法了，所以直接用了“+”，而没有用“<span class="math-inline">\(\circ\)</span>”)：</p>
+<div class="math-block">\[
+(\overline{1}+\overline{2})+\overline{3}=\overline{1}+(\overline{2}+\overline{3})=\overline{6}
+\]</div>
+<p>它还有单位元素<span class="math-inline">\(\overline{0}\)</span>，比如说：</p>
+<div class="math-block">\[
+\overline{0}+\overline{2}=\overline{2}+\overline{0}=\overline{2}
+\]</div>
+<p>每个元素都有逆元，比如说：</p>
+<div class="math-block">\[
+\overline{2}+\overline{6}=\overline{6}+\overline{2}=\overline{0}
+\]</div>
+<p>取<span class="math-inline">\(n=8\)</span>，那么其简化剩余系就是<span class="math-inline">\(\{\overline{1},\overline{3},\overline{5},\overline{7}\}\)</span>，也不难验证，首先这是满足结合律的：</p>
+<div class="math-block">\[
+(\overline{3}\times\overline{5})\times\overline{7}=\overline{3}\times(\overline{5}\times\overline{7})=\overline{105}=\overline{1}
+\]</div>
+<p>它还有单位元素<span class="math-inline">\(\overline{1}\)</span>，比如说：</p>
+<div class="math-block">\[
+\overline{1}\times\overline{5}=\overline{5}\times\overline{1}=\overline{5}
+\]</div>
+<p>每个元素都有逆元，比如说：</p>
+<div class="math-block">\[
+\overline{3}\times\overline{3}=\overline{9}=\overline{1}
+\]</div>
+<section class="latex-block latex-block--generic"><p>这里比较特殊一些，<span class="math-inline">\(\overline{3}\)</span>的逆元恰好是它本身，这当然是符合定义的，但不是所有的群都这样。另外，群的定义中使用的是“任意的”，这里只是为了方便才只写部分元素，实际上对于任意元素都有三条定义成立。</p></section>
+<p>我们现在已经有了群的定义，其实就是一个非空集合加上一个代数运算而已，那么首先就不得不考虑一件事情：这个集合里的元素是有限的还是无限的？根据我们前面的例子，不难发现，有限的也可以，无限的也可以，所以我们给出下面的定义：</p>
+<p><strong>定义</strong>：假如一个群的元素个数是一个有限的整数，那么称这个群为有限群，否则就称这个群为无限群，一个有限群的元素个数叫做这个群的<strong>阶</strong>，记作<span class="math-inline">\(|G|\)</span>。</p>
+<p>这并不是一个难懂的概念，接下来我们暂停对群的集合部分的讨论，转而去看看群的运算部分：前面我们的例子中写过<span class="math-inline">\(\overline{a}\circ\overline{b}\)</span>，那么请问下面这个式子成立吗？</p>
+<div class="math-block">\[
+\overline{a}\circ\overline{b}=\overline{b}\circ\overline{a}
+\]</div>
+<p>看不出来不要紧，我们想想我们前面提到过的几个例子：对于群<span class="math-inline">\((Z_n,+)\)</span>(忘记了的回去重新看例子哦)，不难发现这个例子是成立的，比如说取<span class="math-inline">\(n=8\)</span>，那么显然有<span class="math-inline">\(\overline{3}+\overline{4}=\overline{4}+\overline{3}\)</span>，但是对于全体<span class="math-inline">\(n\)</span>阶可逆矩阵关于矩阵乘法所做成的群，这个式子又不成立了，因为对于任意的两个可逆矩阵<span class="math-inline">\(A,B\)</span>，不一定有<span class="math-inline">\(AB=BA\)</span>。</p>
+<section class="latex-block latex-block--generic"><p>至于为什么对于全体<span class="math-inline">\(n\)</span>阶可逆矩阵关于矩阵乘法所做成的结构是群，由于涉及到线性代数，这里不做要求，只需要知道这确实是一个群即可，不过证明也不难。</p></section>
+<p>所以这个式子<span class="math-inline">\(\overline{a}\circ\overline{b}=\overline{b}\circ\overline{a}\)</span>只对有些群成立，对于有些群反而不成立，为了将这两种群区分开，所以有下面的定义：</p>
+<p><strong>定义</strong>：对于一个群<span class="math-inline">\((G,\circ)\)</span>，如果任意的<span class="math-inline">\(a,b\in G\)</span>，有<span class="math-inline">\(a\circ b=b\circ a\)</span>，则称这个群为<strong>交换群</strong>，也叫做<span class="math-inline">\(Abel\)</span>群。</p>
+<section class="latex-block latex-block--generic"><p>选择性阅读：当一个群是交换群的时候，我们往往将该群的单位元记为0，并称单位元为“零元”，将元素的逆元称为“负元”，并且用“+”来表示群上的运算，并称这个运算为“加法”，把运算的结果叫做“和”，并把这个群称为“加群”；当一个群不是交换群的时候，我们往往将该群称为“乘群”，并把乘群上的运算叫做“乘法”，并且乘群上的运算符号通常会省略不写(当然在这个文档里我还是会写成<span class="math-inline">\(\circ\)</span>的，为了防止大家在学习过程中混淆这个抽象的乘法与普通乘法。)，接下来这一节中提到的群，若无特殊说明或者特别明显，皆是非交换群。</p></section>
+<p>在对群有了初步的认识之后，我们接下来看一下群的一些简单性质：</p>
+<ul class="article-list article-list--ul">
+<li><p>群<span class="math-inline">\(G\)</span>的单位元是唯一的：</p>
+<div class="math-block">\[
+\begin{aligned}
+&amp;\mbox{如果}e_1,e_2\mbox{皆是该群的单位元,那么}\\
+&amp;e_1\circ e_2=e_1(\mbox{因为}e_1\mbox{是该群的单位元})\\
+&amp;e_1\circ e_2=e_2(\mbox{因为}e_2\mbox{是该群的单位元})\\
+&amp;\therefore e_2=e_2\circ e_1=e_1
+\end{aligned}
+\]</div></li>
+<li><p>群<span class="math-inline">\(G\)</span>中每一个元素的逆元是唯一的：</p>
+<div class="math-block">\[
+\begin{aligned}
+&amp;\mbox{如果}g_1,g_2\mbox{皆是元素}g\mbox{的逆元,那么}\\
+&amp;g_2=e\circ g_2=(g_1\circ g)\circ g_2=g_1\circ(g\circ g_2)=g_1\circ e=g_1
+\end{aligned}
+\]</div></li>
+<li><p>对于任意的<span class="math-inline">\(a\in G\)</span>，有<span class="math-inline">\((a^{-1})^{-1}=a\)</span>(不证明了，自己体会，体会不出来也没关系，价值不高)</p></li>
+<li><p>对于任意的<span class="math-inline">\(a,b\in G\)</span>，都有<span class="math-inline">\((a\circ b)^{-1}=b^{-1}\circ a^{-1}\)</span>(这不难证明，直接计算即可)</p>
+<div class="math-block">\[
+(a\circ b)\circ(b^{-1}\circ a^{-1})=a\circ (b\circ b^{-1})\circ a^{-1}=a\circ e\circ a^{-1}=a\circ a^{-1}=e
+\]</div></li>
+</ul>
+<p>群的定义中的结合律表明，群中三个元素<span class="math-inline">\(a,b,c\)</span>做运算的结果与运算的顺序无关，你可以先计算<span class="math-inline">\(a\circ b\)</span>，再计算<span class="math-inline">\((a\circ b)\circ c\)</span>，也可以先计算<span class="math-inline">\(b\circ c\)</span>，再计算<span class="math-inline">\(a\circ(b\circ c)\)</span>，但是要注意，不能先计算<span class="math-inline">\(a\circ c\)</span>，再计算<span class="math-inline">\((a\circ c)\circ b\)</span>，因为我们这是在一般的群上进行的讨论，而不是交换群。 对于三个元素做运算的结果与运算的顺序无关，因此可以直接写成<span class="math-inline">\(a\circ b\circ c\)</span>，那么对于任意的<span class="math-inline">\(k\)</span>个元素，其运算结果与运算顺序也是无关的，可以直接写成<span class="math-inline">\(a_1\circ a_2\circ \cdots\circ a_k\)</span>。据此，我们可以定义出群的元素的方幂：</p>
+<p>对于任意的正整数<span class="math-inline">\(n\)</span>，定义：</p>
+<div class="math-block">\[
+a^n=a\circ a\circ \cdots \circ a(n\mbox{个}a\mbox{做二元运算})
+\]</div>
+<p>并且约定：</p>
+<div class="math-block">\[
+a^0=e\\
+a^{-n}=(a^{-1})^n=a^{-1}\circ a^{-1}\circ \cdots\circ a^{-1}
+\]</div>
+<section class="latex-block latex-block--generic"><p>实际上公钥课本第八章第一节并未给出群的元素的方幂的定义，这里给出是因为理解这个方幂确实是十分的重要，课本上直接写作<span class="math-inline">\(g^m\)</span>是省略了运算符号，而不是意味着运算就是普通乘法运算。</p></section>
+<p>不难注意到(实在是注意不到请反复阅读定义)：</p>
+<div class="math-block">\[
+a^n\circ a^m=a^{n+m}\\
+(a^n)^m=a^{mn}
+\]</div>
+<p>另外，如果群<span class="math-inline">\(G\)</span>是一个交换群的话，还可以有<span class="math-inline">\((ab)^n=a^nb^n\)</span>，但是若不是交换群，那么这个式子一般不会成立。</p>
+<p>（接下来这一段选择性阅读）当群<span class="math-inline">\(G\)</span>是加群(也就是交换群)的时候，元素的方幂应该改写为倍数的形式：也就是<span class="math-inline">\(a^n\)</span>写作<span class="math-inline">\(na\)</span>，也就是：</p>
+<div class="math-block">\[
+na=a+a+\cdots+a\\
+0a=0(0其实是交换群的单位元，前面的选择性阅读中提到过)\\
+(-n)a=n(-a)=(-a)+(-a)+\cdots+(-a)
+\]</div>
+<p>指数法则也会对应的变成倍数法则：</p>
+<div class="math-block">\[
+na+ma=(n+m)a\\
+m(na)=(mn)a
+\]</div>
+<p>(选择性阅读到此结束)</p>
+<p>有了方幂的概念，我们就可以定义元素的阶了(之前我们定义的是群的阶，与元素的阶完全是两个概念，注意不要混淆)：</p>
+<p>定义：给定群<span class="math-inline">\(G\)</span>的一个元素<span class="math-inline">\(g\)</span>，满足<span class="math-inline">\(g^m=e\)</span>的最小正整数<span class="math-inline">\(m\)</span>叫做<span class="math-inline">\(g\)</span>的阶(或者叫周期)，若这样的<span class="math-inline">\(m\)</span>不存在，则称<span class="math-inline">\(g\)</span>的阶为无限。</p>
+<p>这是一个相当抽象的概念，必须得通过举例来说明，尽管课本上使用初等数论中的指数来举例，但是这个例子也不够简单，下面我们以群<span class="math-inline">\((Z_n,+)\)</span>为例(取<span class="math-inline">\(n=8\)</span>)，这个群的单位元为<span class="math-inline">\(\overline{0}\)</span>，我们接下来就需要计算了：</p>
+<div class="math-block">\[
+\overline{1}^8=\overline{1}+\overline{1}+\overline{1}+\overline{1}+\overline{1}+\overline{1}+\overline{1}+\overline{1}+=\overline{8}=\overline{0}
+\]</div>
+<p>所以该群中元素<span class="math-inline">\(\overline{1}\)</span>的阶就是8，对于其他的元素也是如此。不过我个人觉得对于单位元来讨论元素的阶就没啥意义了，满足<span class="math-inline">\(\overline{0}^m=\overline{0}\)</span>的最小正整数<span class="math-inline">\(m\)</span>，这实在是没什么意思。</p>
+<p>课本上有一个定理(尽管我个人觉得这不是很重要)，如下： 设<span class="math-inline">\(a\)</span>的阶为<span class="math-inline">\(m\)</span>，则<span class="math-inline">\(a^n=e\)</span>当且仅当<span class="math-inline">\(m|n\)</span>。 证明：若<span class="math-inline">\(m|n\)</span>，那么存在整数<span class="math-inline">\(k\)</span>，使得<span class="math-inline">\(n=mk\)</span>，于是<span class="math-inline">\(a^n=a^{mk}=(a^m)^k=e^k=e\)</span>，反之，若<span class="math-inline">\(a^n=e\)</span>，但是<span class="math-inline">\(m\)</span>不能整除<span class="math-inline">\(n\)</span>，设<span class="math-inline">\(n=mk+r(1\leqslant r&lt;m)\)</span>，那么就有<span class="math-inline">\(e=a^n=a^{mk+r}=a^{mk}\circ a^r=(a^m)^k\circ a^r=e\circ a^r=a^r\)</span>，这样<span class="math-inline">\(a\)</span>的阶就是更小的<span class="math-inline">\(r\)</span>，矛盾。</p>
+<section class="latex-block latex-block--generic"><p>课本上有这样一句话，“模<span class="math-inline">\(m\)</span>的既约剩余系关于剩余系的乘法运算构成了一个有限群，元素的指数即为元素的阶”，感兴趣的同学可以自行体会。</p></section>
+<p>课本上有这样一道例题：设<span class="math-inline">\(a,b\)</span>是交换群<span class="math-inline">\(G\)</span>中的元素，<span class="math-inline">\(a\)</span>的阶为<span class="math-inline">\(p\)</span>，<span class="math-inline">\(b\)</span>的阶为<span class="math-inline">\(q\)</span>，且<span class="math-inline">\(p,q\)</span>为不同的素数，则<span class="math-inline">\(a\circ b\)</span>的阶为<span class="math-inline">\(pq\)</span>(这里的<span class="math-inline">\(pq\)</span>采用的运算就是普通乘法哈)。 证明：不妨设<span class="math-inline">\(a\circ b\)</span>的阶为<span class="math-inline">\(d\)</span>，那么:</p>
+<div class="math-block">\[
+(a\circ b)^{pq}=a^{pq}\circ b^{pq}=(a^p)^q\circ (b^q)^p=e\circ e=e\Rightarrow d|pq\\
+e=(a\circ b)^d=(a\circ b)^{dq}(这一步是因为d|dq)\\
+\therefore e=a^{dq}\circ b^{dq}=a^{dq}\circ (b^q)^d=a^{dq}\circ e=a^{dq}\\
+\therefore p|dq\Rightarrow p|d\\
+同理 q|d,所以pq|d\Rightarrow d=pq
+\]</div>
+<p>群的定义这一章就到此结束(现在是凌晨两点二十，我还清醒着)</p>
+<h2 id="循环群">循环群</h2>
+<p>循环群是一种极其特殊的群，尽管这一节放在这里有点前不着村后不着店，但是这一节的内容还是十分重要的。</p>
+<p>定义：若一个群<span class="math-inline">\(G\)</span>中的每一个元素都是某一个固定元素的方幂(在上一节我们已经定义过方幂了)，即<span class="math-inline">\(G=\{a^n|n\in Z\}\)</span>，则称<span class="math-inline">\(G\)</span>为循环群，我们也称<span class="math-inline">\(G\)</span>是由元素<span class="math-inline">\(a\)</span>生成的，记为<span class="math-inline">\(G=(a)\)</span>，<span class="math-inline">\(a\)</span>称为<span class="math-inline">\(G\)</span>的一个生成元素。</p>
+<section class="latex-block latex-block--generic"><p>如果你还能记得初等数论的内容的话，你应该还能记得既约剩余系可以由原根来生成，这就是这个定义的最佳例子。当然记不住也没关系，我们还有别的例子。</p></section>
+<p>最简单的例子，莫过于整数集合上对于普通加法作成的群，也就是<span class="math-inline">\((Z,+)\)</span>，该群的单位元是<span class="math-inline">\(0=1^0\)</span>，<span class="math-inline">\(-1=1^{-1}\)</span>，不过要注意，这两个式子成立完全是由于方幂的定义，而不是普通乘法！！！任意的整数都可以由有限个1相加或者有限个-1相加，所以<span class="math-inline">\(G\)</span>中的任意一个元素都可以表示为1的方幂，所以可以说该群是由元素1生成的，写为<span class="math-inline">\((Z,+)=(1)\)</span>。</p>
+<section class="latex-block latex-block--generic"><p>其实通过计算不难发现，当一个群可由元素<span class="math-inline">\(a\)</span>生成的时候，这个群其实也可以由元素<span class="math-inline">\(a\)</span>的逆元来生成。反映到上面的例子中，任意的整数其实也可以表示为-1的方幂，所以-1也是群<span class="math-inline">\((Z,+)\)</span>的一个生成元素，也可以写<span class="math-inline">\((Z,+)=(-1)\)</span></p></section>
+<p>这样我们就大概了解了什么是循环群。在具体讨论其结构之前，我们首先要给出群同构的概念，这是一件威力巨大的工具，其意义甚至超过了这一节的循环群(至少我是这么觉得的)</p>
+<p><strong>定义</strong>：设<span class="math-inline">\((G,\circ),(G',\oplus)\)</span>是两个群，如果存在<span class="math-inline">\(G\)</span>到<span class="math-inline">\(G'\)</span>的一个映射<span class="math-inline">\(f:G\rightarrow G'\)</span>，使得</p>
+<div class="math-block">\[
+f(a\circ b)=f(a)\oplus f(b)
+\]</div>
+<p>对于一切的<span class="math-inline">\(a,b\in G\)</span>皆成立，那么就说<span class="math-inline">\(f\)</span>是<span class="math-inline">\(G\)</span>到<span class="math-inline">\(G'\)</span>上的一个同态映射。</p>
+<section class="latex-block latex-block--generic"><p>需要注意的是，上文中的<span class="math-inline">\(\circ,\oplus\)</span>皆是二元运算的运算符，只是一个符号表示，并无具体含义，另外，由于<span class="math-inline">\(a,b\)</span>皆是<span class="math-inline">\(G\)</span>中的元素，所以<span class="math-inline">\(a,b\)</span>之间的运算使用<span class="math-inline">\(a\circ b\)</span>，而<span class="math-inline">\(f(a),f(b)\)</span>作为<span class="math-inline">\(G'\)</span>上的元素，之间的运算就应该是<span class="math-inline">\(f(a)\oplus f(b)\)</span></p></section>
+<ul class="article-list article-list--ul">
+<li><p>如果<span class="math-inline">\(f\)</span>是一个满射，那么就说<span class="math-inline">\(f\)</span>是满同态，用<span class="math-inline">\(G\sim G'\)</span>来表示</p></li>
+<li><p>如果<span class="math-inline">\(f\)</span>是一个单射，那么就说<span class="math-inline">\(f\)</span>是单一同态</p></li>
+<li><p>如果<span class="math-inline">\(f\)</span>是一个双射，那么就说<span class="math-inline">\(f\)</span>是同构映射，此时称这两个群同构，记为<span class="math-inline">\(G\cong G'\)</span>。</p></li>
+</ul>
+<p>有了这样的定义之后，我们就可以讨论循环群的结构了，是下面的定理：</p>
+<p><strong>定理</strong>：假定<span class="math-inline">\(G\)</span>是一个由元<span class="math-inline">\(a\)</span>所生成的循环群，若<span class="math-inline">\(a\)</span>的阶无限，那么<span class="math-inline">\(G\)</span>同整数加群<span class="math-inline">\((Z,+)\)</span>同构；若<span class="math-inline">\(a\)</span>的阶是一个有限整数<span class="math-inline">\(n\)</span>，那么<span class="math-inline">\(G\)</span>与模<span class="math-inline">\(n\)</span>的剩余类加群是同构的。</p>
+<section class="latex-block latex-block--generic"><p>这里有一点前面其实没有提到，群<span class="math-inline">\((Z,+)\)</span>的名字就是整数加群，当我们提到整数加群的时候也是特指该群，“加”表示该群是一个交换群，群<span class="math-inline">\((Z_n,+)\)</span>的名字就是模<span class="math-inline">\(n\)</span>的剩余类加群，“加”也表示该群是一个交换群。</p></section>
+<p>这里就不再写定理的证明了，这是为数不多的课本上写得异常清楚的证明过程。</p>
+<p>(现在是凌晨三点，有点不太清醒了)</p>
+<h2 id="子群-子群的陪集">子群、子群的陪集</h2>
+<p>在讨论集合时，我们引入了子集的概念；在讨论线性空间时，我们引入子空间的概念，所以在研究群的时候，也要考虑群的某些子集的性质，但真正使我们感兴趣的是那些本身按原来群上的运算也是个群的子集，感觉上就是在一个大群里面寻找更小的群，这就有了群的子群的概念。</p>
+<p><strong>定义</strong>：群<span class="math-inline">\((G,\circ)\)</span>的非空子集<span class="math-inline">\(H\)</span>，若对于<span class="math-inline">\(G\)</span>的运算作成群，则说<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的一个子群，我们用符号<span class="math-inline">\(H\leqslant G\)</span>来表示。</p>
+<p>给定一个任意的群<span class="math-inline">\(G\)</span>，<span class="math-inline">\(G\)</span>至少有两个子群，分别是<span class="math-inline">\(G\)</span>和<span class="math-inline">\(\{e\}\)</span>，称这两个子群为平凡子群；其他的子群，称为<span class="math-inline">\(G\)</span>的非平凡子群。</p>
+<section class="latex-block latex-block--generic"><p><span class="math-inline">\(G\)</span>是自身的一个子群是很好理解的，但是为什么<span class="math-inline">\(\{e\}\)</span>也是一个子群呢？严格按照定义即可，结合律显然是满足的，任意三个元素只能都取<span class="math-inline">\(e\)</span>，而<span class="math-inline">\(e\)</span>作为单位元，其逆元就是它自己，所以这个<span class="math-inline">\(\{e\}\)</span>其实完全符合一个群的定义，它便就是一个子群。</p></section>
+<p>这么讲还是有一些抽象，我们来举个例子看看。 设<span class="math-inline">\(m\)</span>是一个整数，令<span class="math-inline">\(H=\{mz|z\in Z\}\)</span>，则<span class="math-inline">\(H\)</span>就是整数加群的一个子群(这里的mz用的就是普通乘法哈)。 证明：首先，<span class="math-inline">\(0=m\times 0\)</span>，所以<span class="math-inline">\(H\)</span>是一个非空集合。 其次，对于任意的<span class="math-inline">\(mx,my\in H\)</span>，有<span class="math-inline">\(mx+my=m(x+y)\in H\)</span>，所以<span class="math-inline">\(H\)</span>关于<span class="math-inline">\(Z\)</span>的运算是封闭的。 由于结合律对<span class="math-inline">\(Z\)</span>成立，所以对<span class="math-inline">\(H\)</span>也成立。 因为<span class="math-inline">\(0\in H\)</span>，所以对于任意的<span class="math-inline">\(mx\in H\)</span>，有<span class="math-inline">\(0+mx=mx+0=mx\)</span>，所以0为<span class="math-inline">\(H\)</span>的单位元。 对于<span class="math-inline">\(mx\in H\)</span>，有<span class="math-inline">\(-mx=m(-x)\in H\)</span>，且<span class="math-inline">\((-mx)+mx=mx+(-mx)=0\)</span>，所以<span class="math-inline">\(-mx\)</span>就是<span class="math-inline">\(mx\)</span>的逆元。 所以<span class="math-inline">\(H\)</span>就是一个群，所以就是<span class="math-inline">\(G\)</span>的一个子群。</p>
+<section class="latex-block latex-block--generic"><p>这样其实不难看出证明一个结构是群与证明一个非空子集是子群其实是不一样的。当我们需要证明一个结构是群时，往往已经给出了上面封闭的二元运算，我们只需要严格按照群的三条定义即可。但是如果我们想证明某一个非空子集是某一个群的子群，我们就必须先说明它是非空的，其次说明对于群上的运算是封闭的，最后再严格按照群的三条定义去说明，其实，结合律是没必要证明的，因为结合律其实是属于群的运算部分的性质，而不是群的集合部分的性质，从群到运算封闭的非空子集，其运算其实是没有变的，所以满足运算封闭的非空子集一定也是满足结合律的。</p></section>
+<p>其实判断某个非空子集是否是子群，我们有更简单的定理：</p>
+<p><strong>定理</strong>：设<span class="math-inline">\(H\)</span>为群<span class="math-inline">\((G,\circ)\)</span>的非空子集，<span class="math-inline">\(H\)</span>作成<span class="math-inline">\(G\)</span>的一个子群的充分必要条件是：若<span class="math-inline">\(a,b\in H\Rightarrow a\circ b^{-1}\in H\)</span>。</p>
+<p><strong>证明：</strong>若<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的一个子群，若<span class="math-inline">\(a,b\in H\)</span>，那么就有<span class="math-inline">\(b^{-1}\in H\)</span>，由于运算封闭，就有<span class="math-inline">\(a\circ b^{-1}\in H\)</span>。这就证明了必要性。 如果想证明充分性：由于<span class="math-inline">\(H\)</span>是非空的，那么<span class="math-inline">\(H\)</span>中至少含有一个元素<span class="math-inline">\(a\)</span>，所以取条件中<span class="math-inline">\(b=a\)</span>，就有<span class="math-inline">\(a\circ a^{-1}=e\in H\)</span>，这就说明了其含有单位元，由<span class="math-inline">\(e,a\in H\)</span>可得<span class="math-inline">\(e\circ a^{-1}=a^{-1}\in H\)</span>，这就说明了其含有逆元，但是我们还没有说明一件事：该非空子集对于群的运算是封闭的，也就是说，必须要说明<span class="math-inline">\(\forall a,b\in H,ab\in H\)</span>，这也不难说明：<span class="math-inline">\(\forall a,b\in H\)</span>，一定会有<span class="math-inline">\(a^{-1},b^{-1}\in H\)</span>，从而<span class="math-inline">\(a\circ b=a\circ (b^{-1})^{-1}\in H\)</span>，这就说明了运算的封闭性，一旦有了运算的封闭性，结合律也就自然而然地成立了，所以<span class="math-inline">\(H\)</span>就是<span class="math-inline">\(G\)</span>的一个子群。</p>
+<p>(现在是凌晨四点，手腕已经有点过载了)</p>
+<p>有了子群的概念之后，再结合上一节的循环群，我们就能得到一些奇怪的定理与性质(实际上是我在写到这里时，依然无法判断这些定理到底有用没用)</p>
+<p><strong>定理</strong>：循环群的子群仍然为循环群。</p>
+<p><strong>证明：</strong>设循环群的一个生成元素是<span class="math-inline">\(a\)</span>，若子群<span class="math-inline">\(H\)</span>只含有一个元素，那它必然是循环群(其实此时<span class="math-inline">\(H\)</span>就是<span class="math-inline">\(\{e\}\)</span>)。若<span class="math-inline">\(H\neq\{e\}\)</span>，由于<span class="math-inline">\(H\)</span>非空，故所以一定存在<span class="math-inline">\(a^k\in H,k&gt;0\)</span>，之所以会这样是因为<span class="math-inline">\(H\)</span>已经是子群了，如果<span class="math-inline">\(H\)</span>中所有除单位元之外的元素都可以写成生成元素<span class="math-inline">\(a\)</span>的负数次方幂的话，可以通过取其逆元来获得生成元素<span class="math-inline">\(a\)</span>的正数次方幂，也就是<span class="math-inline">\(H\)</span>中会含有<span class="math-inline">\(a\)</span>的某些幂。令<span class="math-inline">\(A=\{k|k\geqslant1,k\in Z,a^k\in H\}\)</span>，那么<span class="math-inline">\(A\)</span>必然不是空集，所以里面必然有最小的元素<span class="math-inline">\(r\)</span>，任取<span class="math-inline">\(a^l\in H\)</span>，则当然可以使用带余除法，有<span class="math-inline">\(l=qr+s,0\leqslant s&lt;r\)</span>，所以有<span class="math-inline">\(a^l=a^{qr}\circ a^s\)</span>，既然有<span class="math-inline">\(a^r\)</span>属于子群<span class="math-inline">\(H\)</span>，那么我们不断地令它与自身做二元运算，就有<span class="math-inline">\((a^r)^q\in H\)</span>，所以其逆元<span class="math-inline">\((a^{qr})^{-1}\in H\)</span>，又因为<span class="math-inline">\(a^l\in H\)</span>，所以<span class="math-inline">\((a^{qr})^{-1}\circ a^l=(a^{qr})^{-1}\circ a^{qr}\circ a^s=a^s\in H\)</span>，但是<span class="math-inline">\(r\)</span>已经是最小的正整数了，所以<span class="math-inline">\(s=0\)</span>，从而对于任意的<span class="math-inline">\(a^l\in H\)</span>，皆有<span class="math-inline">\(l=qr\)</span>，所以<span class="math-inline">\(H=(a^r)\)</span>。</p>
+<p>你还记得前面的例子吗？设<span class="math-inline">\(m\)</span>是一个整数，令<span class="math-inline">\(H=\{mz|z\in Z\}\)</span>，则<span class="math-inline">\(H\)</span>就是整数加群的一个子群，不妨我们取<span class="math-inline">\(m=5\)</span>，那子群<span class="math-inline">\(H\)</span>中的元素其实全部都是5的倍数，那么就可以写成<span class="math-inline">\(H=(5)=(1^5)\)</span>。</p>
+<p><strong>定理</strong>：若<span class="math-inline">\(G\)</span>为<span class="math-inline">\(n\)</span>阶循环群，任给<span class="math-inline">\(a^i\in G,0\leqslant i\leqslant n-1\)</span>，循环子群<span class="math-inline">\(H=(a^i)\)</span>的阶为<span class="math-inline">\(\frac{n}{(n,i)}\)</span>。</p>
+<p><strong>证明：</strong>由题，因为<span class="math-inline">\(G\)</span>为<span class="math-inline">\(n\)</span>阶循环群(也就是总共有<span class="math-inline">\(n\)</span>个元素，每个元素皆可表示为<span class="math-inline">\(a\)</span>的方幂)</p>
+<div class="math-block">\[
+G=\{e,a,a^2,...,a^{n-1}\}
+\]</div>
+<p>但是我们要考虑一件事：<span class="math-inline">\(a^n\)</span>等于<span class="math-inline">\(e,a,a^2,...,a^{n-1}\)</span>中的哪一个呢？？因为群上的运算是封闭的，所以必然有<span class="math-inline">\(a^n=a\circ a^{n-1}\in G\)</span>，可是<span class="math-inline">\(a^n\)</span>等于<span class="math-inline">\(e,a,a^2,...,a^{n-1}\)</span>中的哪一个呢？？</p>
+<p>如果<span class="math-inline">\(a^n=a^i(1\leqslant i\leqslant n-1)\)</span>，那么就有<span class="math-inline">\(a^{n-i}=e\)</span>；等等，可是我们规定的是<span class="math-inline">\(a^0=e\)</span>，所以说对于任意的<span class="math-inline">\(1\leqslant i\leqslant n-1\)</span>，<span class="math-inline">\(a^n=a^i\)</span>都不可能成立，所以唯一必须成立的只有<span class="math-inline">\(a^n=a^0=e\)</span>。</p>
+<p>你有没有发现，我们误打误撞中发现了一个事实，循环群<span class="math-inline">\(G\)</span>的阶为<span class="math-inline">\(n\)</span>，<span class="math-inline">\(a^n=e\)</span>说明<span class="math-inline">\(a\)</span>的阶也是<span class="math-inline">\(n\)</span>，那么就有：<strong>有限循环群的阶其实就等于其生成元的阶</strong>。这实在是意外的收获。</p>
+<p>那么循环子群<span class="math-inline">\(H=(a^i)\)</span>的阶其实就是<span class="math-inline">\(a^i\)</span>的阶，也就是满足<span class="math-inline">\((a^i)^k=e\)</span>的最小正整数<span class="math-inline">\(k\)</span>，也就是<span class="math-inline">\(a^{ik}=e\)</span>，那么就有<span class="math-inline">\(n|ik\)</span>，于是：</p>
+<div class="math-block">\[
+\frac{n}{(n,i)}|\frac{i}{(n,i)}k\\
+\therefore \frac{n}{(n,i)}|k
+\]</div>
+<p>由于我们求的是最小正整数<span class="math-inline">\(k\)</span>，那么根据上式，最小的正整数<span class="math-inline">\(k\)</span>就是<span class="math-inline">\(\frac{n}{(n,i)}\)</span>，故<span class="math-inline">\(a^i\)</span>的阶就是<span class="math-inline">\(\frac{n}{(n,i)}\)</span>，所以循环子群<span class="math-inline">\(H=(a^i)\)</span>的阶就是<span class="math-inline">\(\frac{n}{(n,i)}\)</span>。</p>
+<p><strong>例：</strong>若<span class="math-inline">\(G=(a)\)</span>为<span class="math-inline">\(n\)</span>阶循环群，那么生成元个数为<span class="math-inline">\(\phi(n)\)</span>。</p>
+<p><strong>证明：</strong>我们看上一个定理：<span class="math-inline">\(H=(a^i)\)</span>的阶就是<span class="math-inline">\(\frac{n}{(n,i)}\)</span>，等等，如果<span class="math-inline">\((n,i)=1\)</span>的话，那么循环子群的阶不就是<span class="math-inline">\(n\)</span>了嘛！但是它毕竟是子群啊，如果它含有<span class="math-inline">\(n\)</span>个元素，那必然就是群<span class="math-inline">\(G\)</span>中的<span class="math-inline">\(n\)</span>个元素啊，那<span class="math-inline">\(a^i\)</span>就是群<span class="math-inline">\(G\)</span>的一个生成元。所以群<span class="math-inline">\(G\)</span>的生成元的个数就是满足<span class="math-inline">\((n,i)=1\)</span>的<span class="math-inline">\(i\)</span>的个数，那么就是<span class="math-inline">\(\phi(n)\)</span>。</p>
+<section class="latex-block latex-block--generic"><p>已经体会到写到这里突然明白这个例子的喜悦了。</p></section>
+<p>(关于循环群的知识到此结束)</p>
+<p>关于子群，还有两点要提及：</p>
+<ul class="article-list article-list--ul">
+<li><p>群<span class="math-inline">\(G\)</span>的任意多个子群的交集仍然也是子群。(若想看证明可以翻课本，不是很困难)</p></li>
+<li><p>任取群<span class="math-inline">\(G\)</span>的一个子集合<span class="math-inline">\(M\)</span>，设<span class="math-inline">\(H_i,i\in I\)</span>是群<span class="math-inline">\(G\)</span>中所有含有<span class="math-inline">\(M\)</span>的子群，则<span class="math-inline">\(H=\cap_{i\in I}H_i\)</span>是含<span class="math-inline">\(M\)</span>的最小子群，我们把这样的<span class="math-inline">\(H\)</span>叫做<span class="math-inline">\(M\)</span>生成的子群，用符号<span class="math-inline">\((M)\)</span>来表示。(但是我个人没有看到这个定理的价值，尽管在环中好像也有类似的定理？)</p></li>
+</ul>
+<p>下面我们来看陪集的概念：</p>
+<p><strong>定义</strong>：设<span class="math-inline">\(H\)</span>是<span class="math-inline">\((G,\circ)\)</span>的子群，对于任意的<span class="math-inline">\(a\in G\)</span>，称<span class="math-inline">\(aH=\{a\circ h|h\in H\}\)</span>为子群<span class="math-inline">\(H\)</span>的一个左陪集，同理，称<span class="math-inline">\(Ha=\{h\circ a|h\in H\}\)</span>为子群<span class="math-inline">\(H\)</span>的一个右陪集。</p>
+<section class="latex-block latex-block--generic"><p>注意，课本上写的是<span class="math-inline">\(aH=\{ah|h\in H\}\)</span>，是因为课本第八章中会省略二元运算的运算符号(如果你在前面阅读过选择性阅读，知道什么是乘群的话这里就更容易理解了)，但是为了避免学习过程中将抽象的二元运算与普通乘法所混淆，所以这里写<span class="math-inline">\(aH=\{a\circ h|h\in H\}\)</span>而不是<span class="math-inline">\(aH=\{ah|h\in H\}\)</span>。</p></section>
+<p>我们仍然举前面的例子：设<span class="math-inline">\(m\)</span>是一个整数，令<span class="math-inline">\(H=\{mz|z\in Z\}\)</span>，则<span class="math-inline">\(H\)</span>就是整数加群的一个子群，不妨我们取<span class="math-inline">\(m=5\)</span>，那么<span class="math-inline">\(H=\{5z|z\in Z\}\)</span>。所以我们可以随便写出几个陪集：</p>
+<div class="math-block">\[
+2H=\{2+5z|z\in Z\}\\
+3H=\{3+5z|z\in Z\}
+\]</div>
+<p>这两个陪集就是模5的两个剩余类。</p>
+<p>我们其实能发现，这两个陪集其实压根没有公共元素，那是不是对于任意群的陪集都有这样的性质呢？</p>
+<p><strong>定理</strong>：设<span class="math-inline">\(H\)</span>为<span class="math-inline">\(G\)</span>的子群，任给<span class="math-inline">\(H\)</span>的左陪集<span class="math-inline">\(aH,bH\)</span>，则要么<span class="math-inline">\(aH=bH\)</span>，要么<span class="math-inline">\(aH\cap bH=\varnothing\)</span>。</p>
+<p><strong>证明</strong>：若存在<span class="math-inline">\(x\in G使得x\in aH\cap bH\)</span>，那么</p>
+<div class="math-block">\[
+x\in aH\Rightarrow \exist h_1\in H,x=a\circ h_1\\
+x\in bH\Rightarrow \exist h_2\in H,x=b\circ h_2\\
+\therefore x=a\circ h_1=b\circ h_2\\
+\therefore \forall a\circ h\in aH,a\circ h=a\circ e\circ h=a\circ h_1\circ h_1^{-1}\circ h\\=
+(a\circ h_1)\circ h_1^{-1}\circ h=(b\circ h_2)\circ h_1^{-1}\circ h=b\circ(h_2\circ h_1^{-1}\circ h)\\
+由于h_2,h_1^{-1},h\in H,另外还有运算的封闭性\\
+\therefore h_2\circ h_1^{-1}\circ h\in H,不妨记为h'\\
+\therefore \forall a\circ h\in aH,a\circ h=b\circ h'\in bH\\
+\therefore aH\subseteq bH
+\]</div>
+<p>同理可得<span class="math-inline">\(bH\subseteq aH\)</span>，也就是说，但凡<span class="math-inline">\(aH,bH\)</span>有一个公共元素，就会导致<span class="math-inline">\(aH=bH\)</span>，所以定理得证。</p>
+<p>根据这个定理，我们可以知道群<span class="math-inline">\(G\)</span>可以借助子群<span class="math-inline">\(H\)</span>的左陪集(或者右陪集)来实现一个划分(因为不同的陪集之间压根没有公共元素)。</p>
+<p>课本这里有一道非常好的例题，也放在下面了： <strong>例</strong>：模6的剩余类加群<span class="math-inline">\((Z_6,+)=\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5}\}\)</span>，它有两个子群:</p>
+<div class="math-block">\[
+H_2=\{\overline{0},\overline{2},\overline{4}\}\;\; H_3=\{\overline{0},\overline{3}\}
+\]</div>
+<section class="latex-block latex-block--generic"><p><span class="math-inline">\(H_2,H_3\)</span>很容易验证是子群，另外，由于剩余类加群是循环群，所以下面的这两个子群也是循环群，并且分别是由<span class="math-inline">\(\overline{2},\overline{3}\)</span>生成的。</p></section>
+<p>有子群便能写陪集：</p>
+<div class="math-block">\[
+\overline{0}H_2=\{\overline{0}+\overline{0},\overline{0}+\overline{2},\overline{0}+\overline{4}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{1}H_2=\{\overline{1}+\overline{0},\overline{1}+\overline{2},\overline{1}+\overline{4}\}=\{\overline{1},\overline{3},\overline{5}\}\\
+\overline{2}H_2=\{\overline{2}+\overline{0},\overline{2}+\overline{2},\overline{2}+\overline{4}\}=\{\overline{2},\overline{4},\overline{6}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{3}H_2=\{\overline{3}+\overline{0},\overline{3}+\overline{2},\overline{3}+\overline{4}\}=\{\overline{3},\overline{5},\overline{1}\}\\
+\overline{4}H_2=\{\overline{4}+\overline{0},\overline{4}+\overline{2},\overline{4}+\overline{4}\}=\{\overline{4},\overline{0},\overline{2}\}\\
+\overline{5}H_2=\{\overline{5}+\overline{0},\overline{5}+\overline{2},\overline{5}+\overline{4}\}=\{\overline{5},\overline{1},\overline{3}\}\\
+\]</div>
+<p>同理可写<span class="math-inline">\(H_3\)</span>的陪集。</p>
+<p>通过这个例子，我们能发现以下几点：</p>
+<ul class="article-list article-list--ul">
+<li><p><span class="math-inline">\(H\)</span>的一个陪集有可能是一个子群，也有可能不是</p></li>
+<li><p><span class="math-inline">\(H\)</span>的各个陪集的元素个数都是相同的。</p></li>
+<li><p><span class="math-inline">\(G\)</span>的两个不同元素可能可能生成同一个左陪集</p></li>
+</ul>
+<p>那一个子群的左陪集与右陪集之间有什么数量关系呢？我们有下面的定理：</p>
+<p><strong>定理</strong>：若<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的子群，则<span class="math-inline">\(G\)</span>关于子群<span class="math-inline">\(H\)</span>的左陪集与右陪集的个数是一定相等的。</p>
+<p><strong>证明</strong>：设左陪集作成的集合为<span class="math-inline">\(S_L\)</span>，右陪集作成的集合为<span class="math-inline">\(S_R\)</span>，作<span class="math-inline">\(S_R\)</span>到<span class="math-inline">\(S_L\)</span>的映射：</p>
+<div class="math-block">\[
+\phi:Ha\rightarrow a^{-1}H
+\]</div>
+<p>下面证明<span class="math-inline">\(\phi\)</span>是一个从<span class="math-inline">\(S_R\)</span>到<span class="math-inline">\(S_L\)</span>的一个一一映射。</p>
+<p>首先证明这是一个映射，也就是说明相同的原象对应相同的象，若<span class="math-inline">\(Ha=Hb\)</span>，那么：</p>
+<div class="math-block">\[
+不妨令H={h_1,h_2,...,h_k},由Ha=Hb\\
+\{h_1\circ a,h_2\circ a,...,h_k\circ a\}=\{h_1\circ b,h_2\circ b,...,h_k\circ b\}\\
+不妨设h_i\circ a=h_j\circ b\\
+h_i^{-1}\circ h_i\circ a\circ b^{-1}=h_i^{-1}\circ h_j\circ b\circ b^{-1}\\
+\therefore a\circ b^{-1}=h_i^{-1}\circ h_j\\
+\because h_i,h_j\in H\Rightarrow h_i^{-1}\in H\Rightarrow h_i^{-1}\circ h_j\in H\\
+\therefore a\circ b^{-1}\in H\\
+\therefore (a\circ b^{-1})^{-1}\in H也就是b\circ a^{-1}\in H\\
+不妨设b\circ a^{-1}=h_1,那么a^{-1}=b^{-1}\circ h_1\\
+\therefore a^{-1}H=(b^{-1}\circ h_1)H=\\
+\{b^{-1}\circ h_1\circ h_1,b^{-1}\circ h_1\circ h_2,...,b^{-1}\circ h_1\circ h_k\}\\
+由于H作为一个子群,其上面的运算是封闭的，所以:\\
+\{ h_1\circ h_1, h_1\circ h_2,..., h_1\circ h_k\}=\{h_1,h_2,...,h_k\}\\
+\therefore \{b^{-1}\circ h_1\circ h_1,b^{-1}\circ h_1\circ h_2,...,b^{-1}\circ h_1\circ h_k\}\\=\{ b^{-1}\circ h_1, b^{-1}\circ h_2,..., b^{-1}\circ h_k\}=b^{-1}H\\
+\therefore a^{-1}H=b^{-1}H
+\]</div>
+<p>这就说明了任意两个原象对应相同的象，所以这是一个映射。</p>
+<p>接下来证明这是一个满射：<span class="math-inline">\(S_L\)</span>中的任意元素<span class="math-inline">\(aH\)</span>都是<span class="math-inline">\(S_R\)</span>中元素<span class="math-inline">\(Ha^{-1}\)</span>的象，所以这是一个满射。最后证明这是一个单射：若<span class="math-inline">\(Ha\neq Hb\)</span>，由前面的定理，我们知道，<span class="math-inline">\(Ha,Hb\)</span>要么相等，要么交集为空，所以如果<span class="math-inline">\(Ha\neq Hb\)</span>，那只能是交集为空，即两个右陪集之间一个相同的元素都没有，回忆刚才证明其是映射的过程(<span class="math-inline">\(Ha=Hb\Rightarrow ab^{-1}\in H\)</span>)，现在<span class="math-inline">\(Ha\neq Hb\)</span>，就会有<span class="math-inline">\(ab^{-1}\notin H\)</span>，所以<span class="math-inline">\((ab^{-1})^{-1}=ba^{-1}\notin H\)</span>，所以<span class="math-inline">\(a^{-1}H\neq b^{-1}H\)</span>，也就是任意不同的原象对应着不同的象，所以这是一个单射。</p>
+<p>综上，这是一个一一映射，所以群<span class="math-inline">\(G\)</span>关于子群<span class="math-inline">\(H\)</span>的左陪集与右陪集个数是相等的。</p>
+<p>接下来我们给出一个定义：</p>
+<p><strong>定义</strong>：一个群<span class="math-inline">\(G\)</span>的一个子群<span class="math-inline">\(H\)</span>的右陪集(或左陪集)的个数叫做<span class="math-inline">\(H\)</span>在<span class="math-inline">\(G\)</span>里的指数，记为<span class="math-inline">\([G:H]\)</span>，特别的，<span class="math-inline">\([G:1]\)</span>表示群<span class="math-inline">\(G\)</span>的阶，也就是群中的元素数目。</p>
+<p>但愿大家还能记得刚才举过的例子： <strong>例</strong>：模6的剩余类加群<span class="math-inline">\((Z_6,+)=\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5}\}\)</span>，它有两个子群:</p>
+<div class="math-block">\[
+H_2=\{\overline{0},\overline{2},\overline{4}\}\;\; H_3=\{\overline{0},\overline{3}\}
+\]</div>
+<p>有子群便能写陪集：</p>
+<div class="math-block">\[
+\overline{0}H_2=\{\overline{0}+\overline{0},\overline{0}+\overline{2},\overline{0}+\overline{4}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{1}H_2=\{\overline{1}+\overline{0},\overline{1}+\overline{2},\overline{1}+\overline{4}\}=\{\overline{1},\overline{3},\overline{5}\}\\
+\overline{2}H_2=\{\overline{2}+\overline{0},\overline{2}+\overline{2},\overline{2}+\overline{4}\}=\{\overline{2},\overline{4},\overline{6}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{3}H_2=\{\overline{3}+\overline{0},\overline{3}+\overline{2},\overline{3}+\overline{4}\}=\{\overline{3},\overline{5},\overline{1}\}\\
+\overline{4}H_2=\{\overline{4}+\overline{0},\overline{4}+\overline{2},\overline{4}+\overline{4}\}=\{\overline{4},\overline{0},\overline{2}\}\\
+\overline{5}H_2=\{\overline{5}+\overline{0},\overline{5}+\overline{2},\overline{5}+\overline{4}\}=\{\overline{5},\overline{1},\overline{3}\}\\
+\]</div>
+<p>同理可写<span class="math-inline">\(H_3\)</span>的陪集。</p>
+<p>结合上面的定义，就有<span class="math-inline">\([G:H_2]=2\)</span>，(注意定义中的指数计算的是不同的左陪集的个数，所以这里是2而不是6)，我们不难发现，例子中的剩余类加群阶为6，陪集中的元素个数皆为3，恰好有<span class="math-inline">\(6=2\times 3\)</span>。这并不是什么巧合，这就是群论中一个非常重要的定理，<strong>拉格朗日定理</strong>。</p>
+<p><strong>Lagrange定理</strong>：若<span class="math-inline">\(H\)</span>是一个有限群<span class="math-inline">\(G\)</span>的子群，那么：</p>
+<div class="math-block">\[
+[G:1]=[G:H][H:1]
+\]</div>
+<p>证明：前面提到过，群<span class="math-inline">\(G\)</span>可以借助其子群的左陪集或者右陪集来确定一个划分，总共有<span class="math-inline">\(n\)</span>个元素，被划分为了<span class="math-inline">\([G:H]\)</span>个部分，每个部分皆含有<span class="math-inline">\([H:1]\)</span>个元素(前面提到过，同一个子群确定的各个陪集元素个数是相等的)，所以就有这个结论成立。</p>
+<section class="latex-block latex-block--generic"><p>为什么这个定理这样写出来这么简单，但是当时讲的时候怎么就是理解不了呢？？？</p></section>
+<p>该定理之所以重要，是因为其具有巨大的实用价值，比如：</p>
+<p><strong>定理</strong>：一个有限群<span class="math-inline">\(G\)</span>的任意一个元<span class="math-inline">\(a\)</span>的阶<span class="math-inline">\(n\)</span>都能整除<span class="math-inline">\(G\)</span>的阶。 <strong>证明</strong>：该元<span class="math-inline">\(a\)</span>的阶是<span class="math-inline">\(n\)</span>，也就是有<span class="math-inline">\(a^n=e\)</span>，那么<span class="math-inline">\(a\)</span>生成的子群<span class="math-inline">\(H\)</span>就是<span class="math-inline">\(\{e,a,a^2,...,a^{n-1}\}\)</span>，也就是说<span class="math-inline">\([H:1]=n\)</span>，直接带入拉格朗日定理，就有：</p>
+<div class="math-block">\[
+群G的阶=[G:1]=[G:H][H:1]=[G:H]\cdot n
+\]</div>
+<p>所以<span class="math-inline">\(n\)</span>能够整除群<span class="math-inline">\(G\)</span>的阶。</p>
+<p><strong>定理(Euler定理)</strong>：设<span class="math-inline">\(a,m\)</span>是两个正整数并且<span class="math-inline">\((a,m)=1\)</span>，那么：</p>
+<div class="math-block">\[
+a^{\varphi(m)}\equiv 1(mod \;\; m)
+\]</div>
+<p><strong>证明</strong>：考虑模<span class="math-inline">\(m\)</span>的既约剩余类乘群，用<span class="math-inline">\(a\)</span>作为生成元生成该群的一个子群，记该子群的阶为<span class="math-inline">\(\delta\)</span>，前面提到过<strong>有限循环群的阶其实就等于其生成元的阶</strong>，该子群其实就是一个有限循环群，该子群的阶就是生成元的阶，所以就有：</p>
+<div class="math-block">\[
+a^\delta \equiv \overline{1}
+\]</div>
+<p>由拉格朗日定理：</p>
+<div class="math-block">\[
+\varphi(m)=[G:1]=[G:H][H:1]=[G:H]\cdot \delta\\
+\therefore \delta |\varphi(m)\Rightarrow \varphi(m)=k\delta\\
+\therefore a^{\varphi(m)}=a^{k\delta}=(a^\delta)^k\equiv 1(mod \;\;m)
+\]</div>
+<p>定理得证。</p>
+<section class="latex-block latex-block--generic"><p>其实这里就足够能感受到抽象代数的强大了，拉格朗日定理的推导等等并没有太用到初等数论相关的内容，但是却可以通过合适的群的选取来证明初等数论中的欧拉定理。</p></section>
+<p>课本上还有一道例8.31，但是那道例题的证明过程竟然写的反常的详细，所以这里就不做补充了。</p>
+<h2 id="同态基本定理">同态基本定理</h2>
+<p>在我们介绍了左右陪集之后，我们知道对于群<span class="math-inline">\(G\)</span>的任意子群<span class="math-inline">\(H\)</span>，其左陪集未必等于右陪集，但是有一类<span class="math-inline">\(G\)</span>的特殊子群，其左陪集等于右陪集，我们称这种子群为<strong>不变子群</strong>。</p>
+<p><strong>定义</strong>：设<span class="math-inline">\(H\)</span>是群<span class="math-inline">\(G\)</span>的一个子群，如果对任意的<span class="math-inline">\(a\in G\)</span>都有<span class="math-inline">\(aH=Ha\)</span>，那么就说<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的一个不变子群(或正规子群)，记为<span class="math-inline">\(H\vartriangleleft G\)</span></p>
+<p>首先，对于群<span class="math-inline">\(G\)</span>的两个平凡子群<span class="math-inline">\(G,\{e\}\)</span>，这两个子群其实都是不变子群，这是比较显然的，子群<span class="math-inline">\(G\)</span>的任意一个左陪集或者右陪集其实都是<span class="math-inline">\(G\)</span>(考虑群上二元运算的封闭性)，而子群<span class="math-inline">\(\{e\}\)</span>的同相同元素<span class="math-inline">\(a\)</span>产生的左陪集与右陪集当然也都是<span class="math-inline">\(\{a\}\)</span>，所以这两个都是不变子群。</p>
+<p>判断一个群是不是不变子群，可以直接使用定义，也可以用下面的充要条件：</p>
+<p><strong>定理</strong>：设<span class="math-inline">\(H\)</span>是群<span class="math-inline">\(G\)</span>的子群，那么下面四个条件等价： (1)<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的不变子群 (2)对于任意的<span class="math-inline">\(a\in G\)</span>，都有<span class="math-inline">\(aHa^{-1}=H\)</span> (3)对于任意的<span class="math-inline">\(a\in G\)</span>，都有<span class="math-inline">\(aHa^{-1}\subseteq H\)</span> (4)对于任意的<span class="math-inline">\(a\in G\)</span>和任意的<span class="math-inline">\(h\in H\)</span>，都有<span class="math-inline">\(aha^{-1}\in H\)</span></p>
+<p>关于这里的证明，课本上已经写的十分的详细了，没有什么好补充的，这里不再搬运了。</p>
+<p>(接下来的几段话可能有点玄乎，深呼吸)</p>
+<p>若<span class="math-inline">\(H\)</span>是<span class="math-inline">\((G,\circ)\)</span>的不变子群，<span class="math-inline">\(G/H=\{aH|a\in G\}\)</span>表示<span class="math-inline">\(G\)</span>关于<span class="math-inline">\(H\)</span>的所有陪集的集合，我们定义<span class="math-inline">\(G/H\)</span>上的一种运算<span class="math-inline">\(\oplus\)</span>:</p>
+<div class="math-block">\[
+aH\oplus bH=(a\circ b)H
+\]</div>
+<section class="latex-block latex-block--generic"><p>这里的新运算之所以不用课本上用的“<span class="math-inline">\(\circ\)</span>”符号是因为这个符号已经被我用作表示群上的运算，所以这里使用符合<span class="math-inline">\(\oplus\)</span>来加以区分，意在说明这两个运算并不是同一种运算。至于课本上直接写<span class="math-inline">\(ab\)</span>，那是因为省略了中间的符号而已。</p></section>
+<p>下面证明，这种运算是一种二元运算：</p>
+<section class="latex-block latex-block--generic"><p>我需要说明的是，我个人认为课本上此处的证明是错误的，至于为什么错误，看完下面我个人认为正确的证明过程，应该能够明白。(下面的这个证明过程来自于第二版近世代数)</p></section>
+<p>要想证明这是二元运算，只需要说明对于两组相同的操作数，运算得到的结果相同，也就是如果<span class="math-inline">\(aH=a'H,bH=b'H,那么就有aH\oplus bH=a'H\oplus b'H\)</span>，证明过程如下：</p>
+<div class="math-block">\[
+a'H\oplus b'H=(a'b')H=a'(b'H)=a'(bH)=a'(Hb)\\
+=(a'H)b=(aH)b=a(Hb)=a(bH)=(ab)H\\
+=aH\oplus bH
+\]</div>
+<p>这样就证明了该二元运算其实是<span class="math-inline">\(G/H\)</span>的一个二元运算。</p>
+<p>课本上有一个例8.36，我觉得比较有助于理解这种二元运算，做了部分补充放在了下面：</p>
+<p><strong>例</strong>：设<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的一个子群，则<span class="math-inline">\(H\)</span>的任意两个左陪集的乘积仍是一个左陪集当且仅当<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的一个不变子群。(注意，此处的“乘积”二字指的就是刚才定义过的二元运算)</p>
+<p><strong>证明</strong>：如果<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的一个不变子群，那么根据我们刚才定义的运算：</p>
+<div class="math-block">\[
+aH\oplus bH=(a\circ b)H
+\]</div>
+<p>这显然就是两个左陪集的乘积仍然是一个左陪集，这是没有什么异议的。如果<span class="math-inline">\(H\)</span>的任意两个左陪集的乘积仍是一个左陪集，那我们该如何证明子群<span class="math-inline">\(H\)</span>是一个不变子群呢？首先，我们需要证明<span class="math-inline">\(aH\oplus bH=(a\circ b)H\)</span>，等等，这个不是已经成立了吗？？当然不是，在已知<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的一个不变子群的情况下，这个式子是成立的，但是我们现在不知道<span class="math-inline">\(H\)</span>到底是不是一个不变子群，所以就要先证明这个式子成立： 既然我们已知<span class="math-inline">\(H\)</span>的任意两个左陪集的乘积仍是一个左陪集，我们不妨设<span class="math-inline">\(aH\oplus bH=cH\)</span>，由于：</p>
+<div class="math-block">\[
+a\circ b=(a\circ e)\circ (b\circ e)\in aH\oplus bH=cH\\
+\therefore a\circ b\in cH
+\]</div>
+<p>由前面的定理我们可以知道，两个陪集要么没有公共元素，要么完全相等，因为<span class="math-inline">\(a\circ b\in (a\circ b)H\)</span>是显然有的，所以<span class="math-inline">\((a\circ b)H=cH\)</span>，那么就有：</p>
+<div class="math-block">\[
+aH\oplus bH=cH=(a\circ b)H
+\]</div>
+<p>如果取<span class="math-inline">\(b=a^{-1}\)</span>，那么就有：</p>
+<div class="math-block">\[
+aH\oplus a^{-1}H=(a\circ a^{-1})H=eH=H
+\]</div>
+<p>所以说，对于任意的<span class="math-inline">\(h\in H\)</span>，则：</p>
+<div class="math-block">\[
+aha^{-1}=(ah)(a^{-1}e)\in aH\oplus a^{-1}H=H
+\]</div>
+<p>这样其实就满足了定理中的条件(4)，可以得出<span class="math-inline">\(H\)</span>是<span class="math-inline">\(G\)</span>的不变子群。</p>
+<p>现在既然我们已经有了一个崭新的运算<span class="math-inline">\(\oplus\)</span>，那能不能有一个崭新的群呢？</p>
+<p><strong>定理</strong>：设<span class="math-inline">\(H\)</span>是群<span class="math-inline">\(G\)</span>的不变子群，那么<span class="math-inline">\((G/H,\oplus)\)</span>作成一个群。(其中，<span class="math-inline">\(G/H=\{aH|a\in G\}\)</span>表示<span class="math-inline">\(G\)</span>关于<span class="math-inline">\(H\)</span>的所有陪集的集合，二元运算<span class="math-inline">\(\oplus\)</span>为我们刚刚定义出的那个运算)</p>
+<p><strong>证明</strong>：该运算是一个二元运算以及运算的封闭性我们刚才已经证明过了(就在刚开始提出这种运算的地方)。 接下来我们证明其满足结合律：对于任意的<span class="math-inline">\(a,b,c\in G\)</span>，有：</p>
+<div class="math-block">\[
+(aH\oplus bH)\oplus cH=(a\circ b)H\oplus cH=((a\circ b)\circ c)H\\
+=(a\circ(b\circ c))H=aH\oplus (b\circ c)H=aH\oplus (bH\oplus cH)
+\]</div>
+<p>所以说结合律是成立的。对于任意的<span class="math-inline">\(a\in G\)</span>，有：</p>
+<div class="math-block">\[
+eH\oplus aH=(e\circ a)H=aH=(a\circ e)H=aH\oplus eH
+\]</div>
+<p>所以说<span class="math-inline">\(eH(其实就是H)\)</span>就是该群的单位元。对于任意的<span class="math-inline">\(aH\in G/H\)</span>，有<span class="math-inline">\(a^{-1}H\in G/H\)</span>，且：</p>
+<div class="math-block">\[
+a^{-1}H\oplus  aH=(a^{-1}\circ a)H=eH=(a\circ a^{-1})H=aH\oplus a^{-1}H
+\]</div>
+<p>这样就说明了该群中的任意元素都有逆元。这就证明了<span class="math-inline">\(G/H\)</span>是一个群。</p>
+<p>对于<span class="math-inline">\(G/H\)</span>这个群，我们特意给它取了名字，看下面的定义：</p>
+<p><strong>定义</strong>：群<span class="math-inline">\(G\)</span>的不变子群<span class="math-inline">\(H\)</span>的陪集所作成的群叫做一个商群，记作<span class="math-inline">\(G/H\)</span>(其实就是前面已经提到过的<span class="math-inline">\(G/H\)</span>，只是这里非常认真地给个定义而已)。</p>
+<p><strong>定理</strong>：一个群<span class="math-inline">\(G\)</span>同它的每一个商群<span class="math-inline">\(G/H\)</span>同态(注意是每一个，因为当群<span class="math-inline">\(G\)</span>有不止一个不变子群的时候，肯定也会有不止一个商群)。 <strong>证明</strong>：作一个映射：<span class="math-inline">\(\phi:a\rightarrow aH(a\in G)\)</span>，我们前面提到过，<span class="math-inline">\(G\)</span>的两个不同元素可能可能生成同一个左陪集，所以这一定是一个从<span class="math-inline">\(G\)</span>到<span class="math-inline">\(G/H\)</span>的满射，如果实在是明白不了也没关系，可以看下面的这个例子： <strong>例</strong>：模6的剩余类加群<span class="math-inline">\((Z_6,+)=\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5}\}\)</span>，它有一个不变子群为<span class="math-inline">\(H_2\)</span>(因为剩余类加群是交换群，所以它的子群一定是不变子群，不明白也没关系，知道这就是个不变子群继续往下看即可):</p>
+<div class="math-block">\[
+H_2=\{\overline{0},\overline{2},\overline{4}\}
+\]</div>
+<p>有子群便能写陪集：</p>
+<div class="math-block">\[
+\overline{0}H_2=\{\overline{0}+\overline{0},\overline{0}+\overline{2},\overline{0}+\overline{4}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{1}H_2=\{\overline{1}+\overline{0},\overline{1}+\overline{2},\overline{1}+\overline{4}\}=\{\overline{1},\overline{3},\overline{5}\}\\
+\overline{2}H_2=\{\overline{2}+\overline{0},\overline{2}+\overline{2},\overline{2}+\overline{4}\}=\{\overline{2},\overline{4},\overline{6}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{3}H_2=\{\overline{3}+\overline{0},\overline{3}+\overline{2},\overline{3}+\overline{4}\}=\{\overline{3},\overline{5},\overline{1}\}\\
+\overline{4}H_2=\{\overline{4}+\overline{0},\overline{4}+\overline{2},\overline{4}+\overline{4}\}=\{\overline{4},\overline{0},\overline{2}\}\\
+\overline{5}H_2=\{\overline{5}+\overline{0},\overline{5}+\overline{2},\overline{5}+\overline{4}\}=\{\overline{5},\overline{1},\overline{3}\}\\
+\]</div>
+<p>不难发现，元素<span class="math-inline">\(\overline{0},\overline{2},\overline{4}\)</span>对应的都是同一个陪集。</p>
+<p>在说明完这是一个满射之后，我们必须说明它是一个同态映射：对于任意的<span class="math-inline">\(a,b\in G\)</span>，有：</p>
+<div class="math-block">\[
+\phi(a\circ b)=(a\circ b)H=aH\oplus bH=\phi(a)\oplus\phi(b)
+\]</div>
+<p>所以这就是一个同态满射，定理得证。</p>
+<p>接下来的定义也好，定理也好，都是围绕着不变子群，商群与同态映射来展开的。</p>
+<p><strong>定义</strong>：设<span class="math-inline">\(\phi\)</span>是群<span class="math-inline">\(G\)</span>到群<span class="math-inline">\(G'\)</span>的同态满射，<span class="math-inline">\(G'\)</span>的单位元<span class="math-inline">\(e'\)</span>在<span class="math-inline">\(\phi\)</span>作用下的逆象为<span class="math-inline">\(G\)</span>的子集，该子集称为同态满射<span class="math-inline">\(\phi\)</span>的核，记作<span class="math-inline">\(ker \phi\)</span>，那么有<span class="math-inline">\(ker \phi=\phi^{-1}(e')\)</span></p>
+<p>我还是拿已经出现过三次的这个例子来举例： <strong>例</strong>：模6的剩余类加群<span class="math-inline">\((Z_6,+)=\{\overline{0},\overline{1},\overline{2},\overline{3},\overline{4},\overline{5}\}\)</span>，它有一个不变子群为<span class="math-inline">\(H_2\)</span></p>
+<div class="math-block">\[
+H_2=\{\overline{0},\overline{2},\overline{4}\}
+\]</div>
+<p>有子群便能写陪集：</p>
+<div class="math-block">\[
+\overline{0}H_2=\{\overline{0}+\overline{0},\overline{0}+\overline{2},\overline{0}+\overline{4}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{1}H_2=\{\overline{1}+\overline{0},\overline{1}+\overline{2},\overline{1}+\overline{4}\}=\{\overline{1},\overline{3},\overline{5}\}\\
+\overline{2}H_2=\{\overline{2}+\overline{0},\overline{2}+\overline{2},\overline{2}+\overline{4}\}=\{\overline{2},\overline{4},\overline{6}\}=\{\overline{0},\overline{2},\overline{4}\}\\
+\overline{3}H_2=\{\overline{3}+\overline{0},\overline{3}+\overline{2},\overline{3}+\overline{4}\}=\{\overline{3},\overline{5},\overline{1}\}\\
+\overline{4}H_2=\{\overline{4}+\overline{0},\overline{4}+\overline{2},\overline{4}+\overline{4}\}=\{\overline{4},\overline{0},\overline{2}\}\\
+\overline{5}H_2=\{\overline{5}+\overline{0},\overline{5}+\overline{2},\overline{5}+\overline{4}\}=\{\overline{5},\overline{1},\overline{3}\}\\
+\]</div>
+<p>我们只需要取<span class="math-inline">\(G'=G/H\)</span>即可，这样<span class="math-inline">\(G'\)</span>的单位元其实就是<span class="math-inline">\(\overline{0}H_2=H_2\)</span>，我们发现：</p>
+<div class="math-block">\[
+\phi(\overline{0})=\overline{0}H_2=\{\overline{0},\overline{2},\overline{4}\}=H_2=e'\\
+\phi(\overline{2})=\overline{2}H_2=\{\overline{0},\overline{2},\overline{4}\}=H_2=e'\\
+\phi(\overline{4})=\overline{4}H_2=\{\overline{0},\overline{2},\overline{4}\}=H_2=e'\\
+\]</div>
+<p>那么<span class="math-inline">\(ker \phi=\{\overline{0},\overline{2},\overline{4}\}\)</span>。</p>
+<p><strong>定理</strong>：若<span class="math-inline">\(\phi\)</span>是群<span class="math-inline">\(G\)</span>到群<span class="math-inline">\(G'\)</span>的同态满射，那么<span class="math-inline">\(ker \phi\)</span>是G的不变子群。</p>
+<p>在上面的例子中，<span class="math-inline">\(ker \phi=\{\overline{0},\overline{2},\overline{4}\}\)</span>，这其实就是<span class="math-inline">\(H_2\)</span>，就是群<span class="math-inline">\(G\)</span>的一个不变子群。那如何证明呢？ <strong>证明</strong>：令<span class="math-inline">\(ker \phi=K\)</span>，对于任意<span class="math-inline">\(a,b\in K\)</span>，由于<span class="math-inline">\(\phi\)</span>是同态映射，那么就有：</p>
+<div class="math-block">\[
+\phi(a\circ b^{-1})=\phi(a)\cdot\phi(b^{-1})
+\]</div>
+<p>接下来我们看下面几个过程：</p>
+<div class="math-block">\[
+\phi(e)=\phi(e\circ e)=\phi(e)\cdot\phi(e)\Rightarrow \phi(e)=e'\\
+e'=\phi(e)=\phi(b\circ b^{-1})=\phi(b)\cdot\phi(b^{-1})\Rightarrow \phi(b)^{-1}=\phi(b^{-1})
+\]</div>
+<p>所以：</p>
+<div class="math-block">\[
+\phi(a\circ b^{-1})=\phi(a)\cdot\phi(b^{-1})=\phi(a)\cdot\phi(b)^{-1}=e'\cdot e'^{-1}=e'\\
+\therefore a\circ b^{-1}\in K
+\]</div>
+<p>所以<span class="math-inline">\(K\)</span>是一个子群。同理，对于任意的<span class="math-inline">\(a\in G,k\in K\)</span>：</p>
+<div class="math-block">\[
+\phi(aka^{-1})=\phi(a)\cdot\phi(k)\cdot\phi(a^{-1})=\phi(a)\cdot\phi(k)\cdot\phi(a)^{-1}\\
+=\phi(a)\cdot e'\cdot\phi(a)^{-1}=(\phi(a)\cdot e')\cdot\phi(a)^{-1}=(e'\cdot\phi(a))\cdot\phi(a)^{-1}\\
+=e'\cdot\phi(a)\cdot\phi(a)^{-1}=e'
+\]</div>
+<p>所以<span class="math-inline">\(aka^{-1}\in K\)</span>，所以<span class="math-inline">\(K\)</span>是一个不变子群。</p>
+<p><strong>定理</strong>：若<span class="math-inline">\(\phi\)</span>是群<span class="math-inline">\(G\)</span>到群<span class="math-inline">\(G'\)</span>的同态满射，那么<span class="math-inline">\(G/ker\phi\cong G'\)</span>。</p>
+<section class="latex-block latex-block--generic"><p>在证明它之前，我觉得有必要解释一下它，因为<span class="math-inline">\(ker \phi\)</span>是不变子群，所以<span class="math-inline">\(G/ker\phi\)</span>其实就是一个商群，一个由<span class="math-inline">\(ker \phi\)</span>的所有陪集所构成的集合所作成的群，符号<span class="math-inline">\(\cong\)</span>的意思是同构，就是说商群同<span class="math-inline">\(G'\)</span>之间存在一个同构映射。</p></section>
+<p>有关该定理的证明，课本写的十分清楚，而且那些可能会有疑问的地方皆在前面被解释过好几次了，这里不再搬运，大家开动脑筋。</p>
+<p>要不我先介绍一下同态象的意思吧：比如说群<span class="math-inline">\(G\)</span>到群<span class="math-inline">\(G'\)</span>之间存在一个同态映射<span class="math-inline">\(f\)</span>，那么<span class="math-inline">\(G'\)</span>就是<span class="math-inline">\(G\)</span>的一个同态象，可以记为<span class="math-inline">\(f(G)=G'\)</span>。</p>
+<p><strong>同态基本定理</strong>：设<span class="math-inline">\(G\)</span>是一个群，则<span class="math-inline">\(G\)</span>的任意商群都是<span class="math-inline">\(G\)</span>的同态象(这里运用了定理：一个群<span class="math-inline">\(G\)</span>同它的每一个商群<span class="math-inline">\(G/H\)</span>同态)，反之，如果说<span class="math-inline">\(f(G)=G'\)</span>，那么<span class="math-inline">\(G/ker\phi\cong G'\)</span>(这其实就是上一个定理)</p>
+<p>课本上有一个定理8.44，但是我个人觉得这个定理放在这里有些无厘头，直接扑哧扑哧放了四条性质在这里，实在是摸不着头脑(我也确实没力气证了)，至于后面的例8.45，我个人觉得证明过程还是很详细的，并且不需要定理8.44，只需要同态基本定理就能做，各位开动脑筋，检验一下自己的学习成果。</p>
+<h2 id="有限群的实例">有限群的实例</h2>
+<p>OK我终于熬到这里了。</p>
+<p>关于第五节的内容，我个人觉得唯一有用处的就是定义8.49那几个公式，若再感兴趣一点可以看看课件上的图解，这已经超出我能力范围了，我原先没有使用过数学软件绘制函数图像，而且绘制出来的也不一定多好看，而且课件上那几张曲线的图片确实已经十分的明显了，更何况，这一节椭圆曲线这里，不会群也没关系，当成高中解析几何去学感觉也差不多，个人暴论，个人暴论。</p>
+<h2 id="最后">最后</h2>
+<p>我知道群的理解难度远远比不上环，但是一路写下来，我发现了很多相似的地方，怎么说呢，我个人觉得，如果群学得相对熟练一些，应该对学习环也有很大的帮助吧。帮到这里了，大家自求多福。</p>
+</div>
+
+<div class="post-guide">
+  <div class="item">
+    <a href="/A07-公钥密码学的数学基础/00-课程说明/"><i class="fa fa-angle-left" aria-hidden="true"></i>课程说明</a>
+  </div>
+  <div class="item right">
+    <a href="/A07-公钥密码学的数学基础/09-环与域/">环与域<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+  </div>
+</div>
+    </main>
+
+    <aside id="right-toc">
+      <div class="right-toc-inner">
+        <p class="right-toc-title">目录</p>
+        <nav id="right-toc-content">
+          <ul>
+            <li class="toc-level-1">
+              <a href="#群论">群论</a>
+            </li>
+            <li class="toc-level-1">
+              <a href="#群的定义">群的定义</a>
+            </li>
+            <li class="toc-level-1">
+              <a href="#循环群">循环群</a>
+            </li>
+            <li class="toc-level-1">
+              <a href="#子群-子群的陪集">子群、子群的陪集</a>
+            </li>
+            <li class="toc-level-1">
+              <a href="#同态基本定理">同态基本定理</a>
+            </li>
+            <li class="toc-level-1">
+              <a href="#有限群的实例">有限群的实例</a>
+            </li>
+            <li class="toc-level-1">
+              <a href="#最后">最后</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+  </div>
+
+  <div id="footer">
+    <p>©2026-2026 <a href="/">山东大学网络空间安全学院</a></p>
+  </div>
+
+  <button id="totop-toggle" class="toggle"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>
+</body>
+</html>
