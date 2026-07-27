@@ -546,7 +546,7 @@ body:not(.sidebar-open) #content > * {
   box-shadow: var(--shadow-soft);
   font-family: var(--font-latin-math-italic), var(--font-cn);
   font-size: 17px;
-  font-weight: 400;
+  font-weight: 500;
   font-synthesis: none;
 }
 
