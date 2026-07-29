@@ -31,8 +31,28 @@ OK，下面我们开始。
 
 其实说白了这就是我们小学就学习过的类似于12是3的4倍、12是4的3倍等等类似的东西，但是在这里我们更关注某个整数$b$是不是另一个整数$a$的倍数，而不关注具体是多少倍，我们看重的是这种“关系”，而不是具体有几倍，有多少倍并不影响我们研究问题(我们后面会说明这一点)。
 
-有了定义之后我们就要考察一些性质了：
+有了定义之后我们就要考察一些性质了(设$a,b,c\in Z$)：
+\begin{itemize}
+\item (1)$a|b$且$b|c\Rightarrow a|c$
 
+由定义存在$q_1,q_2\in Z$使得$b=aq_1$，$c=bq_2$，故有$c=aq_1q_2$，即$a|c$
+\item (2)$a|b$且$a|c\Leftrightarrow $对于任意的$x,y\in Z$有$a|bx+cy$
+
+由定义存在$q_1,q_2\in Z$使得$b=aq_1$，$c=aq_2$，故有$bx+cy=aq_1x+aq_2y=a(q_1x+q_2y)$，也就是$a|bx+cy$，反之取$x=0,y=1$或者$x=1,y=0$即可。
+\item (3)若$m\in Z$且$m\neq0$，则$a|b\Leftrightarrow ma|mb$。
+
+由定义存在$q_1\in Z$使得$b=aq_1$，故有$(mb)=(ma)q_1$，故有$ma|mb$，反之同理。
+\item (4)$a|b$且$b|a\Rightarrow a=\pm b$
+
+由定义存在$q_1,q_2\in Z$使得$b=aq_1$，$a=bq_2$，故有$a=aq_1q_2$，所以$q_1q_2=1$，故$q_1=q_2=1$或者$q_1=q_2=-1$，也就是$a=\pm b$
+
+\item (5)若$b\neq 0$，则$a|b\Rightarrow |a|\leqslant |b|$
+
+
+
+
+
+\end{itemize}
 
 
 

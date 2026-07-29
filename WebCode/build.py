@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import argparse
 import html
+import os
 import re
 import shutil
 import sys
+import threading
+import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -1327,14 +1330,194 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
     return output_dir
 
 
+# ── 热重载（Livereload）─────────────────────────────────────────────
+
+_BUILD_TIMESTAMP = 0.0
+_BUILD_LOCK = threading.Lock()
+_WATCHER_RUNNING = False
+
+LIVERELOAD_SCRIPT = """\
+<script>
+(function(){
+  var _lastBuild = 0;
+  function check() {
+    fetch('/__livereload__?t=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (_lastBuild && data.ts > _lastBuild) { location.reload(); }
+        _lastBuild = data.ts;
+      })
+      .catch(function(){});
+  }
+  setInterval(check, 800);
+})();
+</script>"""
+
+
+class LiveReloadHandler(SimpleHTTPRequestHandler):
+    """自定义 HTTP 处理器：注入热重载脚本 + 提供构建时间戳端点。"""
+
+    def do_GET(self) -> None:
+        if self.path.startswith("/__livereload__"):
+            self._serve_livereload()
+            return
+        f = self.send_head()
+        if f:
+            try:
+                self.copyfile(f, self.wfile)
+            finally:
+                f.close()
+        else:
+            print(f"[DEBUG] send_head returned None for path: {self.path}")
+
+    def _serve_livereload(self) -> None:
+        with _BUILD_LOCK:
+            ts = _BUILD_TIMESTAMP
+        payload = f'{{"ts":{ts}}}'.encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(payload)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(payload)
+
+    def send_header(self, keyword, value) -> None:
+        """跳过 HTML 响应的 Content-Length（注入脚本后大小会变）。"""
+        if keyword == "Content-Type" and "text/html" in value:
+            self._is_html = True
+        if keyword == "Content-Length" and getattr(self, "_is_html", False):
+            return
+        super().send_header(keyword, value)
+
+    def end_headers(self) -> None:
+        self._is_html = False
+        super().end_headers()
+
+    def copyfile(self, source, outputfile) -> None:
+        """拦截响应，对 HTML 注入热重载脚本。"""
+        data = source.read()
+        try:
+            text = data.decode("utf-8", errors="replace")
+        except UnicodeDecodeError:
+            outputfile.write(data)
+            return
+
+        stripped = text.lstrip()
+        if (stripped.startswith("<!DOCTYPE") or stripped.startswith("<html")) and "</body>" in text:
+            text = text.replace("</body>", LIVERELOAD_SCRIPT + "\n</body>")
+
+        outputfile.write(text.encode("utf-8"))
+
+    def log_message(self, format, *args):
+        """减少日志噪音。"""
+        if args and "/__livereload__" in str(args[0]):
+            return
+        super().log_message(format, *args)
+
+
+def _handler_factory(directory: str):
+    """创建配置了目录的 LiveReloadHandler 子类。"""
+    class _Handler(LiveReloadHandler):
+        def __init__(self, *args, **kwargs):
+            kwargs.setdefault("directory", directory)
+            super().__init__(*args, **kwargs)
+    return _Handler
+
+
 def serve_directory(root: Path, port: int) -> None:
-    handler = partial(SimpleHTTPRequestHandler, directory=str(root))
-    with ThreadingHTTPServer(("127.0.0.1", port), handler) as server:
-        print(f"Serving {root} at http://127.0.0.1:{port}")
+    handler_cls = _handler_factory(str(root))
+    with ThreadingHTTPServer(("127.0.0.1", port), handler_cls) as server:
+        print(f"🔍 正在监听文件变化，修改 .tex 后浏览器自动刷新")
+        print(f"🌐 Serving {root} at http://127.0.0.1:{port}")
         try:
             server.serve_forever()
         except KeyboardInterrupt:
             print("\nServer stopped.")
+
+
+def _collect_watch_paths(content_root: Path, content_roots: list[Path]) -> dict[Path, float]:
+    """收集所有需要监控的文件及其修改时间。"""
+    mtimes: dict[Path, float] = {}
+    for root in [content_root, *content_roots]:
+        for path in root.rglob("*"):
+            if path.is_file() and path.suffix.lower() in (".tex", ".yml", ".html", ".css", ".js"):
+                try:
+                    mtimes[path.resolve()] = path.stat().st_mtime
+                except OSError:
+                    pass
+    # 也监控模板目录
+    templates_dir = WEB_ROOT / "templates"
+    if templates_dir.exists():
+        for path in templates_dir.rglob("*.html"):
+            try:
+                mtimes[path.resolve()] = path.stat().st_mtime
+            except OSError:
+                pass
+    # 监控 assets 目录
+    assets_dir = WEB_ROOT / "assets"
+    if assets_dir.exists():
+        for path in assets_dir.rglob("*"):
+            if path.is_file():
+                try:
+                    mtimes[path.resolve()] = path.stat().st_mtime
+                except OSError:
+                    pass
+    return mtimes
+
+
+def watch_loop(config_path: Path, poll_interval: float = 1.0) -> None:
+    """后台线程：轮询文件变化，触发重建。"""
+    global _BUILD_TIMESTAMP, _WATCHER_RUNNING
+    _WATCHER_RUNNING = True
+
+    config = load_config(config_path)
+    content_root = resolve_local_path(WEB_ROOT, config["content"]["source_root"])
+    content_roots = discover_content_roots(content_root, config["content"]["reserved_dirs"])
+
+    last_mtimes = _collect_watch_paths(content_root, content_roots)
+    print(f"👀 正在监控 {len(last_mtimes)} 个文件...")
+
+    while _WATCHER_RUNNING:
+        time.sleep(poll_interval)
+        try:
+            current_mtimes = _collect_watch_paths(content_root, content_roots)
+
+            # 检查修改和新文件
+            changed = False
+            for path, mtime in current_mtimes.items():
+                if path not in last_mtimes or mtime > last_mtimes[path]:
+                    changed = True
+                    break
+            # 检查被删除的文件
+            if not changed:
+                for path in last_mtimes:
+                    if path not in current_mtimes:
+                        changed = True
+                        break
+
+            if changed:
+                rel_paths = [
+                    str(p.relative_to(PROJECT_ROOT))
+                    for p in current_mtimes
+                    if p not in last_mtimes or current_mtimes[p] > last_mtimes[p]
+                ][:3]
+                display = ", ".join(rel_paths) if rel_paths else "some files"
+                print(f"\n📝 检测到变化: {display} → 重新构建...")
+
+                try:
+                    render_site(config_path, should_clean=False)
+                    with _BUILD_LOCK:
+                        _BUILD_TIMESTAMP = time.time()
+                    print(f"✅ 构建完成，浏览器将自动刷新")
+                except Exception as exc:
+                    print(f"❌ 构建失败: {exc}")
+
+                last_mtimes = current_mtimes
+        except Exception as exc:
+            print(f"⚠️  监听出错: {exc}")
+
+
+# ── CLI & Main ──────────────────────────────────────────────────────
 
 
 def parse_args() -> argparse.Namespace:
@@ -1352,7 +1535,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--serve",
         action="store_true",
-        help="Serve the built site locally after building.",
+        help="Serve the built site locally after building (auto-watches for changes).",
     )
     parser.add_argument(
         "--port",
@@ -1374,6 +1557,19 @@ def main() -> int:
     print(f"Build complete: {output_dir}")
 
     if args.serve:
+        # 设置初始构建时间戳
+        global _BUILD_TIMESTAMP
+        _BUILD_TIMESTAMP = time.time()
+
+        # 启动文件监听线程
+        watcher = threading.Thread(
+            target=watch_loop,
+            args=(config_path,),
+            daemon=True,
+        )
+        watcher.start()
+
+        # 启动 HTTP 服务器（阻塞主线程）
         serve_directory(output_dir, args.port)
     return 0
 
