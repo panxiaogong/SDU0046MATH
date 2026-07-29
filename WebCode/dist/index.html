@@ -5,7 +5,7 @@
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
   <title>关于本站 | 网安数学站</title>
   <meta name="description" content="一个专注学院内数学课程学习、记录与分享的空间，各门课程的笔记与阶段总结会被整理成清晰的章节，方便回顾与持续更新。" />
-  <link rel="stylesheet" href="/assets/css/site.css?v=2" />
+  <link rel="stylesheet" href="/assets/css/site.css?v=3" />
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css" />
   <script>
     var searchEngine = "https://www.google.com/search?q=";
@@ -40,15 +40,56 @@
   <script>
     window.__sidebarUrl = "/sidebar.html";
   </script>
-  <script defer src="/assets/js/site.js?v=2"></script>
+  <script defer src="/assets/js/site.js?v=3"></script>
 </head>
-<body class="sidebar-open">
+<body class="sidebar-open loading">
+  <!-- 科幻加载屏 -->
+  <div id="loader">
+    <div class="loader-bg"></div>
+    <div class="loader-content">
+      <div class="loader-rings">
+        <div class="loader-ring ring-1"></div>
+        <div class="loader-ring ring-2"></div>
+        <div class="loader-ring ring-3"></div>
+      </div>
+      <div class="loader-core">
+        <div class="loader-diamond"></div>
+      </div>
+      <div class="loader-text">
+        <span class="loader-text-main">系统初始化</span>
+        <span class="loader-dots">
+          <span>.</span><span>.</span><span>.</span>
+        </span>
+      </div>
+      <div class="loader-scanline"></div>
+      <div class="loader-progress">
+        <div class="loader-progress-bar"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      var l=document.getElementById('loader');
+      if(!l)return;
+      var isHome=window.location.pathname==='/'||window.location.pathname==='/index.html'||window.location.pathname.endsWith('/index.html')&&window.location.pathname.split('/').length<=3;
+      if(!isHome){l.remove();document.body.classList.remove('loading');return;}
+      setTimeout(function(){l.classList.add('fade-out');setTimeout(function(){l.remove();document.body.classList.remove('loading');},500)},1000);
+    })();
+  </script>
+
   <header id="header">
     <div class="header-left">
       <a id="title" href="/" class="logo">
         <i class="fa fa-book" aria-hidden="true"></i>
         <span>网安数学站</span>
       </a>
+    </div>
+
+    <div class="header-center">
+      <div class="header-search">
+        <i class="fa fa-search" aria-hidden="true"></i>
+        <input id="header-search-input" type="search" placeholder="搜索课程笔记...">
+      </div>
     </div>
 
     <ul id="menu">
@@ -85,15 +126,12 @@
     <div id="sidebar-overlay"></div>
 
     <main id="content" class="content">
-<h1 id="article-title">关于本站</h1>
-
-<div class="article-meta">
-  <span>潘宇琦</span>
-  <span>2026-03-06 00:00:00</span>
-</div>
-
-<div id="article-content">
-  <h2 id="导语">导语</h2>
+<div id="dashboard-home">
+  <!-- 首页正文 (液态玻璃卡片) -->
+  <div class="glass-card glass-main">
+    <div class="glass-card-body">
+      <div id="article-content">
+        <h2 id="导语">导语</h2>
 <p>现在是凌晨两点，不知道自己在想什么，干脆起来更新一下网站主页。</p>
 <p>我在上学院的数学课的时候，总是会想，能不能用最通俗易懂的语言来把这门课讲清楚，能不能从其他的优秀教材中获得更好的理解，结合这两个方面，我制作了这个网站，不仅仅是为了实现自己的想法，也希望能帮助到其他同学。</p>
 <p>关于这个网站的发展历史，我放在了这个页面的最后，如果你愿意了解更多，欢迎阅读。</p>
@@ -114,6 +152,71 @@
 <p>以上是这个网站的历史，下面我来说点我自己想说的。</p>
 <p>我不是一个很有天赋的人，在过去五年的努力里，我知道自己已经来到了自己的上限，尤其是在我写这些文档的时候，我不知道该怎么形容这种感觉，有点穷途末路的无奈，但是我知道，屏幕前的各位还远没有到达自己的上限，还远没有意识到自己的潜力，而我愿意相信大家的能力。</p>
 <p>沉睡的狮子需要时间来觉醒，我去完成最后的一点铺垫。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最近文章 -->
+  <div class="glass-card">
+    <div class="glass-card-header">
+      <span class="glass-card-title">
+        <i class="fa fa-clock-o" aria-hidden="true"></i> 最近更新
+      </span>
+      <span class="glass-badge">6 篇</span>
+    </div>
+    <div class="glass-card-body">
+      <div class="article-list">
+        <a href="/A01-线性代数/01-向量与线性组合/" class="article-list-item">
+          <div class="item-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+          <div class="item-info">
+            <div class="item-title">向量与线性组合</div>
+            <div class="item-meta">2026-06-07</div>
+          </div>
+          <i class="fa fa-chevron-right item-arrow" aria-hidden="true"></i>
+        </a>
+        <a href="/A02-数学分析-上/00-课程说明/" class="article-list-item">
+          <div class="item-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+          <div class="item-info">
+            <div class="item-title">数学分析(上)课程说明</div>
+            <div class="item-meta">2026-07-21</div>
+          </div>
+          <i class="fa fa-chevron-right item-arrow" aria-hidden="true"></i>
+        </a>
+        <a href="/A03-数学分析-下/00-课程说明/" class="article-list-item">
+          <div class="item-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+          <div class="item-info">
+            <div class="item-title">数学分析(下)课程说明</div>
+            <div class="item-meta">2026-07-21</div>
+          </div>
+          <i class="fa fa-chevron-right item-arrow" aria-hidden="true"></i>
+        </a>
+        <a href="/A04-离散数学/00-课程说明/" class="article-list-item">
+          <div class="item-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+          <div class="item-info">
+            <div class="item-title">离散数学课程说明</div>
+            <div class="item-meta">2026-07-21</div>
+          </div>
+          <i class="fa fa-chevron-right item-arrow" aria-hidden="true"></i>
+        </a>
+        <a href="/A05-组合学与图论/00-课程说明/" class="article-list-item">
+          <div class="item-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+          <div class="item-info">
+            <div class="item-title">组合学与图论课程说明</div>
+            <div class="item-meta">2026-07-21</div>
+          </div>
+          <i class="fa fa-chevron-right item-arrow" aria-hidden="true"></i>
+        </a>
+        <a href="/A06-概率论与数理统计/00-课程说明/" class="article-list-item">
+          <div class="item-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+          <div class="item-info">
+            <div class="item-title">概率论与数理统计课程说明</div>
+            <div class="item-meta">2026-07-21</div>
+          </div>
+          <i class="fa fa-chevron-right item-arrow" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
     </main>
 
@@ -139,6 +242,7 @@
 
   <div id="footer">
     <p>©2026-2026 <a href="/">山东大学网络空间安全学院</a></p>
+    <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">鲁ICP备2026016426号</a></p>
   </div>
 
   <button id="totop-toggle" class="toggle"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>

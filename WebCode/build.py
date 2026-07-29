@@ -1256,7 +1256,6 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
             ),
         )
 
-    posts.sort(key=lambda item: item.date_sort, reverse=True)
 
     # 按课程文件夹（collection）分组，使上一篇/下一篇链接仅在同一课程内跳转
     collection_groups: dict[tuple[str, ...], list[Document]] = defaultdict(list)
@@ -1270,6 +1269,7 @@ def render_site(config_path: Path, should_clean: bool = True) -> Path:
                 post.next_post = group[index - 1]
             if index + 1 < len(group):
                 post.previous_post = group[index + 1]
+
 
     home_page = next(page for page in pages if page.is_home)
     other_pages = [page for page in pages if not page.is_home]

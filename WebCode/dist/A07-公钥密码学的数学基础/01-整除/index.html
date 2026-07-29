@@ -3,8 +3,8 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-  <title>概率论与数理统计课程说明 | 网安数学站</title>
-  <meta name="description" content="这里将逐步整理概率论与数理统计的课程笔记、公式梳理与题型归纳。" />
+  <title>整除 | 网安数学站</title>
+  <meta name="description" content="这里讲解公钥第一章的内容。" />
   <link rel="stylesheet" href="/assets/css/site.css?v=3" />
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css" />
   <script>
@@ -126,18 +126,31 @@
     <div id="sidebar-overlay"></div>
 
     <main id="content" class="content">
-<h1 id="article-title">概率论与数理统计课程说明</h1>
+<h1 id="article-title">整除</h1>
 
 <div class="article-meta">
   <span>山东大学网络空间安全学院</span>
-  <span>2026-07-21</span>
+  <span>2026-07-29</span>
 </div>
 
 <div id="article-content">
-  <h2 id="课程说明">课程说明</h2>
-<p>这里将逐步整理概率论与数理统计的课程笔记、公式梳理、典型题型与复习总结。后续你可以继续在这个文件夹下按章节新增 LaTeX 文稿。</p>
+  <p>整除这一整章可以说是相当基础，并且相对于后面的章节是最简单的，所以整除这一章的文档可能和你课本上的内容除了一些例题外没有太大的出入，这是没有办法的，因为后文中的很多定义相当简单且基础，再怎么解释也解释不出来什么，只能这样。</p>
+<p>另外，需要特别提醒的是，不要因为这一章简单就少花时间，如果你不能很好地记住或者理解这一章内的一些结论，到了后面的章节时就会遇到很大很大的麻烦，所以不论你看不看这一章的文档，反复地复习这一章都是很重要的。</p>
+<p>OK，下面我们开始。</p>
+<h2 id="整除的概念">整除的概念</h2>
+<p>整除就是把小学中的概念描述得更高大上了一些，下面是它的定义(我们用集合<span class="math-inline">\(Z\)</span>来表示全体整数组成的集合，<span class="math-inline">\(N\)</span>表示全体自然数组成的集合)。</p>
+<p>定义：设<span class="math-inline">\(a,b\in Z\)</span>，如果存在<span class="math-inline">\(q\in Z\)</span>，使得<span class="math-inline">\(b=aq\)</span>，那么就说<span class="math-inline">\(b\)</span>可以被<span class="math-inline">\(a\)</span>整除或者<span class="math-inline">\(a\)</span>整除<span class="math-inline">\(b\)</span>，记作<span class="math-inline">\(a|b\)</span>，称<span class="math-inline">\(b\)</span>是<span class="math-inline">\(a\)</span>的倍数，<span class="math-inline">\(a\)</span>是<span class="math-inline">\(b\)</span>的因子，否则就说<span class="math-inline">\(b\)</span>不能被<span class="math-inline">\(a\)</span>整除或者<span class="math-inline">\(a\)</span>不整除<span class="math-inline">\(b\)</span>，记作<span class="math-inline">\(a\nmid b\)</span> 。</p>
+<p>其实说白了这就是我们小学就学习过的类似于12是3的4倍、12是4的3倍等等类似的东西，但是在这里我们更关注某个整数<span class="math-inline">\(b\)</span>是不是另一个整数<span class="math-inline">\(a\)</span>的倍数，而不关注具体是多少倍，我们看重的是这种“关系”，而不是具体有几倍，有多少倍并不影响我们研究问题(我们后面会说明这一点)。</p>
+<p>有了定义之后我们就要考察一些性质了：</p>
 </div>
 
+<div class="post-guide">
+  <div class="item">
+    <a href="/A07-公钥密码学的数学基础/00-课程说明/"><i class="fa fa-angle-left" aria-hidden="true"></i>课程说明</a>
+  </div>
+  <div class="item right">
+  </div>
+</div>
     </main>
 
     <aside id="right-toc">
@@ -146,7 +159,7 @@
         <nav id="right-toc-content">
           <ul>
             <li class="toc-level-1">
-              <a href="#课程说明">课程说明</a>
+              <a href="#整除的概念">整除的概念</a>
             </li>
           </ul>
         </nav>
