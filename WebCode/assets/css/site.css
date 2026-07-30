@@ -1113,6 +1113,15 @@ body:not(.sidebar-open) #content > * {
 
 #article-content mjx-container[jax="CHTML"] { font-size:1.14em !important; }
 
+/* 隐藏 MathJax 公式的滚动条 */
+#article-content mjx-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+#article-content mjx-container::-webkit-scrollbar {
+  display: none;
+}
+
 #article-content pre {
   margin:18px 0;
   border-radius:var(--radius-md);

@@ -4,7 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
   <title>整除 | 网安数学站</title>
-  <meta name="description" content="这里讲解公钥第一章的内容。" />
+  <meta name="description" content="整除这一整章可以说是相当基础，并且相对于后面的章节是最简单的，所以整除这一章的文档可能和你课本上的内容除了一些例题外没有太大的出入，这是没有办法的，因为后文中的很多定义相当简单且基础，再怎么解释也解释不出来什么，只能这样。 另外，需要特别提醒的是，不要因为这一章简单就少花时间，如果你不能很好地记住或…" />
   <link rel="stylesheet" href="/assets/css/site.css?v=3" />
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css" />
   <script>
@@ -138,21 +138,89 @@
 <p>另外，需要特别提醒的是，不要因为这一章简单就少花时间，如果你不能很好地记住或者理解这一章内的一些结论，到了后面的章节时就会遇到很大很大的麻烦，所以不论你看不看这一章的文档，反复地复习这一章都是很重要的。</p>
 <p>OK，下面我们开始。</p>
 <h2 id="整除的概念">整除的概念</h2>
+<h3 id="定义及性质">定义及性质</h3>
 <p>整除就是把小学中的概念描述得更高大上了一些，下面是它的定义(我们用集合<span class="math-inline">\(Z\)</span>来表示全体整数组成的集合，<span class="math-inline">\(N\)</span>表示全体自然数组成的集合)。</p>
 <p>定义：设<span class="math-inline">\(a,b\in Z\)</span>，如果存在<span class="math-inline">\(q\in Z\)</span>，使得<span class="math-inline">\(b=aq\)</span>，那么就说<span class="math-inline">\(b\)</span>可以被<span class="math-inline">\(a\)</span>整除或者<span class="math-inline">\(a\)</span>整除<span class="math-inline">\(b\)</span>，记作<span class="math-inline">\(a|b\)</span>，称<span class="math-inline">\(b\)</span>是<span class="math-inline">\(a\)</span>的倍数，<span class="math-inline">\(a\)</span>是<span class="math-inline">\(b\)</span>的因子，否则就说<span class="math-inline">\(b\)</span>不能被<span class="math-inline">\(a\)</span>整除或者<span class="math-inline">\(a\)</span>不整除<span class="math-inline">\(b\)</span>，记作<span class="math-inline">\(a\nmid b\)</span> 。</p>
 <p>其实说白了这就是我们小学就学习过的类似于12是3的4倍、12是4的3倍等等类似的东西，但是在这里我们更关注某个整数<span class="math-inline">\(b\)</span>是不是另一个整数<span class="math-inline">\(a\)</span>的倍数，而不关注具体是多少倍，我们看重的是这种“关系”，而不是具体有几倍，有多少倍并不影响我们研究问题(我们后面会说明这一点)。</p>
 <p>有了定义之后我们就要考察一些性质了(设<span class="math-inline">\(a,b,c\in Z\)</span>)：</p>
 <ul class="article-list article-list--ul">
 <li><p>(1)<span class="math-inline">\(a|b\)</span>且<span class="math-inline">\(b|c\Rightarrow a|c\)</span></p>
-<p>由定义存在<span class="math-inline">\(q_1,q_2\in Z\)</span>使得<span class="math-inline">\(b=aq_1\)</span>，<span class="math-inline">\(c=bq_2\)</span>，故有<span class="math-inline">\(c=aq_1q_2\)</span>，即<span class="math-inline">\(a|c\)</span></p></li>
+<p><span class="math-inline">\(\;\;\;\;\;\;\;\)</span>证明：由定义存在<span class="math-inline">\(q_1,q_2\in Z\)</span>使得<span class="math-inline">\(b=aq_1\)</span>，<span class="math-inline">\(c=bq_2\)</span>，故有<span class="math-inline">\(c=aq_1q_2\)</span>，即<span class="math-inline">\(a|c\)</span></p></li>
 <li><p>(2)<span class="math-inline">\(a|b\)</span>且<span class="math-inline">\(a|c\Leftrightarrow \)</span>对于任意的<span class="math-inline">\(x,y\in Z\)</span>有<span class="math-inline">\(a|bx+cy\)</span></p>
-<p>由定义存在<span class="math-inline">\(q_1,q_2\in Z\)</span>使得<span class="math-inline">\(b=aq_1\)</span>，<span class="math-inline">\(c=aq_2\)</span>，故有<span class="math-inline">\(bx+cy=aq_1x+aq_2y=a(q_1x+q_2y)\)</span>，也就是<span class="math-inline">\(a|bx+cy\)</span>，反之取<span class="math-inline">\(x=0,y=1\)</span>或者<span class="math-inline">\(x=1,y=0\)</span>即可。</p></li>
+<p><span class="math-inline">\(\;\;\;\;\;\;\;\)</span>证明：由定义存在<span class="math-inline">\(q_1,q_2\in Z\)</span>使得<span class="math-inline">\(b=aq_1\)</span>，<span class="math-inline">\(c=aq_2\)</span>，故有<span class="math-inline">\(bx+cy=aq_1x+aq_2y=a(q_1x+q_2y)\)</span>，也就是<span class="math-inline">\(a|bx+cy\)</span>，反之取<span class="math-inline">\(x=0,y=1\)</span>或者<span class="math-inline">\(x=1,y=0\)</span>即可。</p></li>
 <li><p>(3)若<span class="math-inline">\(m\in Z\)</span>且<span class="math-inline">\(m\neq0\)</span>，则<span class="math-inline">\(a|b\Leftrightarrow ma|mb\)</span>。</p>
-<p>由定义存在<span class="math-inline">\(q_1\in Z\)</span>使得<span class="math-inline">\(b=aq_1\)</span>，故有<span class="math-inline">\((mb)=(ma)q_1\)</span>，故有<span class="math-inline">\(ma|mb\)</span>，反之同理。</p></li>
+<p><span class="math-inline">\(\;\;\;\;\;\;\;\)</span>证明：由定义存在<span class="math-inline">\(q_1\in Z\)</span>使得<span class="math-inline">\(b=aq_1\)</span>，故有<span class="math-inline">\((mb)=(ma)q_1\)</span>，故有<span class="math-inline">\(ma|mb\)</span>，反之同理。</p></li>
 <li><p>(4)<span class="math-inline">\(a|b\)</span>且<span class="math-inline">\(b|a\Rightarrow a=\pm b\)</span></p>
-<p>由定义存在<span class="math-inline">\(q_1,q_2\in Z\)</span>使得<span class="math-inline">\(b=aq_1\)</span>，<span class="math-inline">\(a=bq_2\)</span>，故有<span class="math-inline">\(a=aq_1q_2\)</span>，所以<span class="math-inline">\(q_1q_2=1\)</span>，故<span class="math-inline">\(q_1=q_2=1\)</span>或者<span class="math-inline">\(q_1=q_2=-1\)</span>，也就是<span class="math-inline">\(a=\pm b\)</span></p></li>
-<li><p>(5)若<span class="math-inline">\(b\neq 0\)</span>，则<span class="math-inline">\(a|b\Rightarrow |a|\leqslant |b|\)</span></p></li>
+<p><span class="math-inline">\(\;\;\;\;\;\;\;\)</span>证明：由定义存在<span class="math-inline">\(q_1,q_2\in Z\)</span>使得<span class="math-inline">\(b=aq_1\)</span>，<span class="math-inline">\(a=bq_2\)</span>，故有<span class="math-inline">\(a=aq_1q_2\)</span>，所以<span class="math-inline">\(q_1q_2=1\)</span>，故<span class="math-inline">\(q_1=q_2=1\)</span>或者<span class="math-inline">\(q_1=q_2=-1\)</span>，也就是<span class="math-inline">\(a=\pm b\)</span></p></li>
+<li><p>(5)若<span class="math-inline">\(b\neq 0\)</span>，则<span class="math-inline">\(a|b\Rightarrow |a|\leqslant |b|\)</span></p>
+<p><span class="math-inline">\(\;\;\;\;\;\;\;\)</span>证明：由定义存在<span class="math-inline">\(q_1\in Z\)</span>使得<span class="math-inline">\(b=aq_1\)</span>，故有<span class="math-inline">\(|b|=|aq_1|=|a||q_1|\)</span>，又因为<span class="math-inline">\(b\neq 0\)</span>，故<span class="math-inline">\(a\neq 0\)</span>，<span class="math-inline">\(q_1\neq 0\)</span>，故有<span class="math-inline">\(|a|\leqslant |b|\)</span>。</p></li>
 </ul>
+<p>这些性质是基本且重要的，而且通过证明过程我们也可以看出整除的定义的重要作用，当你想证明但实在是不知道该从哪里入手的时候，不妨先写一写定义。接下来我们使用这些性质来做一些小问题。</p>
+<p>例1：试证明若<span class="math-inline">\(3|n\)</span>且<span class="math-inline">\(7|n\)</span>，则<span class="math-inline">\(21|n\)</span>。</p>
+<p>证明：由<span class="math-inline">\(3|n\)</span>知<span class="math-inline">\(n=3m\)</span>，所以<span class="math-inline">\(7|3m\)</span>，又因为<span class="math-inline">\(7|7m\)</span>，故有<span class="math-inline">\(7|(7m-3m\cdot 2)\)</span>也就是<span class="math-inline">\(7|m\)</span>，所以<span class="math-inline">\(21|n\)</span>。</p>
+<p>例2：设<span class="math-inline">\(a,b\)</span>是两个给定的非零整数，且有整数<span class="math-inline">\(x,y\)</span>使得<span class="math-inline">\(ax+by=1\)</span>，试证明：(1)若<span class="math-inline">\(a|n\)</span>且<span class="math-inline">\(b|n\)</span>，则<span class="math-inline">\(ab|n\)</span>。(2)若<span class="math-inline">\(a|bn\)</span>，则<span class="math-inline">\(a|n\)</span>。</p>
+<p>证明：由<span class="math-inline">\(ax+by=1\)</span>，故有<span class="math-inline">\(n=axn+byn\)</span>，又因为<span class="math-inline">\(a|n\)</span>且<span class="math-inline">\(b|n\)</span>，所以<span class="math-inline">\(ab|nb\)</span>且<span class="math-inline">\(ba|na\)</span>，所以<span class="math-inline">\(ab|nby+nax\)</span>，也就是<span class="math-inline">\(ab|n\)</span>，这就证明了(1)，因为<span class="math-inline">\(a|bn\)</span>且<span class="math-inline">\(a|an\)</span>，所以<span class="math-inline">\(ab|bny+anx\)</span>，也就是<span class="math-inline">\(ab|n\)</span>，故有<span class="math-inline">\(a|n\)</span>，这就证明了(2)。</p>
+<h3 id="素数">素数</h3>
+<p>显然地， <span class="math-inline">\(\pm1,\pm b\)</span> 是 <span class="math-inline">\(b\)</span> 的因子，我们称其为 <span class="math-inline">\(b\)</span> 的显然因子，其他因子则称为 <span class="math-inline">\(b\)</span> 的非显然因子，又叫真因子。</p>
+<p>我们由此可得到下面关于<strong>素数</strong>定义。</p>
+<p>定义：设整数 <span class="math-inline">\(p\neq0,\pm1\)</span> 。如果 <span class="math-inline">\(p\)</span> 除了显然因子外没有其他的因子，那么就称 <span class="math-inline">\(p\)</span> 为素元，也叫素数，若整数 <span class="math-inline">\(a\neq0,\pm1\)</span> 并且 <span class="math-inline">\(a\)</span> 除了显然因子之外还有真因子，则称 <span class="math-inline">\(a\)</span> 为合数。</p>
+<p>一般情况下，素数我们只取正的。</p>
+<p>下面我们来介绍几个关于素数的定理，都比较重要。</p>
+<p>定理：若 <span class="math-inline">\(a\)</span> 为合数，则 <span class="math-inline">\(a\)</span> 的最小真因子为素数，特别地，任何不等于1的正整数都有素因子。</p>
+<p>证明：设<span class="math-inline">\(d\)</span>为<span class="math-inline">\(a\)</span>的最小真因子，假设<span class="math-inline">\(d\)</span>不为素数，则<span class="math-inline">\(d\)</span>也必有真因子<span class="math-inline">\(d'\)</span>，使得 <span class="math-inline">\(d'|d\)</span>，由整除的性质可知<span class="math-inline">\(d'|a\)</span>，与<span class="math-inline">\(d\)</span>为<span class="math-inline">\(a\)</span>的最小真因子矛盾，故假设错误，原定理成立。</p>
+<p>定理：素数有无穷多个。</p>
+<p>证明一：假设只有有限个素数，设为<span class="math-inline">\(p_1,p_2,\cdot\cdot\cdot,p_k\)</span>，考虑 <span class="math-inline">\(a=p_1p_2\cdot\cdot\cdot p_k+1\)</span>，由于素数有限个，那么<span class="math-inline">\(a\)</span>必然是合数，则<span class="math-inline">\(a\)</span>的最小真因子必然是素数，记为<span class="math-inline">\(p\)</span>，而且该素数必等于某一个<span class="math-inline">\(p_i\)</span>，所以说就有<span class="math-inline">\(p|p_1p_2\cdot\cdot\cdot p_k\)</span>，又因为<span class="math-inline">\(p|a\)</span>，所以就有<span class="math-inline">\(p|(a-p_1p_2\cdot\cdot\cdot p_k)\)</span>也就是<span class="math-inline">\(p|1\)</span>，这与<span class="math-inline">\(p\)</span>是素数是矛盾的，故假设错误，原定理成立。</p>
+<p>这里补充一下：若令<span class="math-inline">\(Q_k=q_1q_2\cdot\cdot\cdot q_k+1\)</span>，我们可以直接计算出一些结果：<span class="math-inline">\(Q_1\)</span> =3，<span class="math-inline">\(Q_2\)</span> =7，<span class="math-inline">\(Q_3\)</span> =31，<span class="math-inline">\(Q_4\)</span> =211，<span class="math-inline">\(Q_5\)</span> =2311，<span class="math-inline">\(Q_6\)</span> = <span class="math-inline">\(59\times509\)</span>，<span class="math-inline">\(Q_7\)</span> = <span class="math-inline">\(19\times97\times277\)</span>，<span class="math-inline">\(Q_8\)</span> = <span class="math-inline">\(347\times27953\)</span>， <span class="math-inline">\(Q_9\)</span> = <span class="math-inline">\(317\times703763\)</span>，<span class="math-inline">\(Q_{10}\)</span> = <span class="math-inline">\(331\times571\times34231\)</span>，这里前五个是素数，后五个是合数，所以对于任意的<span class="math-inline">\(k\)</span>，我们不敢贸然判断<span class="math-inline">\(Q_k\)</span>是质数还是合数，而且，至今我们都不知道是否有无穷多个<span class="math-inline">\(k\)</span>使得<span class="math-inline">\(Q_k\)</span>是质数，也不知道是否有无穷多个<span class="math-inline">\(k\)</span>使得<span class="math-inline">\(Q_k\)</span>是合数。</p>
+<p>证明二：我们要证明素数有无穷多个，我们只需要说明对于任意的正整数<span class="math-inline">\(n\)</span>，皆有素数<span class="math-inline">\(p\)</span>使得<span class="math-inline">\(p&gt;n\)</span>。我们考虑<span class="math-inline">\(n!+1\)</span>，若<span class="math-inline">\(n!+1\)</span>为素数，则显然该数比<span class="math-inline">\(n\)</span>大；若<span class="math-inline">\(n!+1\)</span>为合数，则其必有一素因子<span class="math-inline">\(p\)</span>，若<span class="math-inline">\(p\leqslant n\)</span>，那么就会有<span class="math-inline">\(p|n!\)</span>，那么可得<span class="math-inline">\(p|1\)</span>，显然是错误的，所以<span class="math-inline">\(p&gt;n\)</span>，也就是说，对于任意的正整数<span class="math-inline">\(n\)</span>，不管<span class="math-inline">\(n!+1\)</span>为素数还是合数，我们都能找到大于<span class="math-inline">\(n\)</span>的素数，也就证明了素数有无限个。</p>
+<p>证明三(此证明涉及后文知识点)：由于费马数无穷多且两两互素，若素数有限，那必然存在一个素数同时是两个费马数的真因子，那么这两个费马数就不会互素，矛盾。</p>
+<p>将全体素数从小到大排列，假设<span class="math-inline">\(p_n\)</span>表示第<span class="math-inline">\(n\)</span>个素数，<span class="math-inline">\(\pi(x)\)</span>表示不超过<span class="math-inline">\(x\)</span>的素数个数。下面的定理描述了<span class="math-inline">\(p_n\)</span>的一个弱上界估计与<span class="math-inline">\(\pi(x)\)</span>的一个弱下界估计。</p>
+<p>定理：将全体素数从小到大排列，则第<span class="math-inline">\(n\)</span>个素数<span class="math-inline">\(p_n\)</span>与<span class="math-inline">\(\pi(x)\)</span>分别有以下结论：</p>
+<ul class="article-list article-list--ul">
+<li><p>(1)<span class="math-inline">\(p_n\leqslant 2^{2^{n-1}},n=1,2,...\)</span></p></li>
+<li><p>(2)<span class="math-inline">\(\pi(x)&gt;log_2^{log_2^x}\)</span></p></li>
+</ul>
+<p>证明：我们使用归纳法来证明第一个结论。当<span class="math-inline">\(n=1\)</span>时，命题显然成立。假设对于<span class="math-inline">\(n\leqslant k\)</span>，命题成立。当<span class="math-inline">\(n=k+1\)</span>时，由上一个定理的证明过程可知，若<span class="math-inline">\(a=p_1p_2\cdot\cdot\cdot p_k+1\)</span>是素数，则必然是第<span class="math-inline">\(i(i\geqslant k+1)\)</span>个素数，则必然有<span class="math-inline">\(p_{k+1}\leqslant a=p_1p_2\cdot\cdot\cdot p_k+1\)</span>；若<span class="math-inline">\(a\)</span>是合数，则其最小真因子必然是一个素数，并且不出现在前<span class="math-inline">\(k\)</span>个素数之中，那么也是第<span class="math-inline">\(i(i\geqslant k+1)\)</span>个素数，必然也会有<span class="math-inline">\(p_{k+1}\leqslant a=p_1p_2\cdot\cdot\cdot p_k+1\)</span>，综上，就有下面的式子：</p>
+<div class="math-block">$$\begin{align*}
+p_{k+1}\leqslant p_1p_2\cdot\cdot\cdot p_k+1=2^{2^0}2^{2^1}\cdot\cdot\cdot2^{2^{k-1}}+1=2^{2^k-1}+1&lt;2\cdot2^{2^k-1}=2^{2^k}
+\end{align*}$$</div>
+<p>于是第一个结论得证。对于第二个结论，我们用<span class="math-inline">\(2^{2^k}\)</span>对数轴进行划分，也就是说对于任意的<span class="math-inline">\(x\geqslant2\)</span>，必会存在唯一的整数<span class="math-inline">\(n\)</span>，使得<span class="math-inline">\(2^{2^{n-1}}\leqslant x&lt;2^{2^n}\)</span>(也就是<span class="math-inline">\(log_2^{log_2^x}&lt; n\leqslant log_2^{log_2^x}+1\)</span>)，所以不超过<span class="math-inline">\(x\)</span>的素数的个数一定会大于不超过<span class="math-inline">\(2^{2^{n-1}}\)</span>的素数的个数，而此时由第一个结论，第<span class="math-inline">\(n\)</span>个素数是要小于<span class="math-inline">\(2^{2^{n-1}}\)</span>的，所以不超过<span class="math-inline">\(2^{2^{n-1}}\)</span>的素数至少有<span class="math-inline">\(n\)</span>个，我们就有了下面的式子：</p>
+<div class="math-block">$$\begin{align*}
+\pi(x)\geqslant\pi(2^{2^{n-1}})\geqslant n&gt;log_2^{log_2^x}
+\end{align*}$$</div>
+<p>于是第二个结论得证。</p>
+<h3 id="带余除法定理">带余除法定理</h3>
+<p>下面我们介绍初等数论中一个最基本的结论：带余除法定理，它是整除的一般情形，也是Euclid算法的基础。</p>
+<p>带余除法定理：设 <span class="math-inline">\(a,b\)</span> 是两个给定的整数且 <span class="math-inline">\(a\neq0\)</span> ，那么一定存在唯一的一对整数 <span class="math-inline">\(q\)</span> 与 <span class="math-inline">\(r\)</span> ，满足</p>
+<div class="math-block">$$\begin{align*}
+b=qa+r, 0\leqslant r&lt;|a|
+\end{align*}$$</div>
+<p>其中， <span class="math-inline">\(r\)</span> 被称为 <span class="math-inline">\(b\)</span> 被 <span class="math-inline">\(a\)</span> 除后的**最小非负余数**，此外 <span class="math-inline">\(a|b\)</span> 的充要条件是 <span class="math-inline">\(r=0\)</span> 。</p>
+<p>证明：唯一性：若还有整数 <span class="math-inline">\(q'\)</span> 与 <span class="math-inline">\(r'\)</span> 满足</p>
+<div class="math-block">$$\begin{align*}
+b=q'a+r', 0\leqslant r'&lt;|a|
+\end{align*}$$</div>
+<p>那么就会有 <span class="math-inline">\(0\leqslant |r'-r|&lt;|a|\)</span> 并且 <span class="math-inline">\(r'-r=(q-q')a\)</span> ，若 <span class="math-inline">\(r'-r\neq0\)</span> ，那么必有 <span class="math-inline">\(|a|\leqslant |r'-r|\)</span> ，但这显然是矛盾的，所以有 <span class="math-inline">\(r'-r=0\)</span> ，从而 <span class="math-inline">\(q'-q=0\)</span> ，所以唯一性成立。至于存在性，当 <span class="math-inline">\(a|b\)</span> 时，可取 <span class="math-inline">\(q=\frac{b}{a},r=0\)</span> 。当 <span class="math-inline">\(a\neq b\)</span> 时，考虑集合</p>
+<div class="math-block">$$\begin{align*}
+T=\\{b-ka|k=\pm1,\pm2,\pm3,\cdot\cdot\cdot\\}
+\end{align*}$$</div>
+<p>该集合 <span class="math-inline">\(T\)</span> 中必有正整数（比如取 <span class="math-inline">\(k=\frac{-2|ab|}{a}\)</span> ），则 <span class="math-inline">\(T\)</span> 中必有一个最小正整数，记为</p>
+<div class="math-block">$$\begin{align*}
+t_0=b-k_0a&gt;0
+\end{align*}$$</div>
+<p>因为 <span class="math-inline">\(a\nmid b\)</span> ，所以 <span class="math-inline">\(t_0\neq|a|\)</span> ，若 <span class="math-inline">\(t_0&gt;|a|\)</span> ，则 <span class="math-inline">\(t_1=t_0-|a|&gt;0\)</span> ，而且 <span class="math-inline">\(t_1\in T,t_1&lt;t_0\)</span> ，这与 <span class="math-inline">\(t_0\)</span> 的最小性是矛盾的，所以就只有 <span class="math-inline">\(t_0&lt;|a|\)</span> ，我们取 <span class="math-inline">\(q=k_0,r=t_0\)</span> 就满足要求。至于 <span class="math-inline">\(a|b\)</span> 的充要条件是 <span class="math-inline">\(r=0\)</span> ，这是显然的，定理得证。</p>
+<p>实际上，我们可以通过带余除法对整数进行分类。设 <span class="math-inline">\(a\geqslant2\)</span> 是给定的正整数， <span class="math-inline">\(j=0,1,2,...,a-1\)</span> ，对于给定的 <span class="math-inline">\(j\)</span> ，被 <span class="math-inline">\(a\)</span> 除后余数为 <span class="math-inline">\(j\)</span> 的全体整数为</p>
+<div class="math-block">$$\begin{align*}
+ak+j, k=\pm1,\pm2,\pm3,...,
+\end{align*}$$</div>
+<p>这样的整数组成的集合记为 <span class="math-inline">\(S_{a,j}\)</span> 。集合 <span class="math-inline">\(\\{S_{a,j}:0\leqslant j\leqslant a-1\\}\)</span> 满足以下两个性质： - <span class="math-inline">\(\\{S_{a,j}:0\leqslant j\leqslant a-1\\}\)</span> 中的任两个 <span class="math-inline">\(S_{a,j}\)</span> 两两不相交，即</p>
+<div class="math-block">$$\begin{align*}
+S_{a,j}\cap S_{a,j'}=\phi,0\leqslant j\neq j'\leqslant a-1
+\end{align*}$$</div>
+<p>- <span class="math-inline">\(\\{S_{a,j}:0\leqslant j\leqslant a-1\\}\)</span> 中所有子集的并等于 <span class="math-inline">\(\mathbb{Z}\)</span> ，即</p>
+<div class="math-block">$$\begin{align*}
+\bigcup_{0\leqslant j\leqslant a-1}S_{a,j}=\mathbb{Z}
+\end{align*}$$</div>
+<p>这样按被 <span class="math-inline">\(a\)</span> 除后所得不同的最小非负余数，将全体整数分成了两两不相交的 <span class="math-inline">\(a\)</span> 个类，这比较重要，日后会再被提及。</p>
 </div>
 
 <div class="post-guide">
@@ -171,6 +239,15 @@
           <ul>
             <li class="toc-level-1">
               <a href="#整除的概念">整除的概念</a>
+            </li>
+            <li class="toc-level-2">
+              <a href="#定义及性质">定义及性质</a>
+            </li>
+            <li class="toc-level-2">
+              <a href="#素数">素数</a>
+            </li>
+            <li class="toc-level-2">
+              <a href="#带余除法定理">带余除法定理</a>
             </li>
           </ul>
         </nav>
