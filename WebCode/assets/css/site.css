@@ -1113,13 +1113,21 @@ body:not(.sidebar-open) #content > * {
 
 #article-content mjx-container[jax="CHTML"] { font-size:1.14em !important; }
 
-/* 隐藏 MathJax 公式的滚动条 */
+/* 隐藏数学公式的滚动条（.math-block 容器 + MathJax 渲染的 mjx-container） */
+#article-content .math-block,
+#article-content .math-block mjx-container,
 #article-content mjx-container {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
+#article-content .math-block::-webkit-scrollbar,
+#article-content .math-block mjx-container::-webkit-scrollbar,
 #article-content mjx-container::-webkit-scrollbar {
-  display: none;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 #article-content pre {
@@ -1374,7 +1382,7 @@ body:not(.sidebar-open) #footer { margin-left:52px; }
 
 /* ===== LaTeX blocks (dark theme) ===== */
 .inline-toc { display:none; }
-#article-content .math-block { margin:16px 0; overflow-x:auto; }
+#article-content .math-block { margin:16px 0; }
 #article-content .math-inline { padding:0 1px; }
 #article-content .article-figure,
 #article-content figure { margin:18px auto; text-align:center; }

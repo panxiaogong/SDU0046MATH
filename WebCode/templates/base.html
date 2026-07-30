@@ -28,7 +28,15 @@
     window.__typesetMath = function () {
       if (!window.MathJax || typeof window.MathJax.typesetPromise !== 'function') return;
       var container = document.getElementById('content') || document.body;
-      window.MathJax.typesetPromise([container]).catch(function (err) {
+      window.MathJax.typesetPromise([container]).then(function () {
+        // 移除 MathJax 渲染后 mjx-container 和 .math-block 上的滚动条
+        var nodes = container.querySelectorAll('mjx-container, .math-block');
+        for (var i = 0; i < nodes.length; i++) {
+          nodes[i].style.setProperty('overflow', 'visible', 'important');
+          nodes[i].style.setProperty('overflow-x', 'visible', 'important');
+          nodes[i].style.setProperty('overflow-y', 'visible', 'important');
+        }
+      }).catch(function (err) {
         console.error('MathJax typeset failed:', err);
       });
     };

@@ -27,7 +27,15 @@
     window.__typesetMath = function () {
       if (!window.MathJax || typeof window.MathJax.typesetPromise !== 'function') return;
       var container = document.getElementById('content') || document.body;
-      window.MathJax.typesetPromise([container]).catch(function (err) {
+      window.MathJax.typesetPromise([container]).then(function () {
+        // 移除 MathJax 渲染后 mjx-container 和 .math-block 上的滚动条
+        var nodes = container.querySelectorAll('mjx-container, .math-block');
+        for (var i = 0; i < nodes.length; i++) {
+          nodes[i].style.setProperty('overflow', 'visible', 'important');
+          nodes[i].style.setProperty('overflow-x', 'visible', 'important');
+          nodes[i].style.setProperty('overflow-y', 'visible', 'important');
+        }
+      }).catch(function (err) {
         console.error('MathJax typeset failed:', err);
       });
     };
@@ -190,37 +198,77 @@ p_{k+1}\leqslant p_1p_2\cdot\cdot\cdot p_k+1=2^{2^0}2^{2^1}\cdot\cdot\cdot2^{2^{
 <p>于是第二个结论得证。</p>
 <h3 id="带余除法定理">带余除法定理</h3>
 <p>下面我们介绍初等数论中一个最基本的结论：带余除法定理，它是整除的一般情形，也是Euclid算法的基础。</p>
-<p>带余除法定理：设 <span class="math-inline">\(a,b\)</span> 是两个给定的整数且 <span class="math-inline">\(a\neq0\)</span> ，那么一定存在唯一的一对整数 <span class="math-inline">\(q\)</span> 与 <span class="math-inline">\(r\)</span> ，满足</p>
+<p>带余除法定理：设<span class="math-inline">\(a,b\)</span>是两个给定的整数且<span class="math-inline">\(a\neq0\)</span>，那么一定存在唯一的一对整数<span class="math-inline">\(q\)</span>与<span class="math-inline">\(r\)</span>，满足</p>
 <div class="math-block">$$\begin{align*}
 b=qa+r, 0\leqslant r&lt;|a|
 \end{align*}$$</div>
-<p>其中， <span class="math-inline">\(r\)</span> 被称为 <span class="math-inline">\(b\)</span> 被 <span class="math-inline">\(a\)</span> 除后的**最小非负余数**，此外 <span class="math-inline">\(a|b\)</span> 的充要条件是 <span class="math-inline">\(r=0\)</span> 。</p>
+<p>其中， <span class="math-inline">\(r\)</span> 被称为 <span class="math-inline">\(b\)</span> 被 <span class="math-inline">\(a\)</span> 除后的最小非负余数，此外 <span class="math-inline">\(a|b\)</span> 的充要条件是 <span class="math-inline">\(r=0\)</span> 。</p>
 <p>证明：唯一性：若还有整数 <span class="math-inline">\(q'\)</span> 与 <span class="math-inline">\(r'\)</span> 满足</p>
 <div class="math-block">$$\begin{align*}
 b=q'a+r', 0\leqslant r'&lt;|a|
 \end{align*}$$</div>
-<p>那么就会有 <span class="math-inline">\(0\leqslant |r'-r|&lt;|a|\)</span> 并且 <span class="math-inline">\(r'-r=(q-q')a\)</span> ，若 <span class="math-inline">\(r'-r\neq0\)</span> ，那么必有 <span class="math-inline">\(|a|\leqslant |r'-r|\)</span> ，但这显然是矛盾的，所以有 <span class="math-inline">\(r'-r=0\)</span> ，从而 <span class="math-inline">\(q'-q=0\)</span> ，所以唯一性成立。至于存在性，当 <span class="math-inline">\(a|b\)</span> 时，可取 <span class="math-inline">\(q=\frac{b}{a},r=0\)</span> 。当 <span class="math-inline">\(a\neq b\)</span> 时，考虑集合</p>
+<p>那么就会有<span class="math-inline">\(0\leqslant |r'-r|&lt;|a|\)</span>并且<span class="math-inline">\(r'-r=(q-q')a\)</span>，若<span class="math-inline">\(r'-r\neq0\)</span>，那么必有<span class="math-inline">\(|a|\leqslant |r'-r|\)</span>(回忆一下整除的性质)，但这显然是矛盾的，所以有<span class="math-inline">\(r'-r=0\)</span>，从而<span class="math-inline">\(q'-q=0\)</span>，所以唯一性成立。至于存在性，当<span class="math-inline">\(a|b\)</span>时，可取<span class="math-inline">\(q=\frac{b}{a},r=0\)</span>。当<span class="math-inline">\(a\neq b\)</span>时，考虑集合</p>
 <div class="math-block">$$\begin{align*}
-T=\\{b-ka|k=\pm1,\pm2,\pm3,\cdot\cdot\cdot\\}
+T=\{b-ka|k=\pm1,\pm2,\pm3,\cdot\cdot\cdot\}
 \end{align*}$$</div>
-<p>该集合 <span class="math-inline">\(T\)</span> 中必有正整数（比如取 <span class="math-inline">\(k=\frac{-2|ab|}{a}\)</span> ），则 <span class="math-inline">\(T\)</span> 中必有一个最小正整数，记为</p>
+<p>该集合<span class="math-inline">\(T\)</span>中必有正整数(比如取<span class="math-inline">\(k=\frac{-2|ab|}{a}\)</span>)，则<span class="math-inline">\(T\)</span>中必有一个最小正整数(其实这里涉及到了最小自然数原理，不过不用深究)，不妨记为<span class="math-inline">\(t_0\)</span>，那么</p>
 <div class="math-block">$$\begin{align*}
 t_0=b-k_0a&gt;0
 \end{align*}$$</div>
-<p>因为 <span class="math-inline">\(a\nmid b\)</span> ，所以 <span class="math-inline">\(t_0\neq|a|\)</span> ，若 <span class="math-inline">\(t_0&gt;|a|\)</span> ，则 <span class="math-inline">\(t_1=t_0-|a|&gt;0\)</span> ，而且 <span class="math-inline">\(t_1\in T,t_1&lt;t_0\)</span> ，这与 <span class="math-inline">\(t_0\)</span> 的最小性是矛盾的，所以就只有 <span class="math-inline">\(t_0&lt;|a|\)</span> ，我们取 <span class="math-inline">\(q=k_0,r=t_0\)</span> 就满足要求。至于 <span class="math-inline">\(a|b\)</span> 的充要条件是 <span class="math-inline">\(r=0\)</span> ，这是显然的，定理得证。</p>
-<p>实际上，我们可以通过带余除法对整数进行分类。设 <span class="math-inline">\(a\geqslant2\)</span> 是给定的正整数， <span class="math-inline">\(j=0,1,2,...,a-1\)</span> ，对于给定的 <span class="math-inline">\(j\)</span> ，被 <span class="math-inline">\(a\)</span> 除后余数为 <span class="math-inline">\(j\)</span> 的全体整数为</p>
+<p>因为<span class="math-inline">\(a\nmid b\)</span>，所以<span class="math-inline">\(t_0\neq|a|\)</span>，若<span class="math-inline">\(t_0&gt;|a|\)</span>，则<span class="math-inline">\(t_1=t_0-|a|&gt;0\)</span>，而且<span class="math-inline">\(t_1\in T,t_1&lt;t_0\)</span>，这与<span class="math-inline">\(t_0\)</span>的最小性是矛盾的，所以就只有<span class="math-inline">\(t_0&lt;|a|\)</span>，我们取<span class="math-inline">\(q=k_0,r=t_0\)</span>就满足要求。至于<span class="math-inline">\(a|b\)</span>的充要条件是<span class="math-inline">\(r=0\)</span>，这是显然的，定理得证。</p>
+<p>实际上，我们可以通过带余除法对整数进行分类。设<span class="math-inline">\(a\geqslant2\)</span>是给定的正整数，<span class="math-inline">\(j=0,1,2,...,a-1\)</span>，对于给定的<span class="math-inline">\(j\)</span>，被<span class="math-inline">\(a\)</span>除后余数为<span class="math-inline">\(j\)</span>的全体整数为</p>
 <div class="math-block">$$\begin{align*}
 ak+j, k=\pm1,\pm2,\pm3,...,
 \end{align*}$$</div>
-<p>这样的整数组成的集合记为 <span class="math-inline">\(S_{a,j}\)</span> 。集合 <span class="math-inline">\(\\{S_{a,j}:0\leqslant j\leqslant a-1\\}\)</span> 满足以下两个性质： - <span class="math-inline">\(\\{S_{a,j}:0\leqslant j\leqslant a-1\\}\)</span> 中的任两个 <span class="math-inline">\(S_{a,j}\)</span> 两两不相交，即</p>
+<p>这样的整数组成的集合记为<span class="math-inline">\(S_{a,j}\)</span>。集合<span class="math-inline">\(\{S_{a,j}:0\leqslant j\leqslant a-1\}\)</span> 满足以下两个性质：</p>
+<ul class="article-list article-list--ul">
+<li><p>(1)<span class="math-inline">\(\{S_{a,j}:0\leqslant j\leqslant a-1\}\)</span> 中的任两个 <span class="math-inline">\(S_{a,j}\)</span> 两两不相交，即</p>
 <div class="math-block">$$\begin{align*}
 S_{a,j}\cap S_{a,j'}=\phi,0\leqslant j\neq j'\leqslant a-1
-\end{align*}$$</div>
-<p>- <span class="math-inline">\(\\{S_{a,j}:0\leqslant j\leqslant a-1\\}\)</span> 中所有子集的并等于 <span class="math-inline">\(\mathbb{Z}\)</span> ，即</p>
+\end{align*}$$</div></li>
+<li><p>(2)<span class="math-inline">\(\{S_{a,j}:0\leqslant j\leqslant a-1\}\)</span> 中所有子集的并等于 <span class="math-inline">\(\mathbb{Z}\)</span> ，即</p>
 <div class="math-block">$$\begin{align*}
 \bigcup_{0\leqslant j\leqslant a-1}S_{a,j}=\mathbb{Z}
-\end{align*}$$</div>
+\end{align*}$$</div></li>
+</ul>
 <p>这样按被 <span class="math-inline">\(a\)</span> 除后所得不同的最小非负余数，将全体整数分成了两两不相交的 <span class="math-inline">\(a\)</span> 个类，这比较重要，日后会再被提及。</p>
+<p>下面我们来看一道比较重要的例题。</p>
+<p>例：设<span class="math-inline">\(a\geqslant2\)</span>是给定的正整数，那么，任一正整数<span class="math-inline">\(n\)</span>必可唯一表示为</p>
+<div class="math-block">$$\begin{align*}
+n=r_ka^k+r_{k-1}a^{k-1}+\cdot\cdot\cdot+r_1a^1+r_0
+\end{align*}$$</div>
+<p>其中整数<span class="math-inline">\(k\geqslant0\)</span>，<span class="math-inline">\(0\leqslant r_j\leqslant a-1(0\leqslant j\leqslant k),r_k\neq0\)</span>。这就是正整数<span class="math-inline">\(n\)</span>的<span class="math-inline">\(a\)</span>进制表示。</p>
+<p>证明：对正整数<span class="math-inline">\(n\)</span>必有唯一的<span class="math-inline">\(k\geqslant0\)</span>，使得<span class="math-inline">\(a^k\leqslant n&lt;a^{k+1}\)</span>，由带余除法，必有唯一的<span class="math-inline">\(q_0,r_0\)</span>满足</p>
+<div class="math-block">$$\begin{align*}
+n=q_0a+r_0,0\leqslant r_0\leqslant a-1
+\end{align*}$$</div>
+<p>我们使用数学归纳法来证明这一结论。若<span class="math-inline">\(k=0\)</span>，则必有<span class="math-inline">\(q_0=0,1\leqslant r_0&lt;a\)</span>，结论成立。假设<span class="math-inline">\(k=m\)</span>时结论成立，此时</p>
+<div class="math-block">$$\begin{align*}
+&amp;a^m\leqslant n\leq a^{m+1}\\
+&amp;n=r_ma^m+r_{m-1}a^{m-1}+\cdot\cdot\cdot+r_1a^1+r_0  
+\end{align*}$$</div>
+<p>那么当<span class="math-inline">\(k=m+1\)</span>时，也就是<span class="math-inline">\(a^{m+1}\leqslant n&lt;a^{m+2}\)</span>，上式中的<span class="math-inline">\(q_0\)</span>必满足</p>
+<div class="math-block">$$\begin{align*}
+a^m\leqslant q_0\leq a^{m+1}(因为若q_0&lt;a^m或\geqslant a^{m+1}都会同a^{m+1}\leqslant n&lt;a^{m+2}产生矛盾)
+\end{align*}$$</div>
+<p>根据假设，就有</p>
+<div class="math-block">$$\begin{align*}
+q_0=s_ma^m+s_{m-1}a^{m-1}+\cdot\cdot\cdot+s_1a^1+s_0  
+\end{align*}$$</div>
+<p>其中<span class="math-inline">\(0\leqslant s_j\leqslant a-1(0\leqslant j\leqslant m),s_m\neq0\)</span>，因而有</p>
+<div class="math-block">$$\begin{align*}
+n=s_ma^{m+1}+s_{m-1}a^{m}+\cdot\cdot\cdot+s_0a+r_0
+\end{align*}$$</div>
+<p>即结论对<span class="math-inline">\(k=m+1\)</span>也成立，定理得证。</p>
+<p>虽然进制表示的公式看上去有些复杂，但是实际上的进制转换并没有那么复杂。比如说将十进制整数27182写成十二进制的形式，我们只需要进行下面的算法就可以了。</p>
+<div class="math-block">$$\begin{align*}
+27182&amp;=12\cdot2265+2\\
+2265&amp;=12\cdot188+9\\
+188&amp;=12\cdot15+8\\
+15&amp;=12\cdot1+3\\
+1&amp;=12\cdot0+1\\
+得27182_{10}&amp;=13892_{12}
+\end{align*}$$</div>
 </div>
 
 <div class="post-guide">
