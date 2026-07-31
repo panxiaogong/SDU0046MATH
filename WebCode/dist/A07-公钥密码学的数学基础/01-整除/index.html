@@ -138,7 +138,7 @@
 
 <div class="article-meta">
   <span>山东大学网络空间安全学院</span>
-  <span>2026-07-30</span>
+  <span>2026-07-31</span>
 </div>
 
 <div id="article-content">
@@ -271,6 +271,7 @@ n=s_ma^{m+1}+s_{m-1}a^{m}+\cdot\cdot\cdot+s_0a+r_0
 \end{align*}$$</div>
 <p>其实这个例子中的转换过程和前面证明中使用数学归纳法的过程非常非常相似，每次的除以12就是归纳回溯的过程。</p>
 <h2 id="最大公因子与最小公倍数">最大公因子与最小公倍数</h2>
+<h3 id="最大公因子">最大公因子</h3>
 <p>最大公因子与最小公倍数是整除理论中两个最基本的概念。</p>
 <p>定义：设<span class="math-inline">\(a_1,a_2\)</span>是两个整数，如果<span class="math-inline">\(d|a_1\)</span>且<span class="math-inline">\(d|a_2\)</span>，那么就称<span class="math-inline">\(d\)</span>是<span class="math-inline">\(a_1\)</span>和<span class="math-inline">\(a_2\)</span>的公因子。一般地，设<span class="math-inline">\(a_1,a_2,...,a_k\)</span>是<span class="math-inline">\(k\)</span>个整数，如果<span class="math-inline">\(d|a_1,d|a_2,...,d|a_k\)</span>，那么就称<span class="math-inline">\(d\)</span>是<span class="math-inline">\(a_1,a_2,...,a_k\)</span>的公因子。</p>
 <p>定义：设<span class="math-inline">\(a_1,a_2\)</span>是两个不全为零的整数，<span class="math-inline">\(d\)</span>是<span class="math-inline">\(a_1\)</span>和<span class="math-inline">\(a_2\)</span>的一个正公因子，若对任意的<span class="math-inline">\(d'|a_1,d'|a_2\)</span>，都有<span class="math-inline">\(d'|d\)</span>成立，则称<span class="math-inline">\(d\)</span>为<span class="math-inline">\(a_1\)</span>和<span class="math-inline">\(a_2\)</span>的最大公因子，记作<span class="math-inline">\(d=(a_1,a_2)\)</span>或者<span class="math-inline">\(d=gcd(a_1,a_2)\)</span>。一般地，设<span class="math-inline">\(a_1,a_2,...,a_k\)</span>是<span class="math-inline">\(k\)</span>个不全为零的整数，<span class="math-inline">\(d\)</span>是<span class="math-inline">\(a_1,a_2,...,a_k\)</span>的公因子，若对任意的<span class="math-inline">\(a_1,a_2,...,a_k\)</span>的公因子<span class="math-inline">\(d'\)</span>，皆有<span class="math-inline">\(d'|d\)</span>，则称<span class="math-inline">\(d\)</span>为<span class="math-inline">\(a_1,a_2,...,a_k\)</span>的最大公因子，记作<span class="math-inline">\((a_1,a_2,...,a_k)\)</span>或者<span class="math-inline">\(gcd(a_1,a_2,...,a_k)\)</span>。</p>
@@ -296,65 +297,79 @@ n=s_ma^{m+1}+s_{m-1}a^{m}+\cdot\cdot\cdot+s_0a+r_0
 (442,87)=(442-87\times5,87)=(7,87)=(7,87-7\times12)=(7,3)=1
 \end{align*}$$</div>
 <p>下面我们来看一道经典例题：</p>
-<p>设 <span class="math-inline">\(a&gt;2\)</span> 是奇数，证明： (1)一定存在正整数 <span class="math-inline">\(d\leqslant a-1\)</span> ，使得 <span class="math-inline">\(a|2^d-1\)</span> 。 (2)设 <span class="math-inline">\(d_0\)</span> 是满足 <span class="math-inline">\(a|2^d-1\)</span> 的最小正整数，那么 <span class="math-inline">\(a|2^h-1\)</span> 的充要条件是 <span class="math-inline">\(d_0|h\)</span> 。 (3)必有正整数 <span class="math-inline">\(d\)</span> 使得 <span class="math-inline">\((2^d-3,a)=1\)</span> 。</p>
+<p>设<span class="math-inline">\(a&gt;2\)</span>是奇数，证明： (1)一定存在正整数<span class="math-inline">\(d\leqslant a-1\)</span>，使得<span class="math-inline">\(a|2^d-1\)</span>。 (2)设<span class="math-inline">\(d_0\)</span>是满足<span class="math-inline">\(a|2^d-1\)</span>的最小正整数，那么<span class="math-inline">\(a|2^h-1\)</span>的充要条件是<span class="math-inline">\(d_0|h\)</span>。 (3)必有正整数<span class="math-inline">\(d\)</span>使得<span class="math-inline">\((2^d-3,a)=1\)</span>。</p>
 <p>证明：(1)考虑以下<span class="math-inline">\(a\)</span>个数</p>
 <div class="math-block">$$\begin{align*}
 2^0,2^1,2^2,2^3,...,2^{a-1}
 \end{align*}$$</div>
-<p>由 <span class="math-inline">\(a\nmid 2^j(0\leqslant j&lt;a)\)</span> 以及带余除法知，对于每个 <span class="math-inline">\(j\)</span> ，都有 <span class="math-inline">\(2^j=q_ja+r_j,0&lt;r_j&lt;a\)</span> ，这 <span class="math-inline">\(a\)</span> 个余数 <span class="math-inline">\(r_0,r_1,r_2,...,r_{a-1}\)</span> 仅可能取 <span class="math-inline">\(a-1\)</span> 个值，那么必然有两个余数是相等的，不妨设 <span class="math-inline">\(0\leqslant i&lt;k&lt;a\)</span> 且 <span class="math-inline">\(r_i=r_k\)</span> ，因而有</p>
-<div class="math-block">$$\begin{align\*}
+<p>由<span class="math-inline">\(a\nmid 2^j(0\leqslant j&lt;a)\)</span>以及带余除法知，对于每个<span class="math-inline">\(j\)</span>，都有<span class="math-inline">\(2^j=q_ja+r_j,0&lt;r_j&lt;a\)</span>，这<span class="math-inline">\(a\)</span>个余数<span class="math-inline">\(r_0,r_1,r_2,...,r_{a-1}\)</span>仅可能取<span class="math-inline">\(a-1\)</span>个值，那么必然有两个余数是相等的，不妨设<span class="math-inline">\(0\leqslant i&lt;k&lt;a\)</span>且<span class="math-inline">\(r_i=r_k\)</span>，因而有</p>
+<div class="math-block">$$\begin{align*}
 a(q_k-q_i)=2^k-2^i=2^i(2^{k-i}-1)
-\end{align\*}$$</div>
-<p>&amp;emsp;&amp;emsp;由 <span class="math-inline">\((a,2)=1\)</span> ，推出 <span class="math-inline">\(a|2^{k-i}-1\)</span> 。取 <span class="math-inline">\(d=k-i\leqslant a-1\)</span> 就满足要求。</p>
-<p>&amp;emsp;&amp;emsp; **(2)** 充分性：若 <span class="math-inline">\(d_0|h\)</span> ，也就是 <span class="math-inline">\(h=qd_0\)</span> ，所以 <span class="math-inline">\(2^h-1=(2^{d_0})^q-1=(2^{d_0}-1)(\cdot\cdot\cdot)\)</span> ，所以有 <span class="math-inline">\(a|2^h-1\)</span> 。 &amp;emsp;&amp;emsp; 必要性：由带余除法定理可得 <span class="math-inline">\(h=qd_0+r,0\leqslant r&lt;d_0\)</span> ，所以有：</p>
-<div class="math-block">$$\begin{align\*}
+\end{align*}$$</div>
+<p>由<span class="math-inline">\((a,2)=1\)</span>，推出<span class="math-inline">\(a|2^{k-i}-1\)</span>。取<span class="math-inline">\(d=k-i\leqslant a-1\)</span>就满足要求。</p>
+<p>(2)充分性：若<span class="math-inline">\(d_0|h\)</span>，也就是 <span class="math-inline">\(h=qd_0\)</span> ，所以 <span class="math-inline">\(2^h-1=(2^{d_0})^q-1=(2^{d_0}-1)(\cdot\cdot\cdot)\)</span> ，所以有 <span class="math-inline">\(a|2^h-1\)</span> 。 必要性：由带余除法定理可得<span class="math-inline">\(h=qd_0+r,0\leqslant r&lt;d_0\)</span>，所以有：</p>
+<div class="math-block">$$\begin{align*}
 2^h-1=2^{qd_0+r}-2^r+2^r-1=2^r(2^{qd_0}-1)+(2^r-1)
-\end{align\*}$$</div>
-<p>&amp;emsp;&amp;emsp;由于 <span class="math-inline">\(a|2^h-1\)</span> 并且 <span class="math-inline">\(a|2^{qd_0}-1\)</span> ，所以 <span class="math-inline">\(a|2^r-1\)</span> ，注意到 <span class="math-inline">\(r\)</span> 作为余数应小于 <span class="math-inline">\(d_0\)</span> ，但 <span class="math-inline">\(d_0\)</span> 又是满足 <span class="math-inline">\(a|2^d-1\)</span> 的最小正整数，所以 <span class="math-inline">\(r=0\)</span> ，所以就有 <span class="math-inline">\(d_0|h\)</span> 。</p>
-<p>&amp;emsp;&amp;emsp; **(3)** 由(1)知，存在 <span class="math-inline">\(d\)</span> 使得 <span class="math-inline">\(a|2^d-1\)</span> ，那么 <span class="math-inline">\((2^d-3,a)=(2^d-1-2,a)=(-2,a)=1\)</span> ，得证。</p>
-<p>&amp;emsp;&amp;emsp;**定义**：设 <span class="math-inline">\(a_1,a_2\)</span> 是两个整数，若 <span class="math-inline">\((a_1,a_2)=1\)</span> ，则称 <span class="math-inline">\(a_1\)</span> 和 <span class="math-inline">\(a_2\)</span> 是既约的（或者说是互素的），若 <span class="math-inline">\((a_1,a_2,...,a_k)=1\)</span> ，那么就称 <span class="math-inline">\(a_1,a_2,...,a_k\)</span> 是互素的。</p>
-<p>&amp;emsp;&amp;emsp;下面我们来看一道经典例题，费马数。</p>
-<p>&amp;emsp;&amp;emsp;例：费马数 <span class="math-inline">\(F_n\)</span> 定义： <span class="math-inline">\(F_n=(2)^{2^n}-1\)</span> ，其中 <span class="math-inline">\(n\)</span> 为非负整数，证明：任意两个不同的Fermat数互素。</p>
-<p>&amp;emsp;&amp;emsp;**证明**：对任意两个不同的费马数 <span class="math-inline">\(F_n,F_m\)</span> ，不妨设 <span class="math-inline">\(n=m+k,k&gt;0\)</span> ，我们有：</p>
-<div class="math-block">$$\begin{align\*}
+\end{align*}$$</div>
+<p>由于<span class="math-inline">\(a|2^h-1\)</span>并且<span class="math-inline">\(a|2^{qd_0}-1\)</span>，所以<span class="math-inline">\(a|2^r-1\)</span>(回忆一下整除的性质)，注意到<span class="math-inline">\(r\)</span>作为余数应小于<span class="math-inline">\(d_0\)</span>，但<span class="math-inline">\(d_0\)</span>又是满足<span class="math-inline">\(a|2^d-1\)</span>的最小正整数，所以<span class="math-inline">\(r=0\)</span>，所以就有<span class="math-inline">\(d_0|h\)</span>。</p>
+<p>(3)由(1)知，存在<span class="math-inline">\(d\)</span>使得<span class="math-inline">\(a|2^d-1\)</span>，那么<span class="math-inline">\((2^d-3,a)=(2^d-1-2,a)=(-2,a)=1\)</span>，得证。</p>
+<p>定义：设<span class="math-inline">\(a_1,a_2\)</span>是两个整数，若<span class="math-inline">\((a_1,a_2)=1\)</span>，则称<span class="math-inline">\(a_1\)</span>和<span class="math-inline">\(a_2\)</span>是既约的（或者说是互素的），若<span class="math-inline">\((a_1,a_2,...,a_k)=1\)</span>，那么就称<span class="math-inline">\(a_1,a_2,...,a_k\)</span>是互素的。</p>
+<p>下面我们来看一道经典例题，费马数。</p>
+<p>例：费马数<span class="math-inline">\(F_n\)</span>定义：<span class="math-inline">\(F_n=2^{2^n}-1\)</span>，其中<span class="math-inline">\(n\)</span>为非负整数，证明：任意两个不同的Fermat数互素。</p>
+<p>证明：对任意两个不同的费马数<span class="math-inline">\(F_n,F_m\)</span>，不妨设<span class="math-inline">\(n=m+k,k&gt;0\)</span>，我们有：</p>
+<div class="math-block">$$\begin{align*}
 \frac{F_n-2}{F_m}=\frac{F_{m+k}-2}{F_m}=\frac{2^{2^{m+k}}-1}{2^{2^m}+1}=\frac{(2^{2^m})^{2^k}-1}{2^{2^m}+1}
-\end{align\*}$$</div>
-<p>&amp;emsp;&amp;emsp;所以有 <span class="math-inline">\(F_m|F_n-2\)</span> ，由</p>
-<div class="math-block">$$\begin{align\*}
-(F_m,F_n)|F_n,(F_m,F_n)|F_n-2
-\end{align\*}$$</div>
-<p>&amp;emsp;&amp;emsp;所以有 <span class="math-inline">\((F_m,F_n)|2\)</span> ，又因为费马数都是奇数，公因子不可能是2，所以 <span class="math-inline">\((F_m,F_n)=1\)</span> ，得证。</p>
-<p>&amp;emsp;&amp;emsp;其实根据上述过程我们能够得到：</p>
-<div class="math-block">$$\begin{align\*}
+\end{align*}$$</div>
+<p>所以有<span class="math-inline">\(F_m|F_n-2\)</span>(反复利用平方差公式即可推出)，又因为</p>
+<div class="math-block">$$\begin{align*}
+&amp;(F_m,F_n)|F_n(最大公因子的定义)\\
+&amp;(F_m,F_n)|F_m，F_m|F_n-2\Rightarrow (F_m,F_n)|F_n-2
+\end{align*}$$</div>
+<p>所以有<span class="math-inline">\((F_m,F_n)|2\)</span>，又因为费马数都是奇数，公因子不可能是2，所以<span class="math-inline">\((F_m,F_n)=1\)</span>，得证。</p>
+<p>其实根据上述过程我们能够得到：</p>
+<div class="math-block">$$\begin{align*}
 F_n=\prod_{i=0}^{n-1}F_i+2
-\end{align\*}$$</div>
-<p>&amp;emsp;&amp;emsp;为什么会这样呢？其实是因为前面证明出的结论： <span class="math-inline">\(F_m|F_n-2\)</span> ，如果 <span class="math-inline">\(m\)</span> 从0取到 <span class="math-inline">\(n-1\)</span> ，那么就有 <span class="math-inline">\(F_0|F_n-2,F_1|F_n-2,...,F_{n-1}|F_n-2\)</span> ，但是又因为前 <span class="math-inline">\(n\)</span> 个费马数两两互素，所以前 <span class="math-inline">\(n\)</span> 个费马数皆是 <span class="math-inline">\(F_n\)</span> 的因子，也就是有：</p>
-<div class="math-block">$$\begin{align\*}
+\end{align*}$$</div>
+<p>为什么会这样呢？其实是因为前面证明出的结论：<span class="math-inline">\(F_m|F_n-2\)</span>，如果<span class="math-inline">\(m\)</span>从0取到<span class="math-inline">\(n-1\)</span>，那么就有<span class="math-inline">\(F_0|F_n-2,F_1|F_n-2,...,F_{n-1}|F_n-2\)</span>，但是又因为前<span class="math-inline">\(n\)</span>个费马数两两互素，所以前<span class="math-inline">\(n\)</span>个费马数皆是<span class="math-inline">\(F_n\)</span>的因子，也就是有：</p>
+<div class="math-block">$$\begin{align*}
 F_n-2=q_nF_0F_1F_2...F_{n-1}(q_n依然是未知的)
-\end{align\*}$$</div>
-<p>&amp;emsp;&amp;emsp;接下来只需使用数学归纳法证明对于任意的费马数 <span class="math-inline">\(F_n\)</span> 皆有 <span class="math-inline">\(q_n=1\)</span> 即可。（实际上，写到这里的时候我突然反应过来，其实可以一开始就直接使用数学归纳法来证明这个结论，可以省去前面一段分析。）</p>
-<p>&gt; 费马数这一两两互素的性质也可以用于证明素数有无穷多个，对应证明于前文提到过。另外，费马（1601-1665）曾猜测费马数都是素数，但是被欧拉心算验证 <span class="math-inline">\(F_5=4294967297\)</span> 不是素数（是的，晚年欧拉失明，只能心算结果），至今我们也没发现过新的费马素数。</p>
-<p>&amp;emsp;&amp;emsp;下面我们来补充一些关于公因数的重要性质。</p>
-<p>&amp;emsp;&amp;emsp;**定理**：设 <span class="math-inline">\((m,a)=1\)</span> ，则有 <span class="math-inline">\((m,ab)=(m,b)\)</span> - 证明：若 <span class="math-inline">\(m=0\)</span> ，则 <span class="math-inline">\(a=\pm1\)</span> ，结果显然成立；当 <span class="math-inline">\(m\neq0\)</span> ，则有：</p>
-<div class="math-block">$$\begin{align\*}
+\end{align*}$$</div>
+<p>接下来只需使用数学归纳法证明对于任意的费马数<span class="math-inline">\(F_n\)</span>皆有<span class="math-inline">\(q_n=1\)</span>即可。（实际上，写到这里的时候我突然反应过来，其实可以一开始就直接使用数学归纳法来证明这个结论，可以省去前面一段分析。）</p>
+<p>费马数这一两两互素的性质也可以用于证明素数有无穷多个，对应证明于前文提到过。另外，费马（1601-1665）曾猜测费马数都是素数，但是被欧拉心算验证<span class="math-inline">\(F_5=4294967297\)</span>不是素数（是的，晚年欧拉失明，只能心算结果），至今我们也没发现过新的费马素数。</p>
+<p>下面我们来补充一些关于公因数的重要性质。</p>
+<p>定理：设<span class="math-inline">\((m,a)=1\)</span>，则有<span class="math-inline">\((m,ab)=(m,b)\)</span></p>
+<p>证明：若<span class="math-inline">\(m=0\)</span>，则<span class="math-inline">\(a=\pm1\)</span>，结果显然成立；当<span class="math-inline">\(m\neq0\)</span>，则有：</p>
+<div class="math-block">$$\begin{align*}
 (m,b)=(m,b(m,a))=(m,(mb,ab))=(m,mb,ab)=(m,ab)
-\end{align\*}$$</div>
-<p>- **推论**：设 <span class="math-inline">\((m,a)=1\)</span> ， <span class="math-inline">\(n\)</span> 是正整数，则有 <span class="math-inline">\((m,a^n)=1\)</span> (取 <span class="math-inline">\(b=a\)</span> 反复使用定理即可) - **推论**：设 <span class="math-inline">\((a,b)=1\)</span> ， <span class="math-inline">\(k,t\)</span> 是正整数，则有 <span class="math-inline">\((a^k,b^t)=1\)</span> (反复使用定理即可)</p>
-<p>&amp;emsp;&amp;emsp;**定理**：设 <span class="math-inline">\((m,a)=1\)</span> ，若 <span class="math-inline">\(m|ab\)</span> ，则 <span class="math-inline">\(m|b\)</span> - 证明：由于 <span class="math-inline">\(m|ab\)</span> ，那么 <span class="math-inline">\(|m|=(m,ab)\)</span> ，又因为 <span class="math-inline">\((m,a)=1\)</span> ，所以 <span class="math-inline">\((m,ab)=(m,b)\)</span> ，即 <span class="math-inline">\(|m|=(m,b)\)</span> ，所以有 <span class="math-inline">\(m|b\)</span> 。 - **推论**：设 <span class="math-inline">\(p\)</span> 是一个素数且 <span class="math-inline">\(p|ab\)</span> ，那么 <span class="math-inline">\(p|a\)</span> 或者 <span class="math-inline">\(p|b\)</span> 。</p>
-<p>&amp;emsp;&amp;emsp;看完了最大公因子，下面我们来看一下最小公倍数。</p>
-<p>&amp;emsp;&amp;emsp;**定义**：设 <span class="math-inline">\(a_1,a_2\)</span> 是两个均不等于0的整数，如果 <span class="math-inline">\(a_1|l,a_2|l\)</span> ，则称 <span class="math-inline">\(l\)</span> 是 <span class="math-inline">\(a_1\)</span> 和 <span class="math-inline">\(a_2\)</span> 的**公倍数**。一般地，设 <span class="math-inline">\(a_1,a_2,...,a_k\)</span> 是 <span class="math-inline">\(k\)</span> 个均不等于0的整数，如果 <span class="math-inline">\(a_1|l,...,a_k|l\)</span> ，则称 <span class="math-inline">\(l\)</span> 是 <span class="math-inline">\(a_1,a_2,...,a_k\)</span> 的公倍数。</p>
-<p>&amp;emsp;&amp;emsp;**定义**：设 <span class="math-inline">\(a_1,a_2\)</span> 是两个均不等于0的整数， <span class="math-inline">\(l\)</span> 是 <span class="math-inline">\(a_1\)</span> 和 <span class="math-inline">\(a_2\)</span> 的一个正公倍数，若对 <span class="math-inline">\(a_1,a_2\)</span> 的任意公倍数 <span class="math-inline">\(l'\)</span> ，有 <span class="math-inline">\(l|l'\)</span> ，称 <span class="math-inline">\(l\)</span> 是 <span class="math-inline">\(a_1\)</span> 和 <span class="math-inline">\(a_2\)</span> 的**最小公倍数**，记作 <span class="math-inline">\(\[a_1,a_2\]\)</span> 。一般地，设 <span class="math-inline">\(a_1,a_2,...,a_k\)</span> 是 <span class="math-inline">\(k\)</span> 个均不等于0的整数， <span class="math-inline">\(l\)</span> 是 <span class="math-inline">\(a_1,a_2,...,a_k\)</span> 的一个正公倍数，如果对于 <span class="math-inline">\(a_1,a_2,...,a_k\)</span> 的任意公倍数 <span class="math-inline">\(l'\)</span> ，皆有 <span class="math-inline">\(l|l'\)</span> ，称 <span class="math-inline">\(l\)</span> 是 <span class="math-inline">\(a_1,a_2,...,a_k\)</span> 的最小公倍数，记作 <span class="math-inline">\(\[a_1,a_2,...,a_k\]\)</span> 。</p>
-<p>&amp;emsp;&amp;emsp;最小公倍数的性质： - 若 <span class="math-inline">\(a_2|a_1\)</span> ，则 <span class="math-inline">\(\[a_1,a_2\]=|a_1|\)</span> 若 <span class="math-inline">\(a_j|a_1,2\leqslant j\leqslant k\)</span> ，则 <span class="math-inline">\(\[a_1,a_2,...,a_k\]=|a_1|\)</span> - 对于任意的 <span class="math-inline">\(d|a_1\)</span> ， <span class="math-inline">\(\[a_1,a_2\]=\[a_1,a_2,d\]\)</span> - 设 <span class="math-inline">\(m&gt;0\)</span> ，我们有 <span class="math-inline">\(\[ma_1,ma_2,...,ma_k\]=m\[a_1,a_2,...,a_k\]\)</span></p>
-<p>&amp;emsp;&amp;emsp;**定理**：<span class="math-inline">\(\[a_1,a_2\](a_1,a_2)=|a_1a_2|\)</span></p>
-<p>&amp;emsp;&amp;emsp;**证明**：当 <span class="math-inline">\((a_1,a_2)=1\)</span> 时，由于 <span class="math-inline">\(|a_1a_2|\)</span> 是 <span class="math-inline">\(a_1\)</span> 和 <span class="math-inline">\(a_2\)</span> 的一个公倍数，所以 <span class="math-inline">\(\[a_1,a_2\]||a_1a_2|\)</span> ，另外，由于 <span class="math-inline">\(a_1|\[a_1,a_2\]=a_1m\)</span> ，所以 <span class="math-inline">\(a_2|\[a_1,a_2\]=a_1m\)</span> ，但又因为 <span class="math-inline">\(a_1\)</span> 和 <span class="math-inline">\(a_2\)</span> 互质，所以 <span class="math-inline">\(a_2|m\)</span> ，所以 <span class="math-inline">\(|a_1a_2||\[a_1,a_2\]\)</span> ，也就有 <span class="math-inline">\(|a_1a_2|=\[a_1,a_2\]\)</span> 。若 <span class="math-inline">\((a_1,a_2)\neq1\)</span> ，由最大公因子性质得：</p>
-<div class="math-block">$$\begin{align\*}
+\end{align*}$$</div>
+<ul class="article-list article-list--ul">
+<li><p>(1)推论：设<span class="math-inline">\((m,a)=1\)</span>，<span class="math-inline">\(n\)</span>是正整数，则有<span class="math-inline">\((m,a^n)=1\)</span>(取<span class="math-inline">\(b=a\)</span>反复使用定理即可)</p></li>
+<li><p>(2)推论：设<span class="math-inline">\((a,b)=1\)</span>，<span class="math-inline">\(k,t\)</span>是正整数，则有<span class="math-inline">\((a^k,b^t)=1\)</span>(反复使用定理即可)</p></li>
+</ul>
+<p>定理：设<span class="math-inline">\((m,a)=1\)</span>，若<span class="math-inline">\(m|ab\)</span>，则<span class="math-inline">\(m|b\)</span></p>
+<p>证明：由于<span class="math-inline">\(m|ab\)</span>，那么<span class="math-inline">\(|m|=(m,ab)\)</span>，又因为<span class="math-inline">\((m,a)=1\)</span>，所以<span class="math-inline">\((m,ab)=(m,b)\)</span>，即<span class="math-inline">\(|m|=(m,b)\)</span>，所以有<span class="math-inline">\(m|b\)</span>。</p>
+<p>推论：设<span class="math-inline">\(p\)</span>是一个素数且<span class="math-inline">\(p|ab\)</span>，那么<span class="math-inline">\(p|a\)</span>或者<span class="math-inline">\(p|b\)</span>。</p>
+<h3 id="最小公倍数">最小公倍数</h3>
+<p>看完了最大公因子，下面我们来看一下最小公倍数。</p>
+<p>定义：设<span class="math-inline">\(a_1,a_2\)</span>是两个均不等于0的整数，如果<span class="math-inline">\(a_1|l,a_2|l\)</span>，则称<span class="math-inline">\(l\)</span>是<span class="math-inline">\(a_1\)</span>和<span class="math-inline">\(a_2\)</span>的公倍数。一般地，设<span class="math-inline">\(a_1,a_2,...,a_k\)</span>是<span class="math-inline">\(k\)</span>个均不等于0的整数，如果<span class="math-inline">\(a_1|l,...,a_k|l\)</span>，则称<span class="math-inline">\(l\)</span>是<span class="math-inline">\(a_1,a_2,...,a_k\)</span>的公倍数。</p>
+<p>定义：设<span class="math-inline">\(a_1,a_2\)</span>是两个均不等于0的整数，<span class="math-inline">\(l\)</span>是<span class="math-inline">\(a_1\)</span>和<span class="math-inline">\(a_2\)</span>的一个正公倍数，若对<span class="math-inline">\(a_1,a_2\)</span>的任意公倍数<span class="math-inline">\(l'\)</span>，有<span class="math-inline">\(l|l'\)</span>，称<span class="math-inline">\(l\)</span>是<span class="math-inline">\(a_1\)</span>和<span class="math-inline">\(a_2\)</span>的最小公倍数，记作<span class="math-inline">\([a_1,a_2]\)</span>。一般地，设<span class="math-inline">\(a_1,a_2,...,a_k\)</span>是<span class="math-inline">\(k\)</span>个均不等于0的整数，<span class="math-inline">\(l\)</span>是<span class="math-inline">\(a_1,a_2,...,a_k\)</span>的一个正公倍数，如果对于<span class="math-inline">\(a_1,a_2,...,a_k\)</span>的任意公倍数<span class="math-inline">\(l'\)</span>，皆有<span class="math-inline">\(l|l'\)</span>，称<span class="math-inline">\(l\)</span>是<span class="math-inline">\(a_1,a_2,...,a_k\)</span>的最小公倍数，记作<span class="math-inline">\([a_1,a_2,...,a_k]\)</span> 。</p>
+<p>最小公倍数的性质：</p>
+<ul class="article-list article-list--ul">
+<li><p>(1)若 <span class="math-inline">\(a_2|a_1\)</span> ，则 <span class="math-inline">\([a_1,a_2]=|a_1|\)</span></p>
+<p>若 <span class="math-inline">\(a_j|a_1,2\leqslant j\leqslant k\)</span> ，则<span class="math-inline">\([a_1,a_2,...,a_k]=|a_1|\)</span></p></li>
+<li><p>(2)对于任意的<span class="math-inline">\(d|a_1\)</span>，<span class="math-inline">\([a_1,a_2]=[a_1,a_2,d]\)</span></p></li>
+<li><p>(3)设<span class="math-inline">\(m&gt;0\)</span>，我们有<span class="math-inline">\([ma_1,ma_2,...,ma_k]=m[a_1,a_2,...,a_k]\)</span></p></li>
+</ul>
+<p>定理：<span class="math-inline">\([a_1,a_2](a_1,a_2)=|a_1a_2|\)</span></p>
+<p>证明：当<span class="math-inline">\((a_1,a_2)=1\)</span>时，由于<span class="math-inline">\(|a_1a_2|\)</span>是<span class="math-inline">\(a_1\)</span>和<span class="math-inline">\(a_2\)</span>的一个公倍数，所以<span class="math-inline">\([a_1,a_2]||a_1a_2|\)</span>，另外，由于<span class="math-inline">\(a_1|[a_1,a_2]=a_1m\)</span>，所以<span class="math-inline">\(a_2|[a_1,a_2]=a_1m\)</span>，但又因为<span class="math-inline">\(a_1\)</span>和<span class="math-inline">\(a_2\)</span>互质，所以<span class="math-inline">\(a_2|m\)</span>，所以<span class="math-inline">\(|a_1a_2||[a_1,a_2]\)</span>，也就有<span class="math-inline">\(|a_1a_2|=[a_1,a_2]\)</span>。若<span class="math-inline">\((a_1,a_2)\neq1\)</span>，由最大公因子性质得：</p>
+<div class="math-block">$$\begin{align*}
 (\frac{a_1}{(a_1,a_2)},\frac{a_2}{(a_1,a_2)})=1
-\end{align\*}$$</div>
-<p>&amp;emsp;&amp;emsp;此时就有 <span class="math-inline">\(\frac{a_1}{(a_1,a_2)},\frac{a_2}{(a_1,a_2)}\)</span> 互质，由前面的结论，就有：</p>
-<div class="math-block">$$\begin{align\*}
-\[\frac{a_1}{(a_1,a_2)},\frac{a_2}{(a_1,a_2)}\]=\frac{|a_1a_2|}{(a_1,a_2)^2}
-\end{align\*}$$</div>
-<p>&amp;emsp;&amp;emsp;两边同乘 <span class="math-inline">\((a_1,a_2)^2\)</span> 即得结论。</p>
+\end{align*}$$</div>
+<p>此时就有<span class="math-inline">\(\frac{a_1}{(a_1,a_2)},\frac{a_2}{(a_1,a_2)}\)</span>互质，由前面的结论，就有：</p>
+<div class="math-block">$$\begin{align*}
+[\frac{a_1}{(a_1,a_2)},\frac{a_2}{(a_1,a_2)}]=\frac{|a_1a_2|}{(a_1,a_2)^2}
+\end{align*}$$</div>
+<p>两边同乘<span class="math-inline">\((a_1,a_2)^2\)</span>即得结论。</p>
 </div>
 
 <div class="post-guide">
@@ -385,6 +400,12 @@ F_n-2=q_nF_0F_1F_2...F_{n-1}(q_n依然是未知的)
             </li>
             <li class="toc-level-1">
               <a href="#最大公因子与最小公倍数">最大公因子与最小公倍数</a>
+            </li>
+            <li class="toc-level-2">
+              <a href="#最大公因子">最大公因子</a>
+            </li>
+            <li class="toc-level-2">
+              <a href="#最小公倍数">最小公倍数</a>
             </li>
           </ul>
         </nav>
